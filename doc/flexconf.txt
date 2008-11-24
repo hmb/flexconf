@@ -1,0 +1,546 @@
+.TH flexconf 1  "Fri Aug 13 12:00:39 CEST 2004" "version 1.0" "USER COMMANDS"
+
+.SH NAME
+
+flexconf \- C++ header file preprocessor for generating xml configurations
+
+
+
+.SH SYNOPSIS
+
+.B flexconf
+headerfile [headerfile...]
+
+
+
+.SH DESCRIPTION
+
+.B flexconf
+is a preprocessor that reads your native header files and generates
+a simple lightweight XML parser tailored to your custom C++ configuration
+structures. It uses the same nesting in the XML file that is defined
+by your C++ structures.
+.B flexconf
+already provides support for C++ inbuild types and the
+commonly used STL classes
+.I string
+,
+.I list
+,
+.I map
+and
+.I set.
+It can easily be extended, by writing custom serializers for new types.
+.PP
+The preprocessor output is a minimal set of source files that
+\- like the approach used in lexx/yacc \- are linked direcly to your
+program. You don't need large libs with a lot of functionality you
+never use. You can redistribute the generated files to enable people
+to build your program from source without the need of installing the
+.B flexconf
+binary.
+
+
+
+.SH EXAMPLES
+
+.TP
+process your header file configuration.h:
+
+flexconf configuration.h
+
+
+
+.SH BACKGROUND
+
+Today many programs use XML configuration files. To access your configuration
+from within a project you can either store your config values in a
+key/value pair list or keep them nicely in standard C++ structures with
+direct access to it's members.
+.PP
+The structure approach has several benefits over the key/value pairs:
+.IP \-
+The compiler checks for syntax errors avoiding mistyping of key names.
+.IP \-
+Strong typing avoids errors and conversion overhead.
+.IP \-
+A direct access to a member is faster than a lookup in a sorted list,
+especially for big configurations.
+.IP \-
+The configuration's structure is kept througout the program.
+.PP
+On the other hand you pay for it with the additional work of reading
+the configuration into your structure.
+.PP
+Using one of the standard xml parsers like
+.I libxml
+for reading an XML
+configuration into a C++ structure often results in tedious rewriting of
+the same code for every new XML configuration. You either have to use
+a SAX parser with the task of generating some kind of status machine to
+fill your structure or you'll find yourself walking through a full featured
+XML document tree by hand. In any case you have to mirror your
+configuration structure in code at least once. Both approches need a deep
+inside knowledge of the used XML parser.
+.PP
+This is where flexconf steps in and automates the generation of the XML
+parser from the very source where you define your configuration.
+.B flexconf
+uses a
+.I flex
+/
+.I bison
+parser combination to preprocess your header files.
+It then generates the sourcecode for reading and writing the xml config
+file, allowing yourself to focus on the original task of writing your
+program.
+
+
+
+.SH SERIALIZER / DESERIALIZER
+
+.B flexconf
+works as a preprocessor taking your input files and generating
+two overloaded C++ functions
+.I serialize
+and
+.I deserialize
+for every C++ structure in the input files. It generates three output files
+.I struct.h,
+.I strucSer.cpp
+and
+.I structDes.cpp
+containing those function prototypes and implementations.
+.PP
+The serializer
+and deserializer take the object to de/serialize and the de/serialization
+target as parameters. The target could be a file, a string, a pipe or
+anything that has been derived from the taget base classes
+.I CWriteXml
+and
+.I CReadXml.
+See
+.B TARGETS
+for more information.
+.PP
+The generic prototypes for the serializer and deserializer functions are
+as follows:
+
+    void serialize(CWriteXml & rWriteXml, const SData & rObject);
+
+    void deserialize(CReadXml & rReadXml, SData & rObject);
+
+The second parameter is a const reference to the object to be serialized.
+In case of the deserializer the reference is nonconst of course. The function
+calls the de/serialize overload on every member of the structure, all of
+which are either generated or provided by
+.B flexconf
+itself.
+The functions do have more default parameters, that are used internally
+and that are not explained in the scope of this manpage.
+
+
+
+.SH XML TRANSLATION
+
+The XML used by the de/serializer encapsulates every member of a structure
+in XML tags corresponding to the name of the member.
+For example the following structure:
+
+    struct Person
+    {
+      std::string   Name;
+      int           Age;
+    };
+
+is translated into:
+
+    <Person>
+      <Name>Joe Doe</Name>
+      <Age>21</Age>
+    </Person>
+
+While this is sufficient for simple projects more control of the generation
+process is given by the
+.I flexconf comment tags.
+See the section on
+.B FINETUNIG
+for more details.
+.PP
+Nested structures are expanded recursively just like the following:
+
+    struct Couple
+    {
+      Person  Husband;
+      Person  Wife;
+    };
+
+is translated into:
+
+    <Couple>
+
+      <Husband>
+        <Name>Joe Doe</Name>
+        <Age>21</Age>
+      </Husband>
+
+      <Wife>
+        <Name>Jane Doe</Name>
+        <Age>20</Age>
+      </Wife>
+
+    </Couple>
+
+The blank lines are inserted for readability. As you can see the XML tags for
+the nested
+.I Person
+are defined by the name of the member within the enclosing parent structure
+and not by the name of the structure itself.
+.PP
+All basic language types are covered by the internal de/serializers, as
+well as the STL
+.I string
+class which does not need special handling. When it comes to the STL
+.I set, list, map
+containers the above mechanism is not sufficient.
+For those types
+.B flexconf
+generates de/serializers that de/serialize every element of the container.
+For
+.I set
+and
+.I list
+this results in the writing the same structure once for every element in
+the container.
+The single elements are encapsulated in the
+.I _item
+tag.
+
+    struct AddressBook
+    {
+      std::list<Person>   PersonList;
+    };
+
+is translated into:
+
+    <AddressBook>
+      <PersonList>
+
+        <_item>
+          <Name>Joe Doe</Name>
+          <Age>21</Age>
+        </_item>
+
+        <_item>
+          <Name>Jane Doe</Name>
+          <Age>20</Age>
+        </_item>
+          ...
+      </PersonList>
+    </AddressBook>
+
+The blank lines are again inserted for readability. The same applies
+to the STL class
+.I set.
+.PP
+The map however is trickier. As the
+.I stl::map
+element contains a value and an additional key, both have to be reflected
+in the XML produced by
+.B flexconf.
+To simplify the XML design and to get a more natural representation of the
+element, the map key is inserted into the element structure. This is what
+the config file writer would expect: the key is simply one of the
+tags included in the listed element structure.
+To stress the config file point of view we show the example the other
+way this time.
+Let's say we have the above
+.I Person
+with an additional unique id, a e.g social security number.
+We would expect the XML to look like this:
+
+    <AddressBook>
+      <PersonMap>
+
+        <_item>
+          <_id>12345</_id>
+          <Name>Joe Doe</Name>
+          <Age>21</Age>
+        </_item>
+
+        <_item>
+          <_id>67890</_id>
+          <Name>Jane Doe</Name>
+          <Age>20</Age>
+        </_item>
+          ...
+      </PersonMap>
+    </AddressBook>
+
+When deserializing
+.B flexconf
+takes the value of the
+.I _id
+tag and uses it as a key to insert a
+.I Person
+structure as defined above into the map. Ergo the declaration looks like this:
+
+    struct Person
+    {
+      std::string   Name;
+      int           Age;
+    };
+
+    struct AddressBook
+    {
+      std::map<std::string, Person>   PersonMap;
+    };
+
+As you see, the
+.I _id
+tag is missing in the
+.I Person
+structure, instead it is used as the key when inserting the element into the map.
+Programmatically you will use the
+.I stl::map::iterator
+to access the complete structure. Then you can get the key by the iterators
+.I first
+member while the
+.I Person
+struct is the iterators
+.I second
+member:
+
+    std::map<std::string, Person>::iterator itr = PersonMap.begin();
+    std::string   & strKey      = itr->first;
+    Person        & perElement  = itr->second;
+
+This way we don't duplicate information, by inserting the key into the
+.I Person
+structure as well as into the map key.
+
+
+
+.SH FINETUNIG
+
+While the xml translation above provides all you need for XML config files
+it is still desirable to disconnect the names used in structures from
+those used in the XML files. Ususally you have some kind of prefixing,
+indicating the type of a member, that's not necessarily desired in
+the XML file. Or you might want to keep your xml tags all uppercase
+which conflicts with your C++ naming policy.
+.B flexconf
+directives are used to control the way the XML is generated and read.
+A directve is introduced by the
+.I // flexconf
+C++ comment.
+The most important and probably mostly used directive is the alias directive.
+It controls the name that is given to the XML element.
+The alias of a complete structure has to precede the structure declaration.
+Member aliases have to follow the member declaration.
+.PP
+The above declaration extended with type prefixes for the structure members
+will still result in the same XML because the use of the alias directives.
+
+    // flexconf alias Person
+    struct SPerson
+    {
+      std::string   strName;    // flexconf alias Name
+      int           nAge;       // flexconf alias Age
+    };
+
+is translated into
+
+    <Person>
+      <Name>Joe Doe</Name>
+      <Age>21</Age>
+    </Person>
+
+When translating
+.I set, list
+and
+.I map
+elements you can replace the inbuild
+.I _item
+and
+.I _id
+tags with custom tags by using the
+.I item
+and
+.I id
+directves:
+
+  struct AddressBook
+  {
+    std::list<SPerson>  lstPersonList;    // flexconf alias PERSON_LIST item PERSON
+  };
+
+becomes:
+
+    <AddressBook>
+      <PERSON_LIST>
+
+        <PERSON>
+          <Name>Joe Doe</Name>
+          <Age>21</Age>
+        </PERSON>
+
+        <PERSON>
+          <Name>Jane Doe</Name>
+          <Age>20</Age>
+        </PERSON>
+            ...
+      </PERSON_LIST>
+    </AddressBook>
+
+Here the example for the
+.I map
+using all three directives:
+
+    struct AddressBook
+    {
+      std::map<SPerson>  mapPerson; // flexconf alias PERSON_LIST item PERSON id SOCIALSEC_NUMBER
+    };
+
+becomes:
+
+    <AddressBook>
+      <PERSON_LIST>
+
+        <PERSON>
+          <SOCIALSEC_NUMBER>12345</SOCIALSEC_NUMBER>
+          <Name>Joe Doe</Name>
+          <Age>21</Age>
+        </PERSON>
+
+        <PERSON>
+          <SOCIALSEC_NUMBER>67890</SOCIALSEC_NUMBER>
+          <Name>Jane Doe</Name>
+          <Age>20</Age>
+        </PERSON>
+            ...
+      </PERSON_LIST>
+    </AddressBook>
+
+
+
+.SH SKIPPING SECTIONS
+
+The parser
+.B flexconf
+uses to parse the C++ header file knows the C++ syntax to some extent,
+but it is by no means a fully grown C++ parser. Although it does
+know and skips comments and member functions it might stumble over more
+sophisticated C++ constructs. So your usual approach is to keep your
+configuration structures in a separate file and process just that file
+with
+.B flexconf.
+In some rare cases, when it is necessary that you keep C++ in you file
+.B flexconf
+does not understand, you can use the
+.I skip directive
+to skip those sections. The
+.I skip directive
+comes in three forms, all of which are equal:
+
+the normal comment form, which may also be used to comment out something
+in a single line:
+
+    /* flexconf skip begin */
+    //...
+    // some non flexconf conform C++
+    //...
+    /* flexconf skip end */
+
+
+the C++ style comment form:
+
+    // flexconf skip begin
+    //...
+    // some non flexconf conform C++
+    //...
+    // flexconf skip end
+
+
+the xml style comment form:
+
+    //<!--
+    //...
+    // some non flexconf conform C++
+    //...
+    //-->
+
+Although probably not very readable and recommendable you could even mix the
+different beginning and ending tags.
+
+Of course the skip directives could also be used to skip the generation of
+de/serializers for structures that are contained in you header file but
+not used in the configuration.
+
+
+
+.SH TARGETS
+
+When serializing or deserializing XML we need a target to write to or a
+source to read from.
+.B flexconf
+provides two abstract baseclasses that have to be implemented and given
+to the de/serializers as first parameter. Two default implementations
+are provided by
+.B flexconf
+that provide reading from either a
+.I std::string
+or a file respectively. The classes are
+.I CReadXmlPChar
+and
+.I CReadXmlFile.
+We show the usage of the classes with a short example:
+
+    const char      * pszSomeXml[]  = "...put valid xml here...";
+    CReadXmlPChar     readPChar(pszSomeXml);
+    SPerson           datPerson;
+
+    deserialize(readPChar, datPerson);
+
+You pass a char pointer to the xml used to the c'tor of the reader object.
+Then you just pass the reader to the deserialize function.
+When deserializing a file the syntax is a little different:
+
+    CReadXmlFile      readFile;
+    SPerson           datPerson;
+
+    if (readFile.UseFile("somefilename.xml"))
+    {
+      deserialize(readFile, datPerson);
+    }
+
+
+Writing to a
+.I std::string
+is provided by the
+.I CWriteXmlString
+class. Again a small example of the usage:
+
+    std::string       strXmlWrite;
+    CWriteXmlString   writeString(strXmlWrite);
+    SPerson           datPerson;
+
+    serialize(writeString, datPerson);
+    std::cout << strXmlWrite << std::endl;
+
+You declare a string and provide it to the writer in its' constructor.
+Then you just give the writer object to the serialize function.
+
+
+
+.SH EXIT STATUS
+
+.B flexconf
+returns a zero exist status if it succeeds to parse the header file.
+Non zero is returned in case of failure.
+
+
+
+.SH AUTHOR
+
+Holger Böhnke (holger.boehnke (at) amarin (dot) de)

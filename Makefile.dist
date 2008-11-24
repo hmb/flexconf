@@ -1,0 +1,24 @@
+#!/usr/bin/make -f
+
+# ----------------------------------------------------------
+# this is the makefile to generate the ./configure file
+# is is called by kdevelop or by the do_autoconf script
+# ----------------------------------------------------------
+
+all: precond
+	aclocal
+	autoconf
+	autoheader
+	automake -a
+
+sarge: precond
+	aclocal-1.7
+	autoconf
+	autoheader
+	automake-1.7 -a
+
+precond:
+	rm -f config.cache
+	rm -f acconfig.h
+
+.PHONY: all sarge precond

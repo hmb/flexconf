@@ -1,0 +1,7 @@
+.deps
+Makefile
+Makefile.in
+struct.h
+structDes.cpp
+structSer.cpp
+test

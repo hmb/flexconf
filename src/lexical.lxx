@@ -1,0 +1,292 @@
+/*
+  flexconf - flexible configuration generator
+  Copyright (C) 2003-2008 Holger Böhnke
+
+  This file is part of flexconf.
+
+  Flexconf is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+%option noyywrap
+
+%{
+#ifdef _MSC_VER
+  #define YY_NO_UNISTD_H
+  #include <io.h>
+#endif
+
+  #include "yystype.h"
+  #include "grammar.h"
+  #include <stdio.h>
+
+  #define YY_NO_UNPUT
+  #define YY_STACK_USED     0
+  #define YY_MAIN           0
+
+//  #define ECHOTOK(tok)    printf("tok TOK_%s, text: <%.*s>\n", #tok, yyleng, yytext);
+//  #define ECHOOUT(out)    printf("out %s, text: <%.*s>\n", #out, yyleng, yytext);
+//  #define ECHOFKT(out)    printf("out %s, text: <%.*s>\n", #out, yyleng, yytext);
+//  #define ECHOCMT(out)    printf("out %s, text: <%.*s>\n", #out, yyleng, yytext);
+//  #define ECHOSX(out)     printf("out %s, text: <%.*s>\n", #out, yyleng, yytext);
+//  #define ECHOWS          printf("text: <WS{%d}>\n", yyleng);
+
+#ifndef ECHOTOK
+  #define ECHOTOK(tok)
+#endif
+
+#ifndef ECHOOUT
+  #define ECHOOUT(out)
+#endif
+
+#ifndef ECHOFKT
+  #define ECHOFKT(out)
+#endif
+
+#ifndef ECHOCMT
+  #define ECHOCMT(out)
+#endif
+
+#ifndef ECHOSX
+  #define ECHOSX(out)
+#endif
+
+#ifndef ECHOWS
+  #define ECHOWS
+#endif
+%}
+
+IDENT         [_A-Za-z][_A-Za-z0-9]*
+NUM           [0-9]+
+STRUCTXML     "//"[ \t]*"flexconf"[ \t]+
+NSSEP         ::
+NCONST        [0-9]+
+DCONST        [0-9]?\.[0-9]+
+SYMBOL        [{};<>,&[\]]
+
+WS            [ \t\n\r]*
+EAT_EOL       [^\n]*\n
+
+%x  SC_STRUCTXML
+%x  SC_SKIP
+%x  SC_OLCOMMENT
+%x  SC_BRCOMMENT
+
+
+%%
+
+struct {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(STRUCT);
+    return TOK_STRUCT;
+}
+
+class {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(CLASS);
+    return TOK_CLASS;
+}
+
+(std::)?set {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(SET);
+    return TOK_SET;
+}
+
+(std::)?map {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(MAP);
+    return TOK_MAP;
+}
+
+(std::)?multimap {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(MAP);
+    return TOK_MAP;
+}
+
+(std::)?list {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(LIST);
+    return TOK_LIST;
+}
+
+(std::)?vector {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(VECTOR);
+    return TOK_VECTOR;
+}
+
+
+
+{STRUCTXML} {
+    BEGIN(SC_STRUCTXML);
+    ECHOSX(STRUCTXML_BEGIN);
+}
+
+<SC_STRUCTXML>alias {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(SC_STRUCTXML_ALIAS);
+    return TOKSX_ALIAS;
+}
+
+<SC_STRUCTXML>item {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(SC_STRUCTXML_ITEM);
+    return TOKSX_ITEM;
+}
+
+<SC_STRUCTXML>id {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(SC_STRUCTXML_ID);
+    return TOKSX_ID;
+}
+
+<SC_STRUCTXML>[ \t]* {
+    ECHOWS;
+}
+
+<SC_STRUCTXML>"\n" {
+    ECHOSX(SC_STRUCTXML_END);
+    BEGIN(INITIAL);
+}
+
+
+
+<*>{IDENT} {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(IDENT);
+    return TOK_IDENT;
+}
+
+
+
+<*>{NUM} {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(NUM);
+    return TOK_NUM;
+}
+
+
+
+{NSSEP} {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(NSSEP);
+    return TOK_NSSEP;
+}
+
+
+
+{SYMBOL} {
+    yylval.assign(yytext, yyleng);
+    ECHOTOK(CHAR);
+    return *yytext;
+}
+
+
+
+[^/;(]+\([^);]*\){WS}(((const)?{WS}(={WS}0)?{WS};)|(\{[^}]*\})) {
+    /* skip functions and inline functions */
+    /*
+      this regex allows differences to legal C++. If illegal C++ is
+      matched it doesn't matter. The compiler takes care of it.
+      However some legal C++ may not be matched, specially when
+      comments or string constants containing brackets are in the
+      middle of the declaration. Simply avoid any function specific
+      special chars like [(){};] inside comments or string constants.
+      Rewrite the code if necessary. This should be possible in 99%
+      of the cases. In any other case use the skip tags below.
+    */
+    ECHOFKT(FUNCTION);
+}
+
+
+
+("/* flexconf skip begin */")|("// flexconf skip begin")|("//<!--") {
+    /* start skipped section */
+    ECHOOUT(beginskip);
+    BEGIN(SC_SKIP);
+}
+
+<SC_SKIP>[^/]* {
+    /* skip all but '/' */
+    ECHOOUT(skip);
+}
+
+<SC_SKIP>"/"+[^*] {
+    /* skip '/', if not followed by a '*' */
+    ECHOOUT(skip_slash);
+}
+
+
+<SC_SKIP>("/"+"* flexconf skip end */")|("// flexconf skip end")|("//-->") {
+    /* end skipped section */
+    ECHOOUT(endskip);
+    BEGIN(INITIAL);
+}
+
+
+
+#{EAT_EOL} {
+    /* skip preprocessor directives */
+    ECHOOUT(CPP);
+}
+
+
+
+"/*"[^*]* {
+    /* start c braced comments */
+    ECHOCMT(begincmt);
+    BEGIN(SC_BRCOMMENT);
+}
+
+<SC_BRCOMMENT>[^*]* {
+    ECHOCMT(incmt_not_star);
+}
+
+<SC_BRCOMMENT>"*"+[^*/]* {
+    ECHOCMT(incmt_star);
+}
+
+<SC_BRCOMMENT>"*"+"/" {
+    ECHOCMT(endcmt);
+    BEGIN(INITIAL);
+}
+
+
+"//" {
+    /* start c++ one line comments */
+    ECHOCMT(OLCOMMENT);
+    BEGIN(SC_OLCOMMENT);
+}
+
+<SC_OLCOMMENT>{EAT_EOL} {
+    /* remove one line comments until NL */
+    ECHOCMT(EAT_EOL);
+    BEGIN(INITIAL);
+}
+
+
+
+{WS} {
+    /* skip whitespace */
+    ECHOWS;
+}
+
+. {
+    /* anything else is an error */
+    printf("flex discovered an error: <%.*s>\n", yyleng, yytext);
+    return -1;
+}
+
+%%

@@ -1,0 +1,342 @@
+/*
+  flexconf - flexible configuration generator
+  Copyright (C) 2003-2008 Holger Böhnke
+
+  This file is part of flexconf.
+
+  Flexconf is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* -------------------------------------------------------------------------- */
+/* prolog C section                                                           */
+%{
+  // include type macro and other headers
+  #include "generator.h"
+  #include "yystype.h"
+  #include <stdio.h>
+  #include <list>
+
+  // declare flex and bison functions
+  int  yylex(void);
+  void yyrestart(FILE *);
+  void yyerror(const char *);
+
+  // statics pointer to generator
+  CGenerator   * spGenerator = NULL;
+%}
+
+
+
+/* -------------------------------------------------------------------------- */
+/* bison token declarations                                                   */
+
+// enable debug features
+// %debug
+
+// tokens for C++ keywords
+%token TOK_STRUCT     // struct
+%token TOK_CLASS      // class
+
+// other C++ tokens
+%token TOK_IDENT      // generic C++ identifier
+%token TOK_NUM        // numerical constant [0-9]+
+%token TOK_NSSEP      // namespace separator
+
+// tokens for stl keywords
+%token TOK_SET        // (set)|(std::set)
+%token TOK_MAP        // (map)|(std::map)
+%token TOK_LIST       // (list)|(std::list)
+%token TOK_VECTOR     // (vector)|(std::vector)
+
+// tokens for structxml special flags
+%token TOKSX_ALIAS    // alias
+%token TOKSX_ITEM     // item tagname of container classes and vectors
+// %token TOKSX_COUNT    // expression to be used as size in vector
+%token TOKSX_ID       // id (key) tagname of elements stored in a map
+
+
+
+%%
+/* -------------------------------------------------------------------------- */
+/* grammar declaration                                                        */
+
+start:
+    /* empty file */
+  | start struct
+;
+
+
+struct:
+    structFlags
+    TOK_STRUCT idStruct '{' varList '}' ';'
+    {
+      spGenerator->EndStruct();
+    }
+;
+
+
+idStruct:
+    TOK_IDENT
+    {
+      spGenerator->SetVariable(CGenerator::VAR_NAME, $1);
+      if (!spGenerator->IsVariableSet(CGenerator::VAR_ALIAS))
+      {
+        spGenerator->SetVariable(CGenerator::VAR_ALIAS, $1);
+      }
+      spGenerator->BeginStruct();
+    }
+;
+
+
+varList:
+    /* empty list */
+  | varList varDecl
+;
+
+
+varDecl:
+    idVarType TOK_IDENT ';' declFlags
+    {
+      spGenerator->SetVariable(CGenerator::VAR_TYPE, $1);
+      spGenerator->SetVariable(CGenerator::VAR_NAME, $2);
+      spGenerator->SetVariable(CGenerator::VAR_ALIAS, $4);
+      spGenerator->VarDecl();
+    }
+
+  | idVarType '&' TOK_IDENT ';' declFlags
+    {
+      spGenerator->SetVariable(CGenerator::VAR_TYPE, $1);
+      spGenerator->SetVariable(CGenerator::VAR_NAME, $3);
+      spGenerator->SetVariable(CGenerator::VAR_ALIAS, $5);
+      spGenerator->VarDecl();
+    }
+
+  | idVarType TOK_IDENT '[' TOK_NUM ']' ';' vecFlags
+    {
+      spGenerator->SetVariable(CGenerator::VAR_TYPE, $1);
+      spGenerator->SetVariable(CGenerator::VAR_NAME, $2);
+      spGenerator->SetVariable(CGenerator::VAR_SIZE, $4);
+//      if (!spGenerator->IsVariableSet(CGenerator::VAR_COUNT))
+//        spGenerator->SetVariable(CGenerator::VAR_COUNT, $4);
+      spGenerator->SetVariable(CGenerator::VAR_ALIAS, $7);
+      spGenerator->VarDeclVector();
+//      spGenerator->ClearVariable(CGenerator::VAR_COUNT);
+    }
+
+  | idSetListType TOK_IDENT ';' setlistFlags
+    {
+      spGenerator->SetVariable(CGenerator::VAR_TYPE, $1);
+      spGenerator->SetVariable(CGenerator::VAR_NAME, $2);
+      spGenerator->SetVariable(CGenerator::VAR_ALIAS, $4);
+      spGenerator->VarDeclSetList();
+    }
+
+  | idMapType TOK_IDENT ';' mapFlags
+    {
+      spGenerator->SetVariable(CGenerator::VAR_TYPE, $1);
+      spGenerator->SetVariable(CGenerator::VAR_NAME, $2);
+      spGenerator->SetVariable(CGenerator::VAR_ALIAS, $4);
+      spGenerator->VarDeclMap();
+    }
+;
+
+
+
+structFlags:
+    /* empty list */
+    {
+      spGenerator->ClearVariable(CGenerator::VAR_ALIAS);
+    }
+
+  | TOKSX_ALIAS TOK_IDENT
+    {
+      spGenerator->SetVariable(CGenerator::VAR_ALIAS, $2);
+    }
+;
+
+
+
+declFlags:
+    /* empty list */
+    {
+      // init to preceding stack element
+      // $-1 is TOK_IDENT in rule where structxmltags is used
+      $$ = $-1;
+    }
+
+  | declFlags TOKSX_ALIAS TOK_IDENT
+    {
+      $$ = $3;
+    }
+;
+
+
+
+vecFlags:
+    /* empty list */
+    {
+      // init to preceding stack element
+      // $-4 is TOK_IDENT in rule where structxmltags is used
+      $$ = $-4;
+    }
+
+  | vecFlags TOKSX_ALIAS TOK_IDENT
+    {
+      $$ = $3;
+    }
+
+  | vecFlags TOKSX_ITEM TOK_IDENT
+    {
+      spGenerator->SetVariable(CGenerator::VAR_ITEM, $3);
+    }
+
+/*
+  | vecFlags TOKSX_COUNT TOK_IDENT
+    {
+      spGenerator->SetVariable(CGenerator::VAR_COUNT, $3);
+    }
+*/
+;
+
+
+
+setlistFlags:
+    /* empty list */
+    {
+      // init to preceding stack element
+      // $-1 is TOK_IDENT in rule where structxmltags is used
+      $$ = $-1;
+    }
+
+  | setlistFlags TOKSX_ALIAS TOK_IDENT
+    {
+      $$ = $3;
+    }
+
+  | setlistFlags TOKSX_ITEM TOK_IDENT
+    {
+      spGenerator->SetVariable(CGenerator::VAR_ITEM, $3);
+    }
+;
+
+
+
+mapFlags:
+    /* empty list */
+    {
+      // init to preceding stack element
+      // $-1 is TOK_IDENT in rule where structxmltags is used
+      $$ = $-1;
+    }
+
+  | mapFlags TOKSX_ALIAS TOK_IDENT
+    {
+      $$ = $3;
+    }
+
+  | mapFlags TOKSX_ITEM TOK_IDENT
+    {
+      spGenerator->SetVariable(CGenerator::VAR_ITEM, $3);
+    }
+
+  | mapFlags TOKSX_ID TOK_IDENT
+    {
+      spGenerator->SetVariable(CGenerator::VAR_ID, $3);
+    }
+;
+
+
+
+idVarType:
+    TOK_IDENT
+    {
+      $$ = $1;
+    }
+
+  | idVarType TOK_IDENT
+    {
+      $$ = $1 + ' ' + $2;
+    }
+
+  | idVarType TOK_NSSEP TOK_IDENT
+    {
+      $$ = $1 + $2 + $3;
+    }
+
+  | idVarType '<' templParList '>'
+    {
+      $$ = $1 + $2 + $3 + $4;
+    }
+;
+
+
+templParList:
+    idVarType
+    {
+      $$ = $1;
+    }
+
+  | templParList ',' idVarType
+    {
+      $$ = $1 + $2 + $3;
+    }
+;
+
+
+idSetListType:
+    TOK_SET '<' idVarType '>'
+    {
+      $$ = $1 + $2 + $3 + $4;
+    }
+
+  | TOK_LIST '<' idVarType '>'
+    {
+      $$ = $1 + $2 + $3 + $4;
+    }
+;
+
+
+idMapType:
+    TOK_MAP '<' idVarType ',' idVarType '>'
+    {
+      $$ = $1 + $2 + $3 + $4 + $5 + $6;
+    }
+;
+
+
+/*
+tokIdentNum:
+    TOK_IDENT
+    {
+      $$ = $1;
+    }
+
+  | TOK_NUM
+    {
+      $$ = $1;
+    }
+;
+*/
+
+
+
+%%
+/* -------------------------------------------------------------------------- */
+/* epilog C section                                                           */
+
+void yyerror (const char * pszError)
+{
+  // printf ("bison: %s in line %d col %d\n", pszError, yylloc.first_line, yylloc.first_column);
+  printf ("bison said: %s\n", pszError);
+}

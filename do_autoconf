@@ -1,0 +1,58 @@
+#!/bin/sh
+
+if [ SunOS = `uname` ]
+then
+  DEBVER=0
+else
+  if [ -f /etc/SuSE-release ]
+  then
+    DEBVER=-1
+  else
+    DEBVER=$(cut -d " " -f 1 /etc/debian_version)
+  fi
+fi
+
+echo -n "running configuration for debian version $DEBVER "
+chmod u+x Makefile.dist
+
+case "$DEBVER" in
+  0)
+    echo Solaris
+    aclocal
+    autoconf
+    autoheader
+    automake -a --foreign
+    ./configure $@
+    ;;
+
+  -1)
+    echo SuSE
+    ./Makefile.dist all
+    ./configure $@
+    ;;
+
+  4.0)
+    echo "(etch)"
+    ./Makefile.dist sarge
+    ./configure $@
+    ;;
+
+  3.1)
+    echo "(sarge)"
+    ./Makefile.dist sarge
+    ./configure $@
+    ;;
+
+  3.0)
+    echo "(woody)"
+    ./Makefile.dist all
+    ./configure --with-stlport $@
+    ;;
+
+  *)
+    echo ERROR: could not determine debian distribution
+    exit 1
+    ;;
+esac
+
+exit 0
