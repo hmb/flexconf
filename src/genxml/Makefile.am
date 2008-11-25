@@ -1,5 +1,5 @@
 #   flexconf - flexible configuration generator
-#   Copyright (C) 2008 Holger Böhnke
+#   Copyright (C) 2008 Holger BÃ¶hnke
 #
 #   This file is part of flexconf.
 #
@@ -75,11 +75,11 @@ AM_CXXFLAGS = -g
 #---------------------------------------------------------------------------------
 # add serializer and xmlreader/writer as string to binary
 
-progstr.cxx: types.h writexml.h readxml.h serialize.h deserialize.h serialize.cpp deserialize.cpp
-	awk 'BEGIN { BS = "\\\\";  print "const char * pszTypes =" }       { gsub(/\\/,BS); } { gsub(/\t/,"\\t"); } { gsub(/\"/,"\\\""); } { print "  \"" $$0 "\\n\"" } END { print ";" }' types.h > $@
-	awk 'BEGIN { BS = "\\\\";  print "const char * pszHeader =" }      { gsub(/\\/,BS); } { gsub(/\t/,"\\t"); } { gsub(/\"/,"\\\""); } { print "  \"" $$0 "\\n\"" } END { print ";" }' writexml.h readxml.h serialize.h deserialize.h >> $@
-	awk 'BEGIN { BS = "\\\\";  print "const char * pszSerialize =" }   { gsub(/\\/,BS); } { gsub(/\t/,"\\t"); } { gsub(/\"/,"\\\""); } { print "  \"" $$0 "\\n\"" } END { print ";" }' serialize.cpp >> $@
-	awk 'BEGIN { BS = "\\\\";  print "const char * pszDeserialize =" } { gsub(/\\/,BS); } { gsub(/\t/,"\\t"); } { gsub(/\"/,"\\\""); } { print "  \"" $$0 "\\n\"" } END { print ";" }' deserialize.cpp >> $@
+progstr.cxx: types.h writexml.h readxml.h serialize.h deserialize.h serialize.cpp deserialize.cpp strcode.awk
+	awk -f strcode.awk -v STRNAME=pszTypes types.h > $@
+	awk -f strcode.awk -v STRNAME=pszHeader writexml.h readxml.h serialize.h deserialize.h >> $@
+	awk -f strcode.awk -v STRNAME=pszSerialize serialize.cpp >> $@
+	awk -f strcode.awk -v STRNAME=pszDeserialize deserialize.cpp >> $@
 
 
 #---------------------------------------------------------------------------------

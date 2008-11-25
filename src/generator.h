@@ -122,8 +122,8 @@ private:
   lstSourceFilesType  mlstSourceFiles;
 
   // defaults for structxml flags
-  static const char * const CGenerator::mpszItem;
-  static const char * const CGenerator::mpszId;
+  static const char * const mpszItem;
+  static const char * const mpszId;
 };
 
 
