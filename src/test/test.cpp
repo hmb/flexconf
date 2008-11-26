@@ -1,6 +1,6 @@
 /*
   flexconf - flexible configuration generator
-  Copyright (C) 2008 Holger Böhnke
+  Copyright (C) 2008 Holger BÃ¶hnke
 
   This file is part of flexconf.
 
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
     testFirst.strString   = "siebenundvierzigelf -\"'<>&- siebenundvierzigelf";
 
     testFirst.setData.insert("asdf");
-    testFirst.setData.insert("jklö");
+    testFirst.setData.insert("jklÃ¶");
 
     testFirst.setDataL.insert(545);
     testFirst.setDataL.insert(789);

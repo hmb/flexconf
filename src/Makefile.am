@@ -1,5 +1,5 @@
 #   flexconf - flexible configuration generator
-#   Copyright (C) 2003-2008 Holger Böhnke
+#   Copyright (C) 2003-2008 Holger BÃ¶hnke
 #
 #   This file is part of flexconf.
 #

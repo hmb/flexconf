@@ -1,6 +1,6 @@
 /*
   flexconf - flexible configuration generator
-  Copyright (C) 2008 Holger Böhnke
+  Copyright (C) 2008 Holger BÃ¶hnke
 
   This file is part of flexconf.
 
@@ -119,7 +119,7 @@ int main()
 
     testFirst.datData.dblDouble = 1.0;
     testFirst.datData.nInt      = 12.0;
-    testFirst.datData.strString = "Hänsel";
+    testFirst.datData.strString = "HÃ¤nsel";
 
     testFirst.datData2.dblDouble  = 2.0;
     testFirst.datData2.nInt       = 24.0;
@@ -130,7 +130,7 @@ int main()
 
 /*
     testFirst.setData.insert("asdf");
-    testFirst.setData.insert("jklö");
+    testFirst.setData.insert("jklÃ¶");
 
     testFirst.setDataL.insert(545);
     testFirst.setDataL.insert(789);

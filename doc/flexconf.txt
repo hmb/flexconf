@@ -543,4 +543,4 @@ Non zero is returned in case of failure.
 
 .SH AUTHOR
 
-Holger Böhnke (holger.boehnke (at) amarin (dot) de)
+Holger BÃ¶hnke (holger.boehnke (at) amarin (dot) de)
