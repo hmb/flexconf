@@ -337,6 +337,6 @@ tokIdentNum:
 
 void yyerror (const char * pszError)
 {
-  // printf ("bison: %s in line %d col %d\n", pszError, yylloc.first_line, yylloc.first_column);
+//  printf ("bison: %s in line %d col %d\n", pszError, yylloc.first_line, yylloc.first_column);
   printf ("bison said: %s\n", pszError);
 }
