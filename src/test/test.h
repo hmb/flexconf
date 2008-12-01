@@ -82,11 +82,9 @@ struct STestBase
   double            dblDouble;
   std::string       strString;
 
-/*
   SData             datData;
   SData             datData2;     // flexconf alias Data
   SData             vecData[4];   // flexconf alias sepp item DataElement
-*/
 
   // illeagal: maps with plain types as value are not allowed
   // std::map<std::string, int>    mapTesting;

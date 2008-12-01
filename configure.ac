@@ -64,11 +64,12 @@ AC_PROG_INSTALL
 
 
 
-#CXXFLAGS="-O0 -g $CXXFLAGS"
-#CFLAGS="-O0 -g $CFLAGS"
+#----------------------------------------------------------------------------
+# add additional compiler flags
 
 CXXFLAGS="$CXXFLAGS -O0"
 CFLAGS="-O0 $CFLAGS"
+
 
 
 #----------------------------------------------------------------------------
