@@ -263,7 +263,7 @@ int main(int argc, char *argv[])
         deserialize(readFile, sTest);
 //        if (CReadXmlFile::readFile.GetStatus());
       }
-      catch (CReadXmlFile::EStatus eStatus)
+      catch (CReadXmlFile::EStatus /*eStatus*/)
       {
         std::cout << "error parsing file at line " << readFile.GetLine() << ", " << readFile.GetColumn() << std::endl;
         return 1;

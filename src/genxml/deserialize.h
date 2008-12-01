@@ -39,12 +39,12 @@ inline void deserialize(const char * pBuffer, unsigned short & rObject)
 
 inline void deserialize(const char * pBuffer, int & rObject)
 {
-  rObject = strtol(pBuffer, 0, 10);
+  rObject = static_cast<int>(strtol(pBuffer, 0, 10));
 }
 
 inline void deserialize(const char * pBuffer, unsigned int & rObject)
 {
-  rObject = strtoul(pBuffer, 0, 10);
+  rObject = static_cast<unsigned int>(strtoul(pBuffer, 0, 10));
 }
 
 inline void deserialize(const char * pBuffer, long & rObject)
@@ -59,7 +59,7 @@ inline void deserialize(const char * pBuffer, unsigned long & rObject)
 
 inline void deserialize(const char * pBuffer, float & rObject)
 {
-  rObject = atof(pBuffer);
+  rObject = static_cast<float>(atof(pBuffer));
 }
 
 inline void deserialize(const char * pBuffer, double & rObject)
