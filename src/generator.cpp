@@ -282,7 +282,7 @@ void CGenerator::VarDeclMap()
 void CGenerator::EndStruct()
 {
   // verbose output
-  writeStr("}\n\n", stdout);
+  writeStr("};\n\n", stdout);
   // do the work
   writeStructEnd();
 }
