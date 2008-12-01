@@ -64,6 +64,13 @@ AC_PROG_INSTALL
 
 
 
+#CXXFLAGS="-O0 -g $CXXFLAGS"
+#CFLAGS="-O0 -g $CFLAGS"
+
+CXXFLAGS="$CXXFLAGS -O0"
+CFLAGS="-O0 $CFLAGS"
+
+
 #----------------------------------------------------------------------------
 # checks for AC_ARG_WITH
 # here we check for custom packets and set the according variable
