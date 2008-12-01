@@ -18,7 +18,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma warning( disable : 4786 )
+#pragma warning( disable : 4786 4996 )
 
 # include <iostream>
 # include "struct.h"

@@ -1,7 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+# Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flexconf", "flexconf.vcproj", "{16605B70-2DF9-4E6A-AB9B-E36590F0629B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "src\test\test.vcproj", "{DD1DE3A5-E4D7-48C7-B4FB-A22331253A48}"
+	ProjectSection(ProjectDependencies) = postProject
+		{16605B70-2DF9-4E6A-AB9B-E36590F0629B} = {16605B70-2DF9-4E6A-AB9B-E36590F0629B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +18,10 @@ Global
 		{16605B70-2DF9-4E6A-AB9B-E36590F0629B}.Debug|Win32.Build.0 = Debug|Win32
 		{16605B70-2DF9-4E6A-AB9B-E36590F0629B}.Release|Win32.ActiveCfg = Release|Win32
 		{16605B70-2DF9-4E6A-AB9B-E36590F0629B}.Release|Win32.Build.0 = Release|Win32
+		{DD1DE3A5-E4D7-48C7-B4FB-A22331253A48}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DD1DE3A5-E4D7-48C7-B4FB-A22331253A48}.Debug|Win32.Build.0 = Debug|Win32
+		{DD1DE3A5-E4D7-48C7-B4FB-A22331253A48}.Release|Win32.ActiveCfg = Release|Win32
+		{DD1DE3A5-E4D7-48C7-B4FB-A22331253A48}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -21,7 +21,7 @@
 #ifndef Generator_h
 #define Generator_h
 
-#pragma warning(disable: 4786)
+#pragma warning(disable: 4786 4996)
 #include <string>
 #include <list>
 #include <map>

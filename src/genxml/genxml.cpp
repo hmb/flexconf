@@ -61,7 +61,7 @@ int CGeneratorXml::header()
   writeStr("#define _Struct_h_\n\n", mfHeader);
   writeStr("#ifdef _MSC_VER\n", mfHeader);
   writeStr("#define snprintf _snprintf\n", mfHeader);
-  writeStr("#pragma warning(disable: 4786)\n", mfHeader);
+  writeStr("#pragma warning(disable: 4786 4996)\n", mfHeader);
   writeStr("#endif\n", mfHeader);
   writeStr("\n\n\n", mfHeader);
   writeStr("#include <string>\n", mfHeader);

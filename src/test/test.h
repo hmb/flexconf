@@ -48,7 +48,7 @@ using namespace std;
 
 //<!--
 #ifdef _MSC_VER
-typedef unsigned long SLongHex;
+//typedef unsigned long SLongHex;
 #endif
 //-->
 
