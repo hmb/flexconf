@@ -127,8 +127,8 @@ int main(int argc, char *argv[])
     data.dblDouble            = 54456456.564565;
     data.strString            = "ldksfl";
 
-    testFirst.vecData[0].nInt = 465;
-    testFirst.vecData[3].nInt = 78;
+//    testFirst.vecData[0].nInt = 465;
+//    testFirst.vecData[3].nInt = 78;
 
     testFirst.mlstData.push_back(data);
     testFirst.mlstData.push_back(data);

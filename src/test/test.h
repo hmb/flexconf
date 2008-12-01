@@ -82,11 +82,11 @@ struct STestBase
   double            dblDouble;
   std::string       strString;
 
-//*
+/*
   SData             datData;
   SData             datData2;     // flexconf alias Data
   SData             vecData[4];   // flexconf alias sepp item DataElement
-//*/
+*/
 
   // illeagal: maps with plain types as value are not allowed
   // std::map<std::string, int>    mapTesting;
@@ -103,7 +103,6 @@ struct STestBase
   // testcase for a data list
   std::list<std::string> mlstString;  //flexconf alias ListString item StringItem
 
-  // testcase for a long map
   std::map<long, SData>  mapDataL; //flexconf alias maplong item app id longid
 
   std::multimap<long, SData>  mmapDataL; //flexconf alias mmaplong item app id longid
