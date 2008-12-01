@@ -29,12 +29,12 @@ inline void deserialize(const char * pBuffer, bool & rObject)
 
 inline void deserialize(const char * pBuffer, short & rObject)
 {
-  rObject = strtol(pBuffer, 0, 10);
+  rObject = static_cast<short>(strtol(pBuffer, 0, 10));
 }
 
 inline void deserialize(const char * pBuffer, unsigned short & rObject)
 {
-  rObject = strtoul(pBuffer, 0, 10);
+  rObject = static_cast<unsigned short>(strtoul(pBuffer, 0, 10));
 }
 
 inline void deserialize(const char * pBuffer, int & rObject)
