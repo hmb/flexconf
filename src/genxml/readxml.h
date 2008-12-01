@@ -129,7 +129,12 @@ protected:
     mfExceptions(false),
     mnLine(1),
     mnColumn(1)
-  { }
+  {
+  }
+
+  virtual ~CReadXml()
+  {
+  }
 
   // dummy function that increases the line when '\n' is found
   bool incChar(char c)
@@ -164,7 +169,7 @@ protected:
     mstackTags.push_back(std::string(pszTag, nLen));
   }
 
-  void popTag(const char * pszTag, int nLen = std::string::npos)
+  void popTag(const char * pszTag, unsigned int nLen = std::string::npos)
   {
     std::string strTag;
 
@@ -484,6 +489,10 @@ class CReadXmlFile : public CReadXmlPChar
 public:
   CReadXmlFile() :
     CReadXmlPChar(0)
+  {
+  }
+
+  virtual ~CReadXmlFile()
   {
   }
 

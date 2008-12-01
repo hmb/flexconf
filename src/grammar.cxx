@@ -114,6 +114,11 @@
   // statics pointer to generator
   CGenerator   * spGenerator = NULL;
 
+  #ifdef _MSC_VER
+    // ms vs 2008: switch contains default but no case
+    #pragma warning(disable: 4065)
+  #endif
+
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -146,7 +151,7 @@ typedef int YYSTYPE;
 
 
 /* Line 216 of yacc.c.  */
-#line 150 "grammar.cxx"
+#line 155 "grammar.cxx"
 
 #ifdef short
 # undef short
@@ -443,10 +448,10 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    74,    74,    76,    81,    90,   102,   104,   109,   117,
-     125,   137,   145,   158,   162,   172,   178,   188,   194,   199,
-     216,   222,   227,   237,   243,   248,   253,   262,   267,   272,
-     277,   285,   290,   298,   303,   311
+       0,    79,    79,    81,    86,    95,   107,   109,   114,   122,
+     130,   142,   150,   163,   167,   177,   183,   193,   199,   204,
+     221,   227,   232,   242,   248,   253,   258,   267,   272,   277,
+     282,   290,   295,   303,   308,   316
 };
 #endif
 
@@ -1393,14 +1398,14 @@ yyreduce:
   switch (yyn)
     {
         case 4:
-#line 83 "grammar.yxx"
+#line 88 "grammar.yxx"
     {
       spGenerator->EndStruct();
     }
     break;
 
   case 5:
-#line 91 "grammar.yxx"
+#line 96 "grammar.yxx"
     {
       spGenerator->SetVariable(CGenerator::VAR_NAME, (yyvsp[(1) - (1)]));
       if (!spGenerator->IsVariableSet(CGenerator::VAR_ALIAS))
@@ -1412,7 +1417,7 @@ yyreduce:
     break;
 
   case 8:
-#line 110 "grammar.yxx"
+#line 115 "grammar.yxx"
     {
       spGenerator->SetVariable(CGenerator::VAR_TYPE, (yyvsp[(1) - (4)]));
       spGenerator->SetVariable(CGenerator::VAR_NAME, (yyvsp[(2) - (4)]));
@@ -1422,7 +1427,7 @@ yyreduce:
     break;
 
   case 9:
-#line 118 "grammar.yxx"
+#line 123 "grammar.yxx"
     {
       spGenerator->SetVariable(CGenerator::VAR_TYPE, (yyvsp[(1) - (5)]));
       spGenerator->SetVariable(CGenerator::VAR_NAME, (yyvsp[(3) - (5)]));
@@ -1432,7 +1437,7 @@ yyreduce:
     break;
 
   case 10:
-#line 126 "grammar.yxx"
+#line 131 "grammar.yxx"
     {
       spGenerator->SetVariable(CGenerator::VAR_TYPE, (yyvsp[(1) - (7)]));
       spGenerator->SetVariable(CGenerator::VAR_NAME, (yyvsp[(2) - (7)]));
@@ -1446,7 +1451,7 @@ yyreduce:
     break;
 
   case 11:
-#line 138 "grammar.yxx"
+#line 143 "grammar.yxx"
     {
       spGenerator->SetVariable(CGenerator::VAR_TYPE, (yyvsp[(1) - (4)]));
       spGenerator->SetVariable(CGenerator::VAR_NAME, (yyvsp[(2) - (4)]));
@@ -1456,7 +1461,7 @@ yyreduce:
     break;
 
   case 12:
-#line 146 "grammar.yxx"
+#line 151 "grammar.yxx"
     {
       spGenerator->SetVariable(CGenerator::VAR_TYPE, (yyvsp[(1) - (4)]));
       spGenerator->SetVariable(CGenerator::VAR_NAME, (yyvsp[(2) - (4)]));
@@ -1466,21 +1471,21 @@ yyreduce:
     break;
 
   case 13:
-#line 158 "grammar.yxx"
+#line 163 "grammar.yxx"
     {
       spGenerator->ClearVariable(CGenerator::VAR_ALIAS);
     }
     break;
 
   case 14:
-#line 163 "grammar.yxx"
+#line 168 "grammar.yxx"
     {
       spGenerator->SetVariable(CGenerator::VAR_ALIAS, (yyvsp[(2) - (2)]));
     }
     break;
 
   case 15:
-#line 172 "grammar.yxx"
+#line 177 "grammar.yxx"
     {
       // init to preceding stack element
       // $-1 is TOK_IDENT in rule where structxmltags is used
@@ -1489,14 +1494,14 @@ yyreduce:
     break;
 
   case 16:
-#line 179 "grammar.yxx"
+#line 184 "grammar.yxx"
     {
       (yyval) = (yyvsp[(3) - (3)]);
     }
     break;
 
   case 17:
-#line 188 "grammar.yxx"
+#line 193 "grammar.yxx"
     {
       // init to preceding stack element
       // $-4 is TOK_IDENT in rule where structxmltags is used
@@ -1505,21 +1510,21 @@ yyreduce:
     break;
 
   case 18:
-#line 195 "grammar.yxx"
+#line 200 "grammar.yxx"
     {
       (yyval) = (yyvsp[(3) - (3)]);
     }
     break;
 
   case 19:
-#line 200 "grammar.yxx"
+#line 205 "grammar.yxx"
     {
       spGenerator->SetVariable(CGenerator::VAR_ITEM, (yyvsp[(3) - (3)]));
     }
     break;
 
   case 20:
-#line 216 "grammar.yxx"
+#line 221 "grammar.yxx"
     {
       // init to preceding stack element
       // $-1 is TOK_IDENT in rule where structxmltags is used
@@ -1528,21 +1533,21 @@ yyreduce:
     break;
 
   case 21:
-#line 223 "grammar.yxx"
+#line 228 "grammar.yxx"
     {
       (yyval) = (yyvsp[(3) - (3)]);
     }
     break;
 
   case 22:
-#line 228 "grammar.yxx"
+#line 233 "grammar.yxx"
     {
       spGenerator->SetVariable(CGenerator::VAR_ITEM, (yyvsp[(3) - (3)]));
     }
     break;
 
   case 23:
-#line 237 "grammar.yxx"
+#line 242 "grammar.yxx"
     {
       // init to preceding stack element
       // $-1 is TOK_IDENT in rule where structxmltags is used
@@ -1551,84 +1556,84 @@ yyreduce:
     break;
 
   case 24:
-#line 244 "grammar.yxx"
+#line 249 "grammar.yxx"
     {
       (yyval) = (yyvsp[(3) - (3)]);
     }
     break;
 
   case 25:
-#line 249 "grammar.yxx"
+#line 254 "grammar.yxx"
     {
       spGenerator->SetVariable(CGenerator::VAR_ITEM, (yyvsp[(3) - (3)]));
     }
     break;
 
   case 26:
-#line 254 "grammar.yxx"
+#line 259 "grammar.yxx"
     {
       spGenerator->SetVariable(CGenerator::VAR_ID, (yyvsp[(3) - (3)]));
     }
     break;
 
   case 27:
-#line 263 "grammar.yxx"
+#line 268 "grammar.yxx"
     {
       (yyval) = (yyvsp[(1) - (1)]);
     }
     break;
 
   case 28:
-#line 268 "grammar.yxx"
+#line 273 "grammar.yxx"
     {
       (yyval) = (yyvsp[(1) - (2)]) + ' ' + (yyvsp[(2) - (2)]);
     }
     break;
 
   case 29:
-#line 273 "grammar.yxx"
+#line 278 "grammar.yxx"
     {
       (yyval) = (yyvsp[(1) - (3)]) + (yyvsp[(2) - (3)]) + (yyvsp[(3) - (3)]);
     }
     break;
 
   case 30:
-#line 278 "grammar.yxx"
+#line 283 "grammar.yxx"
     {
       (yyval) = (yyvsp[(1) - (4)]) + (yyvsp[(2) - (4)]) + (yyvsp[(3) - (4)]) + (yyvsp[(4) - (4)]);
     }
     break;
 
   case 31:
-#line 286 "grammar.yxx"
+#line 291 "grammar.yxx"
     {
       (yyval) = (yyvsp[(1) - (1)]);
     }
     break;
 
   case 32:
-#line 291 "grammar.yxx"
+#line 296 "grammar.yxx"
     {
       (yyval) = (yyvsp[(1) - (3)]) + (yyvsp[(2) - (3)]) + (yyvsp[(3) - (3)]);
     }
     break;
 
   case 33:
-#line 299 "grammar.yxx"
-    {
-      (yyval) = (yyvsp[(1) - (4)]) + (yyvsp[(2) - (4)]) + (yyvsp[(3) - (4)]) + (yyvsp[(4) - (4)]);
-    }
-    break;
-
-  case 34:
 #line 304 "grammar.yxx"
     {
       (yyval) = (yyvsp[(1) - (4)]) + (yyvsp[(2) - (4)]) + (yyvsp[(3) - (4)]) + (yyvsp[(4) - (4)]);
     }
     break;
 
+  case 34:
+#line 309 "grammar.yxx"
+    {
+      (yyval) = (yyvsp[(1) - (4)]) + (yyvsp[(2) - (4)]) + (yyvsp[(3) - (4)]) + (yyvsp[(4) - (4)]);
+    }
+    break;
+
   case 35:
-#line 312 "grammar.yxx"
+#line 317 "grammar.yxx"
     {
       (yyval) = (yyvsp[(1) - (6)]) + (yyvsp[(2) - (6)]) + (yyvsp[(3) - (6)]) + (yyvsp[(4) - (6)]) + (yyvsp[(5) - (6)]) + (yyvsp[(6) - (6)]);
     }
@@ -1636,7 +1641,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1640 "grammar.cxx"
+#line 1645 "grammar.cxx"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1850,7 +1855,7 @@ yyreturn:
 }
 
 
-#line 334 "grammar.yxx"
+#line 339 "grammar.yxx"
 
 /* -------------------------------------------------------------------------- */
 /* epilog C section                                                           */

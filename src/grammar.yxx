@@ -34,11 +34,11 @@
 
   // statics pointer to generator
   CGenerator   * spGenerator = NULL;
-  
-#ifdef _MSC_VER
-  // ms vs 2008: switch contains default but no case  
-  #pragma warning(disable: 4065)
-#endif
+
+  #ifdef _MSC_VER
+    // ms vs 2008: switch contains default but no case
+    #pragma warning(disable: 4065)
+  #endif
 %}
 
 

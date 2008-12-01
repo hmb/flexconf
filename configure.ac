@@ -67,8 +67,8 @@ AC_PROG_INSTALL
 #----------------------------------------------------------------------------
 # add additional compiler flags
 
-CXXFLAGS="$CXXFLAGS -O0"
-CFLAGS="-O0 $CFLAGS"
+CXXFLAGS="$CXXFLAGS -O0 -Wall"
+CFLAGS="-O0 $CFLAGS -Wall"
 
 
 

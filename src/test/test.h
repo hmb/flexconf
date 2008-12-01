@@ -128,6 +128,7 @@ struct STestBase
     return 879;
   }
 
+  virtual ~STestBase() {}
   virtual unsigned int abstract_function(int some_int) = 0;
   virtual unsigned int abstract_function(int some_int) const = 0  ;
 };
@@ -185,6 +186,7 @@ struct STestIgnored
     return 879;
   }
 
+  virtual ~STestIgnored() {}
   virtual unsigned int abstract_function(int some_int)  const = 0 ;
 };
 

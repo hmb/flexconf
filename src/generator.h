@@ -21,7 +21,10 @@
 #ifndef Generator_h
 #define Generator_h
 
-#pragma warning(disable: 4786 4996)
+#ifdef _MSC_VER
+  #pragma warning(disable: 4786 4996)
+#endif
+
 #include <string>
 #include <list>
 #include <map>

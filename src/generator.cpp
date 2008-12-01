@@ -30,12 +30,12 @@ const char * const CGenerator::mpszId     = "_id";
 
 CGenerator::CGenerator()
   :
-  mstrHeader("struct.h"),
-  mstrSerialize("structSer.cpp"),
-  mstrDeserialize("structDes.cpp"),
   mfHeader(0),
   mfSerialize(0),
-  mfDeserialize(0)
+  mfDeserialize(0),
+  mstrHeader("struct.h"),
+  mstrSerialize("structSer.cpp"),
+  mstrDeserialize("structDes.cpp")
 {
 }
 

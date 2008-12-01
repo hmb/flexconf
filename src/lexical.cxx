@@ -763,6 +763,7 @@ char *yytext;
 */
 #line 24 "lexical.lxx"
 #ifdef _MSC_VER
+  #pragma warning(disable: 4996)
   #define YY_NO_UNISTD_H
   #include <io.h>
 #endif
@@ -809,7 +810,7 @@ char *yytext;
 
 
 
-#line 813 "lexical.cxx"
+#line 814 "lexical.cxx"
 
 #define INITIAL 0
 #define SC_STRUCTXML 1
@@ -966,10 +967,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 86 "lexical.lxx"
+#line 87 "lexical.lxx"
 
 
-#line 973 "lexical.cxx"
+#line 974 "lexical.cxx"
 
 	if ( !(yy_init) )
 		{
@@ -1054,7 +1055,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 88 "lexical.lxx"
+#line 89 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(STRUCT);
@@ -1063,7 +1064,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 94 "lexical.lxx"
+#line 95 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(CLASS);
@@ -1072,7 +1073,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 100 "lexical.lxx"
+#line 101 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(SET);
@@ -1081,7 +1082,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 106 "lexical.lxx"
+#line 107 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(MAP);
@@ -1090,7 +1091,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 112 "lexical.lxx"
+#line 113 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(MAP);
@@ -1099,7 +1100,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 118 "lexical.lxx"
+#line 119 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(LIST);
@@ -1108,7 +1109,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 124 "lexical.lxx"
+#line 125 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(VECTOR);
@@ -1117,7 +1118,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 132 "lexical.lxx"
+#line 133 "lexical.lxx"
 {
     BEGIN(SC_STRUCTXML);
     ECHOSX(STRUCTXML_BEGIN);
@@ -1125,7 +1126,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 137 "lexical.lxx"
+#line 138 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(SC_STRUCTXML_ALIAS);
@@ -1134,7 +1135,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 143 "lexical.lxx"
+#line 144 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(SC_STRUCTXML_ITEM);
@@ -1143,7 +1144,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 149 "lexical.lxx"
+#line 150 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(SC_STRUCTXML_ID);
@@ -1152,7 +1153,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 155 "lexical.lxx"
+#line 156 "lexical.lxx"
 {
     ECHOWS;
 }
@@ -1160,7 +1161,7 @@ YY_RULE_SETUP
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 159 "lexical.lxx"
+#line 160 "lexical.lxx"
 {
     ECHOSX(SC_STRUCTXML_END);
     BEGIN(INITIAL);
@@ -1168,7 +1169,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 166 "lexical.lxx"
+#line 167 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(IDENT);
@@ -1177,7 +1178,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 174 "lexical.lxx"
+#line 175 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(NUM);
@@ -1186,7 +1187,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 182 "lexical.lxx"
+#line 183 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(NSSEP);
@@ -1195,7 +1196,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 190 "lexical.lxx"
+#line 191 "lexical.lxx"
 {
     yylval.assign(yytext, yyleng);
     ECHOTOK(CHAR);
@@ -1205,7 +1206,7 @@ YY_RULE_SETUP
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 198 "lexical.lxx"
+#line 199 "lexical.lxx"
 {
     /* skip functions and inline functions */
     /*
@@ -1223,7 +1224,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 215 "lexical.lxx"
+#line 216 "lexical.lxx"
 {
     /* start skipped section */
     ECHOOUT(beginskip);
@@ -1233,7 +1234,7 @@ YY_RULE_SETUP
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 221 "lexical.lxx"
+#line 222 "lexical.lxx"
 {
     /* skip all but '/' */
     ECHOOUT(skip);
@@ -1242,7 +1243,7 @@ YY_RULE_SETUP
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 226 "lexical.lxx"
+#line 227 "lexical.lxx"
 {
     /* skip '/', if not followed by a '*' */
     ECHOOUT(skip_slash);
@@ -1250,7 +1251,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 232 "lexical.lxx"
+#line 233 "lexical.lxx"
 {
     /* end skipped section */
     ECHOOUT(endskip);
@@ -1260,7 +1261,7 @@ YY_RULE_SETUP
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 240 "lexical.lxx"
+#line 241 "lexical.lxx"
 {
     /* skip preprocessor directives */
     ECHOOUT(CPP);
@@ -1269,7 +1270,7 @@ YY_RULE_SETUP
 case 24:
 /* rule 24 can match eol */
 YY_RULE_SETUP
-#line 247 "lexical.lxx"
+#line 248 "lexical.lxx"
 {
     /* start c braced comments */
     ECHOCMT(begincmt);
@@ -1279,7 +1280,7 @@ YY_RULE_SETUP
 case 25:
 /* rule 25 can match eol */
 YY_RULE_SETUP
-#line 253 "lexical.lxx"
+#line 254 "lexical.lxx"
 {
     ECHOCMT(incmt_not_star);
 }
@@ -1287,14 +1288,14 @@ YY_RULE_SETUP
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 257 "lexical.lxx"
+#line 258 "lexical.lxx"
 {
     ECHOCMT(incmt_star);
 }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 261 "lexical.lxx"
+#line 262 "lexical.lxx"
 {
     ECHOCMT(endcmt);
     BEGIN(INITIAL);
@@ -1302,7 +1303,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 267 "lexical.lxx"
+#line 268 "lexical.lxx"
 {
     /* start c++ one line comments */
     ECHOCMT(OLCOMMENT);
@@ -1312,7 +1313,7 @@ YY_RULE_SETUP
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 273 "lexical.lxx"
+#line 274 "lexical.lxx"
 {
     /* remove one line comments until NL */
     ECHOCMT(EAT_EOL);
@@ -1322,7 +1323,7 @@ YY_RULE_SETUP
 case 30:
 /* rule 30 can match eol */
 YY_RULE_SETUP
-#line 281 "lexical.lxx"
+#line 282 "lexical.lxx"
 {
     /* skip whitespace */
     ECHOWS;
@@ -1330,7 +1331,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 286 "lexical.lxx"
+#line 287 "lexical.lxx"
 {
     /* anything else is an error */
     printf("flex discovered an error: <%.*s>\n", yyleng, yytext);
@@ -1339,10 +1340,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 292 "lexical.lxx"
+#line 293 "lexical.lxx"
 ECHO;
 	YY_BREAK
-#line 1346 "lexical.cxx"
+#line 1347 "lexical.cxx"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(SC_STRUCTXML):
 case YY_STATE_EOF(SC_SKIP):
@@ -2332,7 +2333,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 292 "lexical.lxx"
+#line 293 "lexical.lxx"
 
 
 
