@@ -13,10 +13,10 @@
   </general>
   <kdevcustomproject>
     <run>
-      <mainprogram>flexconf</mainprogram>
-      <directoryradio>executable</directoryradio>
-      <customdirectory>/</customdirectory>
-      <programargs></programargs>
+      <mainprogram>/home/holgerb/projects/flexconf/src/flexconf</mainprogram>
+      <directoryradio>custom</directoryradio>
+      <customdirectory>/home/holgerb/projects/flexconf/src/test/</customdirectory>
+      <programargs>test.h</programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
@@ -42,7 +42,7 @@
   <kdevdebugger>
     <general>
       <dbgshell></dbgshell>
-      <programargs></programargs>
+      <programargs>test.h</programargs>
       <gdbpath></gdbpath>
       <configGdbScript></configGdbScript>
       <runShellScript></runShellScript>
