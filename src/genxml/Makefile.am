@@ -75,11 +75,11 @@ AM_CXXFLAGS = -g
 #---------------------------------------------------------------------------------
 # add serializer and xmlreader/writer as string to binary
 
-progstr.cxx: types.h writexml.h readxml.h serialize.h deserialize.h serialize.cpp deserialize.cpp strcode.awk
-	awk -f strcode.awk -v STRNAME=pszTypes types.h > $@
-	awk -f strcode.awk -v STRNAME=pszHeader writexml.h readxml.h serialize.h deserialize.h >> $@
-	awk -f strcode.awk -v STRNAME=pszSerialize serialize.cpp >> $@
-	awk -f strcode.awk -v STRNAME=pszDeserialize deserialize.cpp >> $@
+progstr.cxx: types.h writexml.h readxml.h serialize.h deserialize.h serialize.cpp deserialize.cpp strcode.pl
+	perl -w strcode.pl pszTypes types.h > $@
+	perl -w strcode.pl pszHeader writexml.h readxml.h serialize.h deserialize.h >> $@
+	perl -w strcode.pl pszSerialize serialize.cpp >> $@
+	perl -w strcode.pl pszDeserialize deserialize.cpp >> $@
 
 
 #---------------------------------------------------------------------------------
