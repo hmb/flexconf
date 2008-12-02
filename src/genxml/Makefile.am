@@ -75,8 +75,9 @@ AM_CXXFLAGS = -g
 #---------------------------------------------------------------------------------
 # add serializer and xmlreader/writer as string to binary
 
-progstr.cxx: types.h writexml.h readxml.h serialize.h deserialize.h serialize.cpp deserialize.cpp strcode.pl
-	perl -w strcode.pl pszTypes types.h > $@
+progstr.cxx: disclaimer.h types.h writexml.h readxml.h serialize.h deserialize.h serialize.cpp deserialize.cpp strcode.pl
+	perl -w strcode.pl pszDisclaimer disclaimer.h > $@
+	perl -w strcode.pl pszTypes types.h >> $@
 	perl -w strcode.pl pszHeader writexml.h readxml.h serialize.h deserialize.h >> $@
 	perl -w strcode.pl pszSerialize serialize.cpp >> $@
 	perl -w strcode.pl pszDeserialize deserialize.cpp >> $@

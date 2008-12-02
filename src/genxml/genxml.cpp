@@ -23,7 +23,8 @@
 
 
 
-// strings held in progstr.cxx, generated from parser files with awk
+// strings held in progstr.cxx, generated from parser files with perl
+extern const char * pszDisclaimer;
 extern const char * pszTypes;
 extern const char * pszHeader;
 extern const char * pszSerialize;
@@ -57,6 +58,9 @@ int CGeneratorXml::header()
   writeStr("   Bugreports to " PACKAGE_BUGREPORT "\n", mfHeader);
   writeStr("   ------------------------------------------------------------------\n", mfHeader);
   writeStr("*/\n", mfHeader);
+  writeStr("\n", mfHeader);
+  writeStr(pszDisclaimer, mfHeader);
+  writeStr("\n", mfHeader);
   writeStr("#ifndef _Struct_h_\n", mfHeader);
   writeStr("#define _Struct_h_\n\n", mfHeader);
   writeStr("#ifdef _MSC_VER\n", mfHeader);
@@ -84,6 +88,9 @@ int CGeneratorXml::header()
   writeStr("   Bugreports to " PACKAGE_BUGREPORT "\n", mfSerialize);
   writeStr("   ------------------------------------------------------------------\n", mfSerialize);
   writeStr("*/\n", mfSerialize);
+  writeStr("\n", mfSerialize);
+  writeStr(pszDisclaimer, mfSerialize);
+  writeStr("\n", mfSerialize);
   writeStr("#include \"struct.h\"\n", mfSerialize);
 //  writeStr("#include <stdio.h>\n", mfSerialize);
 
@@ -99,6 +106,9 @@ int CGeneratorXml::header()
   writeStr("   Bugreports to " PACKAGE_BUGREPORT "\n", mfDeserialize);
   writeStr("   ------------------------------------------------------------------\n", mfDeserialize);
   writeStr("*/\n", mfDeserialize);
+  writeStr("\n", mfDeserialize);
+  writeStr(pszDisclaimer, mfDeserialize);
+  writeStr("\n", mfDeserialize);
   writeStr("#include \"struct.h\"\n", mfDeserialize);
   writeStr("#include <stdlib.h>\n", mfDeserialize);
   return 0;

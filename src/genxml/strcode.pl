@@ -27,9 +27,21 @@ while ($filname = shift @ARGV)
   }
 
   my @infile  = <INFIL>;
+  my $start   = 1;
 
   foreach my $line (@infile)
   {
+    # skip c++ comments at the beginning of the file
+    if ($start)
+    {
+      if ($line =~ /^\/\//)
+      {
+        next;
+      }
+
+      $start = 0;
+    }
+
     $line =~ s/\\/\\\\/g;
     $line =~ s/"/\\"/g;
     $line =~ s/\t/\\t/g;
