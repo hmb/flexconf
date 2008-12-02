@@ -167,38 +167,26 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="Quelldateien"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+		<File
+			RelativePath=".\struct.h"
 			>
-			<File
-				RelativePath=".\structDes.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\structSer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test.cpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Headerdateien"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+		</File>
+		<File
+			RelativePath=".\structDes.cpp"
 			>
-			<File
-				RelativePath=".\struct.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test.h"
-				>
-			</File>
-		</Filter>
+		</File>
+		<File
+			RelativePath=".\structSer.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\test.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\test.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
