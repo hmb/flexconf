@@ -162,12 +162,178 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			Name="doc"
 			>
 			<File
-				RelativePath=".\config.h"
+				RelativePath=".\doc\flexconf.txt"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="genxml"
+			>
+			<File
+				RelativePath=".\src\genxml\deserialize.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\src\genxml\deserialize.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\src\genxml\genxml.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\genxml\genxml.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\genxml\progstr.cxx"
+				>
+			</File>
+			<File
+				RelativePath=".\src\genxml\readxml.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\src\genxml\serialize.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\src\genxml\serialize.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\src\genxml\strcode.pl"
+				>
+			</File>
+			<File
+				RelativePath=".\src\genxml\types.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\src\genxml\writexml.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="gencust"
+			>
+			<File
+				RelativePath=".\src\gencust\gencust.cpp"
 				>
 			</File>
 			<File
@@ -175,62 +341,60 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\generator.h"
+				RelativePath=".\src\gencust\genxml.src"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="genreg"
+			>
+			<File
+				RelativePath=".\src\genreg\genreg.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\src\genreg\genreg.h"
 				>
 			</File>
-			<File
-				RelativePath=".\src\genxml\genxml.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Source Files"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
-			>
-			<File
-				RelativePath=".\src\gencust\gencust.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\genreg\genreg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\genxml\genxml.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\grammar.cxx"
-				>
-			</File>
-			<File
-				RelativePath=".\src\lexical.cxx"
-				>
-			</File>
-			<File
-				RelativePath=".\src\main.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\genxml\progstr.cxx"
-				>
-			</File>
 		</Filter>
 		<File
-			RelativePath=".\doc\flexconf.txt"
+			RelativePath=".\config.h"
 			>
 		</File>
 		<File
-			RelativePath=".\src\gencust\genxml.src"
+			RelativePath=".\src\generator.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\generator.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\grammar.cxx"
+			>
+		</File>
+		<File
+			RelativePath=".\src\grammar.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\grammar.yxx"
+			>
+		</File>
+		<File
+			RelativePath=".\src\lexical.cxx"
+			>
+		</File>
+		<File
+			RelativePath=".\src\lexical.lxx"
+			>
+		</File>
+		<File
+			RelativePath=".\src\main.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\src\yystype.h"
 			>
 		</File>
 	</Files>
