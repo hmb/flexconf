@@ -19,6 +19,7 @@
 */
 
 #include "generator.h"
+#include "config.h"
 
 
 
@@ -37,6 +38,8 @@ CGenerator::CGenerator()
   mstrSerialize("structSer.cpp"),
   mstrDeserialize("structDes.cpp")
 {
+  SetVariable(VAR_PACKAGE, PACKAGE_STRING);
+  SetVariable(VAR_BUGREPORT, PACKAGE_BUGREPORT);
 }
 
 
@@ -175,6 +178,8 @@ void CGenerator::Reset()
 
 
 // names of variables filled by framework
+const char * const CGenerator::VAR_PACKAGE        = "packagename";
+const char * const CGenerator::VAR_BUGREPORT      = "bugreport";
 const char * const CGenerator::VAR_HEADERFILE     = "headerfile";
 // names of variables filled by c++
 const char * const CGenerator::VAR_TYPE           = "type";

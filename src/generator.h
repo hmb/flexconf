@@ -49,7 +49,9 @@ public:
   void Reset();
 
   // names of variables filled by framework
-  static const char * const VAR_HEADERFILE;   // name of header file beeing processed
+  static const char * const VAR_PACKAGE;      // name of package
+  static const char * const VAR_BUGREPORT;    // address for bugreports
+  static const char * const VAR_HEADERFILE;   // name of headerfile being processed
   // names of variables filled by c++
   static const char * const VAR_TYPE;         // type of a member declaration
   static const char * const VAR_NAME;         // name of the declared member
