@@ -47,19 +47,7 @@ CGeneratorXml::~CGeneratorXml()
 int CGeneratorXml::header()
 {
   // write header declarations
-  writeStr("/* ------------------------------------------------------------------\n", mfHeader);
-  writeStr("   This file is the structure de/serializer header file.\n", mfHeader);
-  writeStr("   It has been automatically created by:\n", mfHeader);
-  writeStr("   \n", mfHeader);
-  writeStr("   " PACKAGE_STRING "\n", mfHeader);
-  writeStr("   \n", mfHeader);
-  writeStr("   !!! DO NOT MODIFY MANUALLY !!!\n", mfHeader);
-  writeStr("   \n", mfHeader);
-  writeStr("   Bugreports to " PACKAGE_BUGREPORT "\n", mfHeader);
-  writeStr("   ------------------------------------------------------------------\n", mfHeader);
-  writeStr("*/\n", mfHeader);
-  writeStr("\n", mfHeader);
-  writeStr(pszDisclaimer, mfHeader);
+  writeRep(pszDisclaimer, mfHeader);
   writeStr("\n", mfHeader);
   writeStr("#ifndef _Struct_h_\n", mfHeader);
   writeStr("#define _Struct_h_\n\n", mfHeader);
@@ -77,37 +65,13 @@ int CGeneratorXml::header()
   writeStr(pszTypes, mfHeader);
 
   // write serializer
-  writeStr("/* ------------------------------------------------------------------\n", mfSerialize);
-  writeStr("   This file is the structure serializer implementation file.\n", mfSerialize);
-  writeStr("   It has been automatically created by:\n", mfSerialize);
-  writeStr("   \n", mfSerialize);
-  writeStr("   " PACKAGE_STRING "\n", mfSerialize);
-  writeStr("   \n", mfSerialize);
-  writeStr("   !!! DO NOT MODIFY MANUALLY !!!\n", mfSerialize);
-  writeStr("   \n", mfSerialize);
-  writeStr("   Bugreports to " PACKAGE_BUGREPORT "\n", mfSerialize);
-  writeStr("   ------------------------------------------------------------------\n", mfSerialize);
-  writeStr("*/\n", mfSerialize);
-  writeStr("\n", mfSerialize);
-  writeStr(pszDisclaimer, mfSerialize);
+  writeRep(pszDisclaimer, mfSerialize);
   writeStr("\n", mfSerialize);
   writeStr("#include \"struct.h\"\n", mfSerialize);
 //  writeStr("#include <stdio.h>\n", mfSerialize);
 
   // write deserializer
-  writeStr("/* ------------------------------------------------------------------\n", mfDeserialize);
-  writeStr("   This file is the structure deserializer implementation file.\n", mfDeserialize);
-  writeStr("   It has been automatically created by:\n", mfDeserialize);
-  writeStr("   \n", mfDeserialize);
-  writeStr("   " PACKAGE_STRING "\n", mfDeserialize);
-  writeStr("   \n", mfDeserialize);
-  writeStr("   !!! DO NOT MODIFY MANUALLY !!!\n", mfDeserialize);
-  writeStr("   \n", mfDeserialize);
-  writeStr("   Bugreports to " PACKAGE_BUGREPORT "\n", mfDeserialize);
-  writeStr("   ------------------------------------------------------------------\n", mfDeserialize);
-  writeStr("*/\n", mfDeserialize);
-  writeStr("\n", mfDeserialize);
-  writeStr(pszDisclaimer, mfDeserialize);
+  writeRep(pszDisclaimer, mfDeserialize);
   writeStr("\n", mfDeserialize);
   writeStr("#include \"struct.h\"\n", mfDeserialize);
   writeStr("#include <stdlib.h>\n", mfDeserialize);

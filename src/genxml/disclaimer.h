@@ -18,7 +18,16 @@
 //
 //
 //
-/*
+/*-------------------------------------------------------------------
+  This file is part of the structure de/serializer.
+  It has been automatically created by:
+
+  $(packagename)
+
+  !!! DO NOT MODIFY MANUALLY !!!
+
+  Bugreports to $(bugreport)
+  -------------------------------------------------------------------
   flexconf - flexible configuration generator
   Copyright (C) 2008 Holger Böhnke
 
@@ -36,4 +45,13 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -------------------------------------------------------------------
+  As a special exception, you may create a larger work that contains
+  part or all of the de/serializer functions and distribute that work
+  under terms of your choice, as long as that work itself does not
+  provide a functionality similar to flexconf.
+  Alternatively, if you modify or redistribute this file itself,
+  you may (at your option) remove this special exception, which will
+  cause the file to be licensed under the GNU General Public
+  License without this special exception.
 */
