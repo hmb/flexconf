@@ -55,7 +55,7 @@ public:
   // names of variables filled by c++
   static const char * const VAR_TYPE;         // type of a member declaration
   static const char * const VAR_NAME;         // name of the declared member
-  static const char * const VAR_SIZE;         // size if declared member, if declared as array
+  static const char * const VAR_SIZE;         // size of declared member, if declared as array
 //  static const char * const VAR_COUNT;        // number of valid elements in an array
   // names of variables filled by tags
   static const char * const VAR_ALIAS;        // alias given by tag
@@ -126,7 +126,7 @@ private:
 
   lstSourceFilesType  mlstSourceFiles;
 
-  // defaults for structxml flags
+  // defaults for flexconf flags
   static const char * const mpszItem;
   static const char * const mpszId;
 };
