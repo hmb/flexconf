@@ -29,7 +29,7 @@ public:
     eStatXmlDeclTagstartMissing,      // the declaration tag start '<?xml...'is not found
     eStatXmlDeclTagendMissing,        // the declaration tag end '?>'is not found
     eStatIlleagalCharInTagName,       // a char other than alnum and '_' has been found in a tagname
-    eStatIlleagalTextBetweenTags,     // text other tha ws is found between closed value tags
+    eStatIlleagalTextBetweenTags,     // text other than WS is found between closed value tags
     eStatIlleagalStarttag,            // an unexpected starttag has been found
     eStatMissingStarttag,             // there's no starttag where we expect one in a skip operation
     eStatMissingEndtag,               // the end tag for a value is missing
@@ -79,7 +79,7 @@ public:
   }
 
 /*
-  bool IsStrict() const
+  bool Strict() const
   {
     return mfStrict;
   }
@@ -91,7 +91,7 @@ public:
   }
 
 /*
-  bool IsExceptions()
+  bool Exceptions()
   {
     return mfExceptions;
   }
