@@ -25,6 +25,9 @@
 
 // strings held in progstr.cxx, generated from parser files with perl
 extern const char * pszDisclaimer;
+extern const char * pszHeaderProlog;
+extern const char * pszSerProlog;
+extern const char * pszDesProlog;
 extern const char * pszTypes;
 extern const char * pszHeader;
 extern const char * pszSerialize;
@@ -48,33 +51,14 @@ int CGeneratorXml::header()
 {
   // write header declarations
   writeRep(pszDisclaimer, mfHeader);
-  writeStr("\n", mfHeader);
-  writeStr("#ifndef _Struct_h_\n", mfHeader);
-  writeStr("#define _Struct_h_\n\n", mfHeader);
-  writeStr("#ifdef _MSC_VER\n", mfHeader);
-  writeStr("#define snprintf _snprintf\n", mfHeader);
-  writeStr("#pragma warning(disable: 4786 4996)\n", mfHeader);
-  writeStr("#endif\n", mfHeader);
-  writeStr("\n\n\n", mfHeader);
-  writeStr("#include <string>\n", mfHeader);
-  writeStr("#include <list>\n", mfHeader);
-  writeStr("#include <set>\n", mfHeader);
-  writeStr("#include <map>\n", mfHeader);
-  writeStr("#include <stdio.h>\n", mfHeader);
-  writeStr("\n\n\n", mfHeader);
+  writeRep(pszHeaderProlog, mfHeader);
   writeStr(pszTypes, mfHeader);
-
   // write serializer
   writeRep(pszDisclaimer, mfSerialize);
-  writeStr("\n", mfSerialize);
-  writeStr("#include \"struct.h\"\n", mfSerialize);
-//  writeStr("#include <stdio.h>\n", mfSerialize);
-
+  writeRep(pszSerProlog, mfSerialize);
   // write deserializer
   writeRep(pszDisclaimer, mfDeserialize);
-  writeStr("\n", mfDeserialize);
-  writeStr("#include \"struct.h\"\n", mfDeserialize);
-  writeStr("#include <stdlib.h>\n", mfDeserialize);
+  writeRep(pszDesProlog, mfDeserialize);
   return 0;
 }
 

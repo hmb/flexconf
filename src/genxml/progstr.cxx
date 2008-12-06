@@ -70,6 +70,36 @@ const char * pszTypes =
   "\n"
   "\n"
 ;
+const char * pszHeaderProlog =
+  "\n"
+  "#ifndef _Struct_h_\n"
+  "#define _Struct_h_\n"
+  "\n"
+  "#ifdef _MSC_VER\n"
+  "  #define snprintf _snprintf\n"
+  "  #pragma warning(disable: 4786 4996)\n"
+  "#endif\n"
+  "\n"
+  "\n"
+  "\n"
+  "#include <string>\n"
+  "#include <list>\n"
+  "#include <set>\n"
+  "#include <map>\n"
+  "#include <stdio.h>\n"
+  "\n"
+  "\n"
+  "\n"
+;
+const char * pszSerProlog =
+  "\n"
+  "#include \"struct.h\"\n"
+;
+const char * pszDesProlog =
+  "\n"
+  "#include \"struct.h\"\n"
+  "#include <stdlib.h>\n"
+;
 const char * pszHeader =
   "const int IDENT_WIDTH = 2;\n"
   "\n"

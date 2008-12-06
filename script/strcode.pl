@@ -2,6 +2,10 @@
 
 use strict;
 
+my $outstart = 0;
+
+
+
 sub usage()
 {
   print "usage: [-p <varname>] <filename> [|<filename> [|...]]\n";
@@ -9,24 +13,28 @@ sub usage()
 
 
 
-my $outstart = 0;
+sub stringstart($)
+{
+  my ($varname) = @_;
+
+  if ($outstart)
+  {
+    print ";\n";
+  }
+  print "const char * $varname =\n";
+  $outstart = 1;
+}
+
+
 
 while (@ARGV)
 {
-
   if ($ARGV[0] eq "-p")
   {
     shift @ARGV;
     my $varname = shift @ARGV;
-
-    if ($outstart)
-    {
-      print ";\n";
-    }
-    print "const char * $varname =\n";
+    stringstart($varname);
   }
-
-  $outstart = 1;
 
   my $filname = shift @ARGV;
 
@@ -56,6 +64,12 @@ while (@ARGV)
       }
 
       $start = 0;
+    }
+
+    if ($line =~ /\/\*stringname: .*\*\//)
+    {
+      stringstart substr($line, 14, length($line)-17);
+      next;
     }
 
     $line =~ s/\\/\\\\/g;
