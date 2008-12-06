@@ -75,10 +75,21 @@ AM_CXXFLAGS = -g
 #---------------------------------------------------------------------------------
 # add serializer and xmlreader/writer as string to binary
 
-progstr.cxx: disclaimer.h types.h writexml.h readxml.h serialize.h deserialize.h serialize.cpp deserialize.cpp $(STRCODE)
-	$(STRCODE) -p pszDisclaimer disclaimer.h -p pszTypes types.h > $@
-	$(STRCODE) -p pszHeader writexml.h readxml.h serialize.h deserialize.h >> $@
-	$(STRCODE) -p pszSerialize serialize.cpp -p pszDeserialize deserialize.cpp >> $@
+PROGSTR_SOURCES = \
+	code/disclaimer.h \
+	code/types.h \
+	code/writexml.h \
+	code/readxml.h \
+	code/serialize.h \
+	code/deserialize.h \
+	code/serialize.cpp \
+	code/deserialize.cpp
+
+
+progstr.cxx: $(PROGSTR_SOURCES) $(STRCODE)
+	$(STRCODE) -p pszDisclaimer code/disclaimer.h -p pszTypes code/types.h > $@
+	$(STRCODE) -p pszHeader code/writexml.h code/readxml.h code/serialize.h code/deserialize.h >> $@
+	$(STRCODE) -p pszSerialize code/serialize.cpp -p pszDeserialize code/deserialize.cpp >> $@
 
 
 #---------------------------------------------------------------------------------
