@@ -62,6 +62,13 @@ AC_PROG_RANLIB
 # include a portable install in your distribution
 AC_PROG_INSTALL
 
+# check for c file to code script
+AC_ARG_VAR([STRCODE], [c file to code script])
+AC_PATH_PROG([STRCODE], [strcode.pl], [no], [$(pwd)/script])
+if test "$STRCODE" == "no"; then
+  AC_MSG_ERROR([cannot find the c file to code script])
+fi
+
 
 
 #----------------------------------------------------------------------------

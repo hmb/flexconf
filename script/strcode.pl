@@ -1,19 +1,35 @@
 #!/usr/bin/perl  -w
 
-my $count = @ARGV;
+use strict;
 
-if ($count < 2)
+sub usage()
 {
-  print "usage: <varname> <filename> [|<filename> [|...]]\n";
-  exit;
+  print "usage: [-p <varname>] <filename> [|<filename> [|...]]\n";
 }
 
-$varname = shift @ARGV;
 
-print "const char * $varname =\n";
 
-while ($filname = shift @ARGV)
+my $outstart = 0;
+
+while (@ARGV)
 {
+
+  if ($ARGV[0] eq "-p")
+  {
+    shift @ARGV;
+    my $varname = shift @ARGV;
+
+    if ($outstart)
+    {
+      print ";\n";
+    }
+    print "const char * $varname =\n";
+  }
+
+  $outstart = 1;
+
+  my $filname = shift @ARGV;
+
   if (! -f $filname)
   {
     print "file \"$filname\" not found...\n";
