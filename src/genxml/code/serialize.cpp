@@ -25,5 +25,3 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
   rWriteXml.EndTag(pszTag);
 }
 
-
-

@@ -25,12 +25,29 @@
 
 // strings held in progstr.cxx, generated from parser files with perl
 extern const char * pszDisclaimer;
-extern const char * pszHeaderProlog;
-extern const char * pszSerProlog;
-extern const char * pszDesProlog;
+extern const char * pszHdrProlog;
 extern const char * pszTypes;
+extern const char * pszHdrFile;
+extern const char * pszHdrStruct;
 extern const char * pszHeader;
+extern const char * pszHdrEpilog;
+
+extern const char * pszSerProlog;
+extern const char * pszSerStructBegin;
+extern const char * pszSerStructVarDecl;
+extern const char * pszSerStructVarDeclVector;
+extern const char * pszSerStructVarDeclList;
+extern const char * pszSerStructVarDeclMap;
+extern const char * pszSerStructEnd;
 extern const char * pszSerialize;
+
+extern const char * pszDesProlog;
+extern const char * pszDesStructBegin;
+extern const char * pszDesStructVarDecl;
+extern const char * pszDesStructVarDeclVector;
+extern const char * pszDesStructVarDeclList;
+extern const char * pszDesStructVarDeclMap;
+extern const char * pszDesStructEnd;
 extern const char * pszDeserialize;
 
 
@@ -51,14 +68,14 @@ int CGeneratorXml::header()
 {
   // write header declarations
   writeRep(pszDisclaimer, mfHeader);
-  writeRep(pszHeaderProlog, mfHeader);
-  writeStr(pszTypes, mfHeader);
+  writeRep(pszHdrProlog,  mfHeader);
+  writeStr(pszTypes,      mfHeader);
   // write serializer
   writeRep(pszDisclaimer, mfSerialize);
-  writeRep(pszSerProlog, mfSerialize);
+  writeRep(pszSerProlog,  mfSerialize);
   // write deserializer
   writeRep(pszDisclaimer, mfDeserialize);
-  writeRep(pszDesProlog, mfDeserialize);
+  writeRep(pszDesProlog,  mfDeserialize);
   return 0;
 }
 
@@ -66,55 +83,20 @@ int CGeneratorXml::header()
 
 int CGeneratorXml::headerfile()
 {
-  writeRep("#include \"$(headerfile)\"\n", mfHeader);
+  writeRep(pszHdrFile, mfHeader);
   return 0;
 }
 
 
 
-
-
-
 void CGeneratorXml::writeStructBegin()
 {
-  /* declarations */
-  writeRep("void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszTag = 0, bool fRoot = true,\n", mfHeader);
-  writeStr("  const char * pszIdTag = 0, const std::string * pstrIdValue = 0);\n", mfHeader);
-  writeRep("void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag =0, bool fRoot = true,\n", mfHeader);
-  writeStr("  const char * pszIdTag = 0, std::string * pstrIdValue = 0);\n\n", mfHeader);
-
-  /* start of struct serialize function */
-  writeStr("\n\n\n", mfSerialize);
-  writeRep("void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszTag, bool fRoot,\n", mfSerialize);
-  writeStr("  const char * pszIdTag, const std::string * pstrIdValue)\n", mfSerialize);
-  writeStr("{\n", mfSerialize);
-  writeStr("  if (!pszTag)\n", mfSerialize);
-  writeRep("    pszTag=\"$(alias)\";\n", mfSerialize);
-  writeStr("  rWriteXml.StartTag(pszTag, fRoot);\n", mfSerialize);
-  writeStr("  if (pszIdTag && pstrIdValue)\n", mfSerialize);
-  writeStr("  {\n", mfSerialize);
-  writeStr("    serialize(rWriteXml, *pstrIdValue, pszIdTag, false);\n", mfSerialize);
-  writeStr("  }\n", mfSerialize);
-
-  /* start of struct deserialize function */
-  writeStr("\n\n\n", mfDeserialize);
-  writeRep("void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bool fRoot,\n", mfDeserialize);
-  writeStr("  const char * pszIdTag, std::string * pstrIdValue)\n", mfDeserialize);
-  writeStr("{\n", mfDeserialize);
-  writeStr("  if (!pszTag)\n", mfDeserialize);
-  writeRep("    pszTag=\"$(alias)\";\n", mfDeserialize);
-  writeStr("  if (fRoot)\n", mfDeserialize);
-  writeStr("  {\n", mfDeserialize);
-  writeStr("    if (!rReadXml.IsStartTag(pszTag, fRoot))\n", mfDeserialize);
-  writeStr("      return;\n", mfDeserialize);
-  writeStr("  }\n", mfDeserialize);
-  writeStr("  while (!rReadXml.IsEof() && !rReadXml.IsEndTag(pszTag))\n", mfDeserialize);
-  writeStr("  {\n", mfDeserialize);
-  writeStr("    if (pszIdTag && pstrIdValue && rReadXml.IsStartTag(pszIdTag, false))\n", mfDeserialize);
-  writeStr("    {\n", mfDeserialize);
-  writeStr("      deserialize(rReadXml, *pstrIdValue, pszIdTag, false);\n", mfDeserialize);
-  writeStr("      continue;\n", mfDeserialize);
-  writeStr("    }\n", mfDeserialize);
+  // declarations
+  writeRep(pszHdrStruct, mfHeader);
+  // start of struct serialize function
+  writeRep(pszSerStructBegin, mfSerialize);
+  // start of struct deserialize function
+  writeRep(pszDesStructBegin, mfDeserialize);
 }
 
 
@@ -122,14 +104,9 @@ void CGeneratorXml::writeStructBegin()
 void CGeneratorXml::writeVarDecl()
 {
   // write serializer
-  writeRep("  serialize(rWriteXml, rObject.$(name), \"$(alias)\", false);\n", mfSerialize);
-
+  writeRep(pszSerStructVarDecl, mfSerialize);
   // write deserializer
-  writeRep("    if (rReadXml.IsStartTag(\"$(alias)\", false))\n", mfDeserialize);
-  writeStr("    {\n", mfDeserialize);
-  writeRep("      deserialize(rReadXml, rObject.$(name), \"$(alias)\", false);\n", mfDeserialize);
-  writeStr("      continue;\n", mfDeserialize);
-  writeStr("    }\n", mfDeserialize);
+  writeRep(pszDesStructVarDecl, mfDeserialize);
 }
 
 
@@ -137,28 +114,9 @@ void CGeneratorXml::writeVarDecl()
 void CGeneratorXml::writeVarDeclVector()
 {
   // write serializer
-  writeRep("  rWriteXml.StartTag(\"$(alias)\", false);\n", mfSerialize);
-  writeRep("  {for (int n=0; n<$(size); n++)\n", mfSerialize);
-  writeStr("  {\n", mfSerialize);
-  writeRep("    serialize(rWriteXml, rObject.$(name)[n], \"$(item)\", false);\n", mfSerialize);
-  writeStr("  }}\n", mfSerialize);
-  writeRep("  rWriteXml.EndTag(\"$(alias)\");\n", mfSerialize);
-
+  writeRep(pszSerStructVarDeclVector, mfSerialize);
   // write deserializer
-  writeRep("    if (rReadXml.IsStartTag(\"$(alias)\", false))\n", mfDeserialize);
-  writeStr("    {\n", mfDeserialize);
-  writeStr("      int     _n   = 0;\n", mfDeserialize);
-  writeRep("      while (!rReadXml.IsEof() && !rReadXml.IsEndTag(\"$(alias)\"))\n", mfDeserialize);
-  writeStr("      {\n", mfDeserialize);
-  writeRep("        if (_n<$(size) && rReadXml.IsStartTag(\"$(item)\", false))\n", mfDeserialize);
-  writeStr("        {\n", mfDeserialize);
-  writeRep("          deserialize(rReadXml, rObject.$(name)[_n++], \"$(item)\", false);\n", mfDeserialize);
-  writeStr("          continue;\n", mfDeserialize);
-  writeStr("        }\n", mfDeserialize);
-  writeStr("        rReadXml.SkipTag();\n", mfDeserialize);
-  writeStr("      } // while (!rReadXml.IsEndTag(...))\n", mfDeserialize);
-  writeStr("      continue;\n", mfDeserialize);
-  writeStr("    }\n", mfDeserialize);
+  writeRep(pszDesStructVarDeclVector, mfDeserialize);
 }
 
 
@@ -166,14 +124,9 @@ void CGeneratorXml::writeVarDeclVector()
 void CGeneratorXml::writeVarDeclSetList()
 {
   // write serializer
-  writeRep("  serialize(rWriteXml, rObject.$(name), \"$(alias)\", \"$(item)\", false);\n", mfSerialize);
-
+  writeRep(pszSerStructVarDeclList, mfSerialize);
   // write deserializer
-  writeRep("    if (rReadXml.IsStartTag(\"$(alias)\", false))\n", mfDeserialize);
-  writeStr("    {\n", mfDeserialize);
-  writeRep("      deserialize(rReadXml, rObject.$(name), \"$(alias)\", \"$(item)\", false);\n", mfDeserialize);
-  writeStr("      continue;\n", mfDeserialize);
-  writeStr("    }\n", mfDeserialize);
+  writeRep(pszDesStructVarDeclList, mfDeserialize);
 }
 
 
@@ -181,32 +134,20 @@ void CGeneratorXml::writeVarDeclSetList()
 void CGeneratorXml::writeVarDeclMap()
 {
   // write serializer
-  writeRep("  serialize(rWriteXml, rObject.$(name), \"$(alias)\", \"$(item)\", \"$(id)\", false);\n", mfSerialize);
-
+  writeRep(pszSerStructVarDeclMap, mfSerialize);
   // write deserializer
-  writeRep("    if (rReadXml.IsStartTag(\"$(alias)\", false))\n", mfDeserialize);
-  writeStr("    {\n", mfDeserialize);
-  writeRep("      deserialize(rReadXml, rObject.$(name), \"$(alias)\", \"$(item)\", \"$(id)\", false);\n", mfDeserialize);
-  writeStr("      continue;\n", mfDeserialize);
-  writeStr("    }\n", mfDeserialize);
+  writeRep(pszDesStructVarDeclMap, mfDeserialize);
 }
 
 
 
 void CGeneratorXml::writeStructEnd()
 {
-  /* end of struct serialize function */
-  writeStr("  rWriteXml.EndTag(pszTag);\n", mfSerialize);
-  writeStr("}\n", mfSerialize);
-
-  /* end of struct deserialize function */
-  writeStr("    rReadXml.SkipTag();\n", mfDeserialize);
-  writeStr("  } // while (!rReadXml.IsEndTag(...))\n", mfDeserialize);
-  writeStr("}\n", mfDeserialize);
+  // end of struct serialize function
+  writeRep(pszSerStructEnd, mfSerialize);
+  // end of struct deserialize function
+  writeRep(pszDesStructEnd, mfDeserialize);
 }
-
-
-
 
 
 
@@ -220,16 +161,11 @@ int CGeneratorXml::footerfile()
 int CGeneratorXml::footer()
 {
   // write header
-  writeStr("\n\n", mfHeader);
-  writeStr(pszHeader, mfHeader);
-  writeStr("#endif // _Struct_h_\n", mfHeader);
-
+  writeStr(pszHeader,       mfHeader);
+  writeStr(pszHdrEpilog,    mfHeader);
   // write serializer
-  writeStr("\n\n\n", mfSerialize);
-  writeStr(pszSerialize, mfSerialize);
-
+  writeStr(pszSerialize,    mfSerialize);
   // write deserializer
-  writeStr("\n\n\n", mfDeserialize);
-  writeStr(pszDeserialize, mfDeserialize);
+  writeStr(pszDeserialize,  mfDeserialize);
   return 0;
 }

@@ -19,15 +19,11 @@
 //
 //
 #ifdef _MSC_VER
-#define snprintf _snprintf
+  #define snprintf _snprintf
 #endif
-
-
 
 class CReadXml;
 class CWriteXml;
-
-
 
 struct SLongHex
 {
@@ -46,6 +42,4 @@ struct SLongHex
   unsigned long operator = (unsigned long ulHex) { return mulHex=ulHex; }
   operator unsigned long () const { return mulHex; }
 };
-
-
 

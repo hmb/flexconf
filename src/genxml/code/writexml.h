@@ -48,8 +48,6 @@ private:
   virtual void putData(const char * pszData, int nDataLen = 0x7FFF) = 0;
 };
 
-
-
 class CWriteXmlString : public CWriteXml
 {
 public:
@@ -165,13 +163,10 @@ public:
     }
   }
 
-
 private:
   std::string & mstrWrite;
   int           mnDepth;
   bool          mfStartTag;
   bool          mfLf;
 };
-
-
 

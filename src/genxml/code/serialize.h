@@ -68,8 +68,6 @@ inline void serialize(char * pBuffer, int nBufSize, const SLongHex & rObject)
   snprintf(pBuffer, nBufSize, "%lX", rObject.mulHex);
 }
 
-
-
 // serialize a std::string object
 void serialize(CWriteXml & rWriteXml, const std::string &     rObject, const char * pszTag, bool fRoot = true);
 
@@ -83,8 +81,6 @@ void serialize(CWriteXml & rWriteXml, const _T & rObject, const char * pszTag, b
   rWriteXml.PutData(szBuffer);
   rWriteXml.EndTag(pszTag);
 }
-
-
 
 // serialize any set object for witch a key serialize function exists
 template <class _K>
@@ -101,8 +97,6 @@ void serialize(
   rWriteXml.EndTag(pszTag);
 }
 
-
-
 // serialize any list object for witch a serialize function exists
 template <class _T>
 void serialize(
@@ -118,8 +112,6 @@ void serialize(
   rWriteXml.EndTag(pszTag);
 }
 
-
-
 // serialize a std::map<std::string, _T> object
 template <class _T>
 void serialize(
@@ -134,8 +126,6 @@ void serialize(
   }
   rWriteXml.EndTag(pszTag);
 }
-
-
 
 // serialize any other map object for witch a key serialize function exists
 template <class _K, class _T>
@@ -158,8 +148,6 @@ void serialize(
   rWriteXml.EndTag(pszTag);
 }
 
-
-
 // serialize a std::multimap<std::string, _T> object
 template <class _T>
 void serialize(
@@ -174,8 +162,6 @@ void serialize(
   }
   rWriteXml.EndTag(pszTag);
 }
-
-
 
 // serialize any other multimap object for witch a key serialize function exists
 template <class _K, class _T>
@@ -197,6 +183,4 @@ void serialize(
   }
   rWriteXml.EndTag(pszTag);
 }
-
-
 

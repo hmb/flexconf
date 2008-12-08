@@ -41,5 +41,3 @@ void deserialize(CReadXml & rReadXml, std::string & rObject, const char * pszTag
     return;
 }
 
-
-

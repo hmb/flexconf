@@ -72,7 +72,6 @@ public:
     skipTag();
   }
 
-
   void EnableStrict(bool fEnable = true)
   {
     mfStrict = fEnable;
@@ -203,8 +202,6 @@ private:
   int       mnColumn;
   std::list<std::string> mstackTags;
 };
-
-
 
 class CReadXmlPChar : public CReadXml
 {
@@ -482,8 +479,6 @@ private:
   const char * mpszXml;
 };
 
-
-
 class CReadXmlFile : public CReadXmlPChar
 {
 public:
@@ -525,6 +520,4 @@ public:
 private:
   std::string mstrData;
 };
-
-
 

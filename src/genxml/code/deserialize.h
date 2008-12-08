@@ -72,8 +72,6 @@ inline void deserialize(const char * pBuffer, SLongHex & rObject)
   rObject.mulHex = strtoul(pBuffer, 0, 16);
 }
 
-
-
 void deserialize(CReadXml & rReadXml, std::string & rObject, const char * pszTag, bool fRoot = true);
 
 // deserialize types without a base or ordinal integers in decimal system
@@ -95,8 +93,6 @@ void deserialize(CReadXml & rReadXml, _T & rObject, const char * pszTag, bool fR
     rReadXml.SetStatus(CReadXml::eStatMissingEndtag);
   }
 }
-
-
 
 template <class _K>
 void deserialize(
@@ -123,8 +119,6 @@ void deserialize(
   } // while (!rReadXml.IsEndTag(...))
 }
 
-
-
 template <class _T>
 void deserialize(
   CReadXml & rReadXml, std::list<_T> & rObject,
@@ -149,8 +143,6 @@ void deserialize(
     break;
   } // while (!rReadXml.IsEndTag(...))
 }
-
-
 
 template <class _T>
 void deserialize(
@@ -187,8 +179,6 @@ void deserialize(
     break;
   } // while (!rReadXml.IsEndTag(...))
 }
-
-
 
 template <class _K, class _T>
 void deserialize(
@@ -228,8 +218,6 @@ void deserialize(
   } // while (!rReadXml.IsEndTag(...))
 }
 
-
-
 template <class _T>
 void deserialize(
   CReadXml & rReadXml, std::multimap<std::string, _T> & rObject,
@@ -254,8 +242,6 @@ void deserialize(
     rReadXml.SkipTag();
   } // while (!rReadXml.IsEndTag(...))
 }
-
-
 
 template <class _K, class _T>
 void deserialize(
@@ -283,6 +269,4 @@ void deserialize(
     rReadXml.SkipTag();
   } // while (!rReadXml.IsEndTag(...))
 }
-
-
 

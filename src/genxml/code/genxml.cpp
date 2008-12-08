@@ -18,8 +18,7 @@
 //
 //
 //
-/*stringname: pszHeaderProlog*/
-
+/* begin section: HdrProlog */
 #ifndef _Struct_h_
 #define _Struct_h_
 
@@ -28,20 +27,185 @@
   #pragma warning(disable: 4786 4996)
 #endif
 
-
-
 #include <string>
 #include <list>
 #include <set>
 #include <map>
 #include <stdio.h>
 
+/* end section */
 
 
-/*stringname: pszSerProlog*/
 
+/* begin section: HdrFile */
+#include "$(headerfile)"
+/* end section */
+
+
+
+/* begin section: HdrStruct */
+void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszTag = 0, bool fRoot = true,
+  const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
+void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag =0, bool fRoot = true,
+  const char * pszIdTag = 0, std::string * pstrIdValue = 0);
+
+/* end section */
+
+
+
+/* begin section: HdrEpilog */
+#endif // _Struct_h_
+/* end section */
+
+
+
+
+
+
+/* begin section: SerProlog */
 #include "struct.h"
-/*stringname: pszDesProlog*/
 
+/* end section */
+
+
+
+/* begin section: SerStructBegin */
+void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszTag, bool fRoot,
+  const char * pszIdTag, const std::string * pstrIdValue)
+{
+  if (!pszTag)
+    pszTag="$(alias)";
+  rWriteXml.StartTag(pszTag, fRoot);
+  if (pszIdTag && pstrIdValue)
+  {
+    serialize(rWriteXml, *pstrIdValue, pszIdTag, false);
+  }
+/* end section */
+
+
+
+/* begin section: SerStructVarDecl */
+  serialize(rWriteXml, rObject.$(name), "$(alias)", false);
+/* end section */
+
+
+
+/* begin section: SerStructVarDeclVector */
+  rWriteXml.StartTag("$(alias)", false);
+  {for (int n=0; n<$(size); n++)
+  {
+    serialize(rWriteXml, rObject.$(name)[n], "$(item)", false);
+  }}
+  rWriteXml.EndTag("$(alias)");
+/* end section */
+
+
+
+/* begin section: SerStructVarDeclList */
+  serialize(rWriteXml, rObject.$(name), "$(alias)", "$(item)", false);
+/* end section */
+
+
+
+/* begin section: SerStructVarDeclMap */
+  serialize(rWriteXml, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
+/* end section */
+
+
+
+/* begin section: SerStructEnd */
+  rWriteXml.EndTag(pszTag);
+}
+
+/* end section */
+
+
+
+
+
+
+/* begin section: DesProlog */
 #include "struct.h"
 #include <stdlib.h>
+
+/* end section */
+
+
+
+/* begin section: DesStructBegin */
+void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bool fRoot,
+  const char * pszIdTag, std::string * pstrIdValue)
+{
+  if (!pszTag)
+    pszTag="$(alias)";
+  if (fRoot)
+  {
+    if (!rReadXml.IsStartTag(pszTag, fRoot))
+      return;
+  }
+  while (!rReadXml.IsEof() && !rReadXml.IsEndTag(pszTag))
+  {
+    if (pszIdTag && pstrIdValue && rReadXml.IsStartTag(pszIdTag, false))
+    {
+      deserialize(rReadXml, *pstrIdValue, pszIdTag, false);
+      continue;
+    }
+/* end section */
+
+
+
+/* begin section: DesStructVarDecl */
+    if (rReadXml.IsStartTag("$(alias)", false))
+    {
+      deserialize(rReadXml, rObject.$(name), "$(alias)", false);
+      continue;
+    }
+/* end section */
+
+
+
+/* begin section: DesStructVarDeclVector */
+    if (rReadXml.IsStartTag("$(alias)", false))
+    {
+      int     _n   = 0;
+      while (!rReadXml.IsEof() && !rReadXml.IsEndTag("$(alias)"))
+      {
+        if (_n<$(size) && rReadXml.IsStartTag("$(item)", false))
+        {
+          deserialize(rReadXml, rObject.$(name)[_n++], "$(item)", false);
+          continue;
+        }
+        rReadXml.SkipTag();
+      } // while (!rReadXml.IsEndTag(...))
+      continue;
+    }
+/* end section */
+
+
+
+/* begin section: DesStructVarDeclList */
+    if (rReadXml.IsStartTag("$(alias)", false))
+    {
+      deserialize(rReadXml, rObject.$(name), "$(alias)", "$(item)", false);
+      continue;
+    }
+/* end section */
+
+
+
+/* begin section: DesStructVarDeclMap */
+    if (rReadXml.IsStartTag("$(alias)", false))
+    {
+      deserialize(rReadXml, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
+      continue;
+    }
+/* end section */
+
+
+
+/* begin section: DesStructEnd */
+    rReadXml.SkipTag();
+  } // while (!rReadXml.IsEndTag(...))
+}
+
+/* end section */

@@ -88,10 +88,9 @@ PROGSTR_IN = \
 
 
 progstr.cxx: $(PROGSTR_IN) $(STRCODE)
-	$(STRCODE) -p pszDisclaimer code/disclaimer.h -p pszTypes code/types.h code/genxml.cpp > $@
-#	$(STRCODE) -p pszDisclaimer code/disclaimer.h -p pszTypes code/types.h > $@
-	$(STRCODE) -p pszHeader code/writexml.h code/readxml.h code/serialize.h code/deserialize.h >> $@
-	$(STRCODE) -p pszSerialize code/serialize.cpp -p pszDeserialize code/deserialize.cpp >> $@
+	$(STRCODE) -p Disclaimer code/disclaimer.h -p Types code/types.h code/genxml.cpp > $@
+	$(STRCODE) -p Header code/writexml.h code/readxml.h code/serialize.h code/deserialize.h >> $@
+	$(STRCODE) -p Serialize code/serialize.cpp -p Deserialize code/deserialize.cpp >> $@
 
 
 #---------------------------------------------------------------------------------

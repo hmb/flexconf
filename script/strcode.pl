@@ -2,7 +2,7 @@
 
 use strict;
 
-my $outstart = 0;
+my $insection = 0;
 
 
 
@@ -13,16 +13,24 @@ sub usage()
 
 
 
-sub stringstart($)
+sub beginsection($)
 {
   my ($varname) = @_;
 
-  if ($outstart)
+  endsection();
+  print "const char * psz$varname =\n";
+  $insection = 1;
+}
+
+
+
+sub endsection()
+{
+  if ($insection)
   {
     print ";\n";
   }
-  print "const char * $varname =\n";
-  $outstart = 1;
+  $insection = 0;
 }
 
 
@@ -33,7 +41,7 @@ while (@ARGV)
   {
     shift @ARGV;
     my $varname = shift @ARGV;
-    stringstart($varname);
+    beginsection $varname;
   }
 
   my $filname = shift @ARGV;
@@ -50,25 +58,35 @@ while (@ARGV)
     exit;
   }
 
-  my @infile  = <INFIL>;
-  my $start   = 1;
+  my @infile    = <INFIL>;
+  my $filestart = 1;
 
   foreach my $line (@infile)
   {
-    # skip c++ comments at the beginning of the file
-    if ($start)
+    if ($filestart)
     {
+      # skip c++ comments at the beginning of the file
       if ($line =~ /^\/\//)
       {
         next;
       }
-
-      $start = 0;
+      $filestart = 0;
     }
 
-    if ($line =~ /\/\*stringname: .*\*\//)
+    if ($line =~ /\/\* *begin section: *([_a-zA-Z][_a-zA-Z0-9]*) *\*\//)
     {
-      stringstart substr($line, 14, length($line)-17);
+      beginsection $1;
+      next;
+    }
+
+    if ($line =~ /\/\* *end section *\*\//)
+    {
+      endsection();
+      next;
+    }
+
+    if (!$insection)
+    {
       next;
     }
 
@@ -82,4 +100,4 @@ while (@ARGV)
   close INFIL;
 }
 
-print ";\n";
+endsection();
