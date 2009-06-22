@@ -53,16 +53,16 @@ int CGeneratorReg::header()
   writeStr("\n\n\n", mfHeader);
 
   writeStr("template <class _T>\n", mfHeader);
-  writeStr("void serialize(const CRegKey & rkeyStruct, const _T & rObject, const char * pszKeyName)\n", mfHeader);
+  writeStr("void serialize(const amalib::CRegKey & rkeyStruct, const _T & rObject, const char * pszKeyName)\n", mfHeader);
   writeStr("{\n", mfHeader);
   writeStr("  rkeyStruct.SetValue(pszKeyName, rObject);\n", mfHeader);
   writeStr("}\n", mfHeader);
   writeStr("\n", mfHeader);
 
   writeStr("template <class _T>\n", mfHeader);
-  writeStr("void serialize(const CRegKey & rkeyStruct, const _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)\n", mfHeader);
+  writeStr("void serialize(const amalib::CRegKey & rkeyStruct, const _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)\n", mfHeader);
   writeStr("{\n", mfHeader);
-  writeStr("  CRegKey keyArray;\n", mfHeader);
+  writeStr("  amalib::CRegKey keyArray;\n", mfHeader);
   writeStr("  keyArray.Create(rkeyStruct, pszKeyName);\n", mfHeader);
   writeStr("  for (int n=0; n<nCount; n++)\n", mfHeader);
   writeStr("  {\n", mfHeader);
@@ -75,16 +75,16 @@ int CGeneratorReg::header()
   writeStr("\n\n\n", mfHeader);
 
   writeStr("template <class _T>\n", mfHeader);
-  writeStr("void deserialize(const CRegKey & rkeyStruct, _T & rObject, const char * pszKeyName)\n", mfHeader);
+  writeStr("void deserialize(const amalib::CRegKey & rkeyStruct, _T & rObject, const char * pszKeyName)\n", mfHeader);
   writeStr("{\n", mfHeader);
   writeStr("  rkeyStruct.QueryValue(pszKeyName, rObject);\n", mfHeader);
   writeStr("}\n", mfHeader);
   writeStr("\n\n\n", mfHeader);
 
   writeStr("template <class _T>\n", mfHeader);
-  writeStr("void deserialize(const CRegKey & rkeyStruct, _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)\n", mfHeader);
+  writeStr("void deserialize(const amalib::CRegKey & rkeyStruct, _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)\n", mfHeader);
   writeStr("{\n", mfHeader);
-  writeStr("  CRegKey keyArray;\n", mfHeader);
+  writeStr("  amalib::CRegKey keyArray;\n", mfHeader);
   writeStr("  keyArray.Create(rkeyStruct, pszKeyName);\n", mfHeader);
   writeStr("  for (int n=0; n<nCount; n++)\n", mfHeader);
   writeStr("  {\n", mfHeader);
@@ -120,19 +120,19 @@ int CGeneratorReg::headerfile()
 
 void CGeneratorReg::writeStructBegin()
 {
-  writeRep("void serialize(const CRegKey & rkeyParent, const $(name) & rObject, const char * pszKeyName = 0,\n", mfHeader);
+  writeRep("void serialize(const amalib::CRegKey & rkeyParent, const $(name) & rObject, const char * pszKeyName = 0,\n", mfHeader);
   writeStr("  const char * pszIdTag = 0, const std::string * pstrIdValue = 0);\n", mfHeader);
-  writeRep("void deserialize(const CRegKey & rkeyParent, $(name) & rObject, const char * pszKeyName = 0,\n", mfHeader);
+  writeRep("void deserialize(const amalib::CRegKey & rkeyParent, $(name) & rObject, const char * pszKeyName = 0,\n", mfHeader);
   writeStr("  const char * pszIdTag = 0, std::string * pstrIdValue = 0);\n\n", mfHeader);
 
   /* start of struct serialize function */
   writeStr("\n\n\n", mfSerialize);
-  writeRep("void serialize(const CRegKey & rkeyParent, const $(name) & rObject, const char * pszKeyName,\n", mfSerialize);
+  writeRep("void serialize(const amalib::CRegKey & rkeyParent, const $(name) & rObject, const char * pszKeyName,\n", mfSerialize);
   writeStr("  const char * pszIdTag, const std::string * pstrIdValue)\n", mfSerialize);
   writeStr("{\n", mfSerialize);
   writeStr("  if (!pszKeyName)\n", mfSerialize);
   writeRep("    pszKeyName=\"$(alias)\";\n", mfSerialize);
-  writeStr("  CRegKey keyStruct;\n", mfSerialize);
+  writeStr("  amalib::CRegKey keyStruct;\n", mfSerialize);
   writeStr("  keyStruct.Create(rkeyParent, pszKeyName);\n", mfSerialize);
   writeStr("  if (pszIdTag && pstrIdValue)\n", mfSerialize);
   writeStr("  {\n", mfSerialize);
@@ -142,12 +142,12 @@ void CGeneratorReg::writeStructBegin()
 
   /* start of struct deserialize function */
   writeStr("\n\n\n", mfDeserialize);
-  writeRep("void deserialize(const CRegKey & rkeyParent, $(name) & rObject, const char * pszKeyName,\n", mfDeserialize);
+  writeRep("void deserialize(const amalib::CRegKey & rkeyParent, $(name) & rObject, const char * pszKeyName,\n", mfDeserialize);
   writeStr("  const char * pszIdTag, std::string * pstrIdValue)\n", mfDeserialize);
   writeStr("{\n", mfDeserialize);
   writeStr("  if (!pszKeyName)\n", mfDeserialize);
   writeRep("    pszKeyName=\"$(alias)\";\n", mfDeserialize);
-  writeStr("  CRegKey keyStruct;\n", mfDeserialize);
+  writeStr("  amalib::CRegKey keyStruct;\n", mfDeserialize);
   writeStr("  keyStruct.Open(rkeyParent, pszKeyName);\n", mfDeserialize);
   writeStr("  if (pszIdTag && pstrIdValue)\n", mfDeserialize);
   writeStr("  {\n", mfDeserialize);
