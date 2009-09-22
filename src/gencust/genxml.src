@@ -18,7 +18,60 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ***************************************************************************
 
-********** HeaderDeSerHdr
+********** [SH] FILE PROLOG
+********** [DH] FILE PROLOG
+********** [SI] FILE PROLOG
+********** [DI] FILE PROLOG
+
+********** [SH] STRUCT PROLOG
+********** [DH] STRUCT PROLOG
+********** [SI] STRUCT PROLOG
+********** [DI] STRUCT PROLOG
+
+********** [SH] GENERIC DECL
+********** [DH] GENERIC DECL
+********** [SI] GENERIC DECL
+********** [DI] GENERIC DECL
+
+********** [SH] VECTOR DECL
+********** [DH] VECTOR DECL
+********** [SI] VECTOR DECL
+********** [DI] VECTOR DECL
+
+********** [SH] SET/LIST DECL
+********** [DH] SET/LIST DECL
+********** [SI] SET/LIST DECL
+********** [DI] SET/LIST DECL
+
+********** [SH] MAP DECL
+********** [DH] MAP DECL
+********** [SI] MAP DECL
+********** [DI] MAP DECL
+
+********** [SH] STRUCT EPILOG
+********** [DH] STRUCT EPILOG
+********** [SI] STRUCT EPILOG
+********** [DI] STRUCT EPILOG
+
+********** [SH] FILE EPILOG
+********** [DH] FILE EPILOG
+********** [SI] FILE EPILOG
+********** [DI] FILE EPILOG
+
+********** [SH] EPILOG
+********** [DH] EPILOG
+********** [SI] EPILOG
+********** [DI] EPILOG
+
+
+
+********** [SH] PROLOG
+// TODO separate serializer and deserializer header
+********** [END]
+
+
+
+********** [DH] PROLOG
 #ifndef _Struct_h_
 #define _Struct_h_
 
@@ -62,12 +115,12 @@ struct SLongHex
 
 
 
-********** end
+********** [END]
 
 
 ********** HeaderFileDeSerHdr
 #include "$(headerfile)"
-********** end
+********** [END]
 
 
 ********** StructBeginDeSerHdr
@@ -76,31 +129,31 @@ void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszT
 void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag =0, bool fRoot = true,
   const char * pszIdTag = 0, std::string * pstrIdValue = 0);
 
-********** end
+********** [END]
 
 
 ********** VarDeclDeSerHdr
-********** end
+********** [END]
 
 
 ********** VarDeclVectorDeSerHdr
-********** end
+********** [END]
 
 
 ********** VarDeclSetListDeSerHdr
-********** end
+********** [END]
 
 
 ********** VarDeclMapDeSerHdr
-********** end
+********** [END]
 
 
 ********** StructEndDeSerHdr
-********** end
+********** [END]
 
 
 ********** FooterFileDeSerHdr
-********** end
+********** [END]
 
 
 ********** FooterDeSerHdr
@@ -828,20 +881,23 @@ void deserialize(
 
 
 #endif // _Struct_h_
-********** end
+********** [END]
 
 
 
 
 
 
-********** HeaderSerImp
+********** [SI] PROLOG
+********** [END]
+
+********** [DI] PROLOG
 #include "struct.h"
-********** end
+********** [END]
 
 
 ********** HeaderFileSerImp
-********** end
+********** [END]
 
 
 ********** StructBeginSerImp
@@ -858,12 +914,12 @@ void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszT
   {
     serialize(rWriteXml, *pstrIdValue, pszIdTag, false);
   }
-********** end
+********** [END]
 
 
 ********** VarDeclSerImp
   serialize(rWriteXml, rObject.$(name), "$(alias)", false);
-********** end
+********** [END]
 
 
 ********** VarDeclVectorSerImp
@@ -871,27 +927,27 @@ void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszT
   {
     serialize(rWriteXml, rObject.$(name)[n], "$(alias)", false);
   }}
-********** end
+********** [END]
 
 
 ********** VarDeclSetListSerImp
   serialize(rWriteXml, rObject.$(name), "$(alias)", "$(item)", false);
-********** end
+********** [END]
 
 
 ********** VarDeclMapSerImp
   serialize(rWriteXml, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
-********** end
+********** [END]
 
 
 ********** StructEndSerImp
   rWriteXml.EndTag(pszTag);
 }
-********** end
+********** [END]
 
 
 ********** FooterFileSerImp
-********** end
+********** [END]
 
 
 ********** FooterSerImp
@@ -907,7 +963,7 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
 
 
 
-********** end
+********** [END]
 
 
 
@@ -917,11 +973,11 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
 ********** HeaderDesImp
 #include "struct.h"
 #include <stdlib.h>
-********** end
+********** [END]
 
 
 ********** HeaderFileDesImp
-********** end
+********** [END]
 
 
 ********** StructBeginDesImp
@@ -945,7 +1001,7 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
       deserialize(rReadXml, *pstrIdValue, pszIdTag, false);
       continue;
     }
-********** end
+********** [END]
 
 
 ********** VarDeclDesImp
@@ -954,7 +1010,7 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
       deserialize(rReadXml, rObject.$(name), "$(alias)", false);
       continue;
     }
-********** end
+********** [END]
 
 
 ********** VarDeclVectorDesImp
@@ -963,7 +1019,7 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
       deserialize(rReadXml, rObject.%s, "%s", false);\n", mstrName.c_str(), mstrAlias.c_str());
       continue;
     }
-********** end
+********** [END]
 
 
 ********** VarDeclSetListDesImp
@@ -972,7 +1028,7 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
       deserialize(rReadXml, rObject.$(name), "$(alias)", "$(item)", false);
       continue;
     }
-********** end
+********** [END]
 
 
 ********** VarDeclMapDesImp
@@ -981,18 +1037,18 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
       deserialize(rReadXml, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
       continue;
     }
-********** end
+********** [END]
 
 
 ********** StructEndDesImp
     rReadXml.SkipTag();
   } // while (!rReadXml.IsEndTag(...))
 }
-********** end
+********** [END]
 
 
 ********** FooterFileDesImp
-********** end
+********** [END]
 
 
 ********** FooterDesImp
@@ -1024,4 +1080,4 @@ void deserialize(CReadXml & rReadXml, std::string & rObject, const char * pszTag
 
 
 
-********** end
+********** [END]

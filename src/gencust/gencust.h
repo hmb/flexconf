@@ -70,7 +70,8 @@ protected:
 
   enum EOutputFile
   {
-    eSerDeserHdr,
+    eSerializerHdr,
+    eDeserializerHdr,
     eSerializerImp,
     eDeserializerImp,
     eFileCount

@@ -66,6 +66,19 @@ struct SData
 };
 
 
+//<!--
+class CData : private SData
+{
+
+
+
+friend void serialize(CWriteXml & rWriteXml, const CData & rObject, const char * pszTag = 0, bool fRoot = true,
+  const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
+friend void deserialize(CReadXml & rReadXml, CData & rObject, const char * pszTag =0, bool fRoot = true,
+  const char * pszIdTag = 0, std::string * pstrIdValue = 0);
+};
+
+//-->
 
 // flexconf alias TEST
 struct STestBase
@@ -85,6 +98,7 @@ struct STestBase
   SData             datData;
   SData             datData2;     // flexconf alias Data
   SData             vecData[4];   // flexconf alias sepp item DataElement
+  CData             datDataDerived;
 
   // illeagal: maps with plain types as value are not allowed
   // std::map<std::string, int>    mapTesting;

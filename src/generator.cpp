@@ -85,6 +85,8 @@ extern CGenerator * spGenerator;
 void yyrestart(FILE *);
 int yyparse(void);
 
+
+
 void CGenerator::Generate()
 {
   // init file pointers for output files
