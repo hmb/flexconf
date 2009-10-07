@@ -61,96 +61,7 @@ void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszT
 
 
 ********** [SH] EPILOG
-********** [END]
 
-
-
-
-
-
-********** [DH] PROLOG
-#ifndef _Struct_h_
-#define _Struct_h_
-
-#ifdef _MSC_VER
-#define snprintf _snprintf
-#pragma warning(disable: 4786)
-#endif
-
-
-
-#include <string>
-#include <list>
-#include <set>
-#include <map>
-#include <stdio.h>
-
-
-
-class CReadXml;
-class CWriteXml;
-
-
-
-struct SLongHex
-{
-  SLongHex() { }
-  SLongHex(unsigned long ulHex) : mulHex(ulHex) { }
-
-  unsigned long mulHex;
-
-  bool operator == (const SLongHex & cmp) const { return mulHex == cmp.mulHex; }
-  bool operator >= (const SLongHex & cmp) const { return mulHex >= cmp.mulHex; }
-  bool operator <= (const SLongHex & cmp) const { return mulHex <= cmp.mulHex; }
-  bool operator <  (const SLongHex & cmp) const { return mulHex >  cmp.mulHex; }
-  bool operator >  (const SLongHex & cmp) const { return mulHex <  cmp.mulHex; }
-  bool operator != (const SLongHex & cmp) const { return mulHex != cmp.mulHex; }
-
-  unsigned long operator = (unsigned long ulHex) { return mulHex=ulHex; }
-  operator unsigned long () const { return mulHex; }
-};
-
-
-
-********** [END]
-
-
-********** [DH] FILE PROLOG
-#include "$(headerfile)"
-********** [END]
-
-
-********** [DH] STRUCT PROLOG
-void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag =0, bool fRoot = true,
-  const char * pszIdTag = 0, std::string * pstrIdValue = 0);
-********** [END]
-
-
-********** [DH] GENERIC DECL
-********** [END]
-
-
-********** [DH] VECTOR DECL
-********** [END]
-
-
-********** [DH] SET/LIST DECL
-********** [END]
-
-
-********** [DH] MAP DECL
-********** [END]
-
-
-********** [DH] STRUCT EPILOG
-********** [END]
-
-
-********** [DH] FILE EPILOG
-********** [END]
-
-
-********** [DH] EPILOG
 
 
 const int IDENT_WIDTH = 2;
@@ -306,6 +217,240 @@ private:
 
 
 
+inline void serialize(char * pBuffer, int nBufSize, const bool & rObject)
+{
+  snprintf(pBuffer, nBufSize, rObject? "1" : "0");
+}
+
+inline void serialize(char * pBuffer, int nBufSize, const short & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%hd", rObject);
+}
+
+inline void serialize(char * pBuffer, int nBufSize, const unsigned short & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%hu", rObject);
+}
+
+inline void serialize(char * pBuffer, int nBufSize, const int & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%d", rObject);
+}
+
+inline void serialize(char * pBuffer, int nBufSize, const unsigned int & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%u", rObject);
+}
+
+inline void serialize(char * pBuffer, int nBufSize, const long & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%ld", rObject);
+}
+
+inline void serialize(char * pBuffer, int nBufSize, const unsigned long & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%lu", rObject);
+}
+
+inline void serialize(char * pBuffer, int nBufSize, const float & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%f", rObject);
+}
+
+inline void serialize(char * pBuffer, int nBufSize, const double & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%lf", rObject);
+}
+
+inline void serialize(char * pBuffer, int nBufSize, const SLongHex & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%lX", rObject.mulHex);
+}
+
+
+
+// serialize a std::string object
+void serialize(CWriteXml & rWriteXml, const std::string &     rObject, const char * pszTag, bool fRoot = true);
+
+// serialize any of the objects for that an above function is defined
+template <class _T>
+void serialize(CWriteXml & rWriteXml, const _T & rObject, const char * pszTag, bool fRoot = true)
+{
+  rWriteXml.StartTag(pszTag, fRoot);
+  char szBuffer[80];
+  serialize(szBuffer, 80, rObject);
+  rWriteXml.PutData(szBuffer);
+  rWriteXml.EndTag(pszTag);
+}
+
+
+
+// serialize any set object for witch a key serialize function exists
+template <class _K>
+void serialize(
+  CWriteXml & rWriteXml, const std::set<_K> & rObject,
+  const char * pszTag, const char * pszTagItem, bool fRoot = true)
+{
+  rWriteXml.StartTag(pszTag, fRoot);
+  for (std::set<_K>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  {
+    // serialize the key object
+    serialize(rWriteXml, *itr, pszTagItem, false);
+  }
+  rWriteXml.EndTag(pszTag);
+}
+
+
+
+// serialize any list object for witch a serialize function exists
+template <class _T>
+void serialize(
+  CWriteXml & rWriteXml, const std::list<_T> & rObject,
+  const char * pszTag, const char * pszTagItem, bool fRoot = true)
+{
+  rWriteXml.StartTag(pszTag, fRoot);
+  for (std::list<_T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  {
+    // serialize the key object
+    serialize(rWriteXml, *itr, pszTagItem, false);
+  }
+  rWriteXml.EndTag(pszTag);
+}
+
+
+
+// serialize a std::map<std::string, _T> object
+template <class _T>
+void serialize(
+  CWriteXml & rWriteXml, const std::map<std::string, _T> & rObject,
+  const char * pszTag, const char * pszTagItem, const char * pszTagId,
+  bool fRoot = true)
+{
+  rWriteXml.StartTag(pszTag, fRoot);
+  for (std::map<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  {
+    serialize(rWriteXml, itr->second, pszTagItem, false, pszTagId, &itr->first);
+  }
+  rWriteXml.EndTag(pszTag);
+}
+
+
+
+// serialize any other map object for witch a key serialize function exists
+template <class _K, class _T>
+void serialize(
+  CWriteXml & rWriteXml, const std::map<_K, _T> & rObject,
+  const char * pszTag, const char * pszTagItem, const char * pszTagId,
+  bool fRoot = true)
+{
+  rWriteXml.StartTag(pszTag, fRoot);
+  for (std::map<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  {
+    // first serialize the key to a string
+    char szBuffer[80];
+    serialize(szBuffer, 80, itr->first);
+    std::string strBuffer(szBuffer);
+    // serialize the object with a string key
+    serialize(rWriteXml, itr->second, pszTagItem, false, pszTagId, &strBuffer);
+  }
+  rWriteXml.EndTag(pszTag);
+}
+
+
+#endif // _Struct_h_
+********** [END]
+
+
+
+
+
+
+********** [DH] PROLOG
+#ifndef _Struct_h_
+#define _Struct_h_
+
+#ifdef _MSC_VER
+#define snprintf _snprintf
+#pragma warning(disable: 4786)
+#endif
+
+
+
+#include <string>
+#include <list>
+#include <set>
+#include <map>
+#include <stdio.h>
+
+
+
+class CReadXml;
+class CWriteXml;
+
+
+
+struct SLongHex
+{
+  SLongHex() { }
+  SLongHex(unsigned long ulHex) : mulHex(ulHex) { }
+
+  unsigned long mulHex;
+
+  bool operator == (const SLongHex & cmp) const { return mulHex == cmp.mulHex; }
+  bool operator >= (const SLongHex & cmp) const { return mulHex >= cmp.mulHex; }
+  bool operator <= (const SLongHex & cmp) const { return mulHex <= cmp.mulHex; }
+  bool operator <  (const SLongHex & cmp) const { return mulHex >  cmp.mulHex; }
+  bool operator >  (const SLongHex & cmp) const { return mulHex <  cmp.mulHex; }
+  bool operator != (const SLongHex & cmp) const { return mulHex != cmp.mulHex; }
+
+  unsigned long operator = (unsigned long ulHex) { return mulHex=ulHex; }
+  operator unsigned long () const { return mulHex; }
+};
+
+
+
+********** [END]
+
+
+********** [DH] FILE PROLOG
+#include "$(headerfile)"
+********** [END]
+
+
+********** [DH] STRUCT PROLOG
+void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag =0, bool fRoot = true,
+  const char * pszIdTag = 0, std::string * pstrIdValue = 0);
+********** [END]
+
+
+********** [DH] GENERIC DECL
+********** [END]
+
+
+********** [DH] VECTOR DECL
+********** [END]
+
+
+********** [DH] SET/LIST DECL
+********** [END]
+
+
+********** [DH] MAP DECL
+********** [END]
+
+
+********** [DH] STRUCT EPILOG
+********** [END]
+
+
+********** [DH] FILE EPILOG
+********** [END]
+
+
+********** [DH] EPILOG
+
+
+
 class CReadXml
 {
 public:
@@ -333,7 +478,6 @@ public:
   {
     skipTag();
   }
-
 
 private:
   virtual bool isEof()                                            = 0;
@@ -550,147 +694,6 @@ private:
 
 
 
-inline void serialize(char * pBuffer, int nBufSize, const bool & rObject)
-{
-  snprintf(pBuffer, nBufSize, rObject? "1" : "0");
-}
-
-inline void serialize(char * pBuffer, int nBufSize, const short & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%hd", rObject);
-}
-
-inline void serialize(char * pBuffer, int nBufSize, const unsigned short & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%hu", rObject);
-}
-
-inline void serialize(char * pBuffer, int nBufSize, const int & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%d", rObject);
-}
-
-inline void serialize(char * pBuffer, int nBufSize, const unsigned int & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%u", rObject);
-}
-
-inline void serialize(char * pBuffer, int nBufSize, const long & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%ld", rObject);
-}
-
-inline void serialize(char * pBuffer, int nBufSize, const unsigned long & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%lu", rObject);
-}
-
-inline void serialize(char * pBuffer, int nBufSize, const float & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%f", rObject);
-}
-
-inline void serialize(char * pBuffer, int nBufSize, const double & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%lf", rObject);
-}
-
-inline void serialize(char * pBuffer, int nBufSize, const SLongHex & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%lX", rObject.mulHex);
-}
-
-
-
-// serialize a std::string object
-void serialize(CWriteXml & rWriteXml, const std::string &     rObject, const char * pszTag, bool fRoot = true);
-
-// serialize any of the objects for that an above function is defined
-template <class _T>
-void serialize(CWriteXml & rWriteXml, const _T & rObject, const char * pszTag, bool fRoot = true)
-{
-  rWriteXml.StartTag(pszTag, fRoot);
-  char szBuffer[80];
-  serialize(szBuffer, 80, rObject);
-  rWriteXml.PutData(szBuffer);
-  rWriteXml.EndTag(pszTag);
-}
-
-
-
-// serialize any set object for witch a key serialize function exists
-template <class _K>
-void serialize(
-  CWriteXml & rWriteXml, const std::set<_K> & rObject,
-  const char * pszTag, const char * pszTagItem, bool fRoot = true)
-{
-  rWriteXml.StartTag(pszTag, fRoot);
-  for (std::set<_K>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
-  {
-    // serialize the key object
-    serialize(rWriteXml, *itr, pszTagItem, false);
-  }
-  rWriteXml.EndTag(pszTag);
-}
-
-
-
-// serialize any list object for witch a serialize function exists
-template <class _T>
-void serialize(
-  CWriteXml & rWriteXml, const std::list<_T> & rObject,
-  const char * pszTag, const char * pszTagItem, bool fRoot = true)
-{
-  rWriteXml.StartTag(pszTag, fRoot);
-  for (std::list<_T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
-  {
-    // serialize the key object
-    serialize(rWriteXml, *itr, pszTagItem, false);
-  }
-  rWriteXml.EndTag(pszTag);
-}
-
-
-
-// serialize a std::map<std::string, _T> object
-template <class _T>
-void serialize(
-  CWriteXml & rWriteXml, const std::map<std::string, _T> & rObject,
-  const char * pszTag, const char * pszTagItem, const char * pszTagId,
-  bool fRoot = true)
-{
-  rWriteXml.StartTag(pszTag, fRoot);
-  for (std::map<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
-  {
-    serialize(rWriteXml, itr->second, pszTagItem, false, pszTagId, &itr->first);
-  }
-  rWriteXml.EndTag(pszTag);
-}
-
-
-
-// serialize any other map object for witch a key serialize function exists
-template <class _K, class _T>
-void serialize(
-  CWriteXml & rWriteXml, const std::map<_K, _T> & rObject,
-  const char * pszTag, const char * pszTagItem, const char * pszTagId,
-  bool fRoot = true)
-{
-  rWriteXml.StartTag(pszTag, fRoot);
-  for (std::map<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
-  {
-    // first serialize the key to a string
-    char szBuffer[80];
-    serialize(szBuffer, 80, itr->first);
-    std::string strBuffer(szBuffer);
-    // serialize the object with a string key
-    serialize(rWriteXml, itr->second, pszTagItem, false, pszTagId, &strBuffer);
-  }
-  rWriteXml.EndTag(pszTag);
-}
-
-
-
 inline void deserialize(const char * pBuffer, bool & rObject)
 {
   rObject =
@@ -871,7 +874,6 @@ void deserialize(
     rReadXml.SkipTag();
   } // while (!rReadXml.IsEndTag(...))
 }
-
 
 
 #endif // _Struct_h_
