@@ -1,6 +1,6 @@
 ***************************************************************************
 flexconf - flexible configuration generator
-Copyright (C) 2008 Holger Böhnke
+Copyright (c) 2008-2009 Holger Böhnke
 
 This file is part of flexconf.
 
@@ -18,56 +18,53 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ***************************************************************************
 
-********** [SH] FILE PROLOG
-********** [DH] FILE PROLOG
-********** [SI] FILE PROLOG
-********** [DI] FILE PROLOG
-
-********** [SH] STRUCT PROLOG
-********** [DH] STRUCT PROLOG
-********** [SI] STRUCT PROLOG
-********** [DI] STRUCT PROLOG
-
-********** [SH] GENERIC DECL
-********** [DH] GENERIC DECL
-********** [SI] GENERIC DECL
-********** [DI] GENERIC DECL
-
-********** [SH] VECTOR DECL
-********** [DH] VECTOR DECL
-********** [SI] VECTOR DECL
-********** [DI] VECTOR DECL
-
-********** [SH] SET/LIST DECL
-********** [DH] SET/LIST DECL
-********** [SI] SET/LIST DECL
-********** [DI] SET/LIST DECL
-
-********** [SH] MAP DECL
-********** [DH] MAP DECL
-********** [SI] MAP DECL
-********** [DI] MAP DECL
-
-********** [SH] STRUCT EPILOG
-********** [DH] STRUCT EPILOG
-********** [SI] STRUCT EPILOG
-********** [DI] STRUCT EPILOG
-
-********** [SH] FILE EPILOG
-********** [DH] FILE EPILOG
-********** [SI] FILE EPILOG
-********** [DI] FILE EPILOG
-
-********** [SH] EPILOG
-********** [DH] EPILOG
-********** [SI] EPILOG
-********** [DI] EPILOG
-
 
 
 ********** [SH] PROLOG
 // TODO separate serializer and deserializer header
 ********** [END]
+
+
+********** [SH] FILE PROLOG
+#include "$(headerfile)"
+********** [END]
+
+
+********** [SH] STRUCT PROLOG
+void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszTag = 0, bool fRoot = true,
+  const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
+********** [END]
+
+
+********** [SH] GENERIC DECL
+********** [END]
+
+
+********** [SH] VECTOR DECL
+********** [END]
+
+
+********** [SH] SET/LIST DECL
+********** [END]
+
+
+********** [SH] MAP DECL
+********** [END]
+
+
+********** [SH] STRUCT EPILOG
+********** [END]
+
+
+********** [SH] FILE EPILOG
+********** [END]
+
+
+********** [SH] EPILOG
+********** [END]
+
+
+
 
 
 
@@ -118,45 +115,42 @@ struct SLongHex
 ********** [END]
 
 
-********** HeaderFileDeSerHdr
+********** [DH] FILE PROLOG
 #include "$(headerfile)"
 ********** [END]
 
 
-********** StructBeginDeSerHdr
-void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszTag = 0, bool fRoot = true,
-  const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
+********** [DH] STRUCT PROLOG
 void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag =0, bool fRoot = true,
   const char * pszIdTag = 0, std::string * pstrIdValue = 0);
-
 ********** [END]
 
 
-********** VarDeclDeSerHdr
+********** [DH] GENERIC DECL
 ********** [END]
 
 
-********** VarDeclVectorDeSerHdr
+********** [DH] VECTOR DECL
 ********** [END]
 
 
-********** VarDeclSetListDeSerHdr
+********** [DH] SET/LIST DECL
 ********** [END]
 
 
-********** VarDeclMapDeSerHdr
+********** [DH] MAP DECL
 ********** [END]
 
 
-********** StructEndDeSerHdr
+********** [DH] STRUCT EPILOG
 ********** [END]
 
 
-********** FooterFileDeSerHdr
+********** [DH] FILE EPILOG
 ********** [END]
 
 
-********** FooterDeSerHdr
+********** [DH] EPILOG
 
 
 const int IDENT_WIDTH = 2;
@@ -889,18 +883,15 @@ void deserialize(
 
 
 ********** [SI] PROLOG
-********** [END]
-
-********** [DI] PROLOG
 #include "struct.h"
 ********** [END]
 
 
-********** HeaderFileSerImp
+********** [SI] FILE PROLOG
 ********** [END]
 
 
-********** StructBeginSerImp
+********** [SI] STRUCT PROLOG
 
 
 
@@ -917,12 +908,12 @@ void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszT
 ********** [END]
 
 
-********** VarDeclSerImp
+********** [SI] GENERIC DECL
   serialize(rWriteXml, rObject.$(name), "$(alias)", false);
 ********** [END]
 
 
-********** VarDeclVectorSerImp
+********** [SI] VECTOR DECL
   {for (int n=0; n<$(size); n++)
   {
     serialize(rWriteXml, rObject.$(name)[n], "$(alias)", false);
@@ -930,27 +921,27 @@ void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszT
 ********** [END]
 
 
-********** VarDeclSetListSerImp
+********** [SI] SET/LIST DECL
   serialize(rWriteXml, rObject.$(name), "$(alias)", "$(item)", false);
 ********** [END]
 
 
-********** VarDeclMapSerImp
+********** [SI] MAP DECL
   serialize(rWriteXml, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
 ********** [END]
 
 
-********** StructEndSerImp
+********** [SI] STRUCT EPILOG
   rWriteXml.EndTag(pszTag);
 }
 ********** [END]
 
 
-********** FooterFileSerImp
+********** [SI] FILE EPILOG
 ********** [END]
 
 
-********** FooterSerImp
+********** [SI] EPILOG
 
 
 
@@ -970,17 +961,17 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
 
 
 
-********** HeaderDesImp
+********** [DI] PROLOG
 #include "struct.h"
 #include <stdlib.h>
 ********** [END]
 
 
-********** HeaderFileDesImp
+********** [DI] FILE PROLOG
 ********** [END]
 
 
-********** StructBeginDesImp
+********** [DI] STRUCT PROLOG
 
 
 
@@ -1004,7 +995,7 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
 ********** [END]
 
 
-********** VarDeclDesImp
+********** [DI] GENERIC DECL
     if (rReadXml.IsStartTag("$(alias)", false))
     {
       deserialize(rReadXml, rObject.$(name), "$(alias)", false);
@@ -1013,7 +1004,7 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
 ********** [END]
 
 
-********** VarDeclVectorDesImp
+********** [DI] VECTOR DECL
     if (rReadXml.IsStartTag("%s", false))\n", mstrAlias.c_str());
     {
       deserialize(rReadXml, rObject.%s, "%s", false);\n", mstrName.c_str(), mstrAlias.c_str());
@@ -1022,7 +1013,7 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
 ********** [END]
 
 
-********** VarDeclSetListDesImp
+********** [DI] SET/LIST DECL
     if (rReadXml.IsStartTag("$(alias)", false))
     {
       deserialize(rReadXml, rObject.$(name), "$(alias)", "$(item)", false);
@@ -1031,7 +1022,7 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
 ********** [END]
 
 
-********** VarDeclMapDesImp
+********** [DI] MAP DECL
     if (rReadXml.IsStartTag("$(alias)", false))
     {
       deserialize(rReadXml, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
@@ -1040,18 +1031,18 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
 ********** [END]
 
 
-********** StructEndDesImp
+********** [DI] STRUCT EPILOG
     rReadXml.SkipTag();
   } // while (!rReadXml.IsEndTag(...))
 }
 ********** [END]
 
 
-********** FooterFileDesImp
+********** [DI] FILE EPILOG
 ********** [END]
 
 
-********** FooterDesImp
+********** [DI] EPILOG
 
 
 
