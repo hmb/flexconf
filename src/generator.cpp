@@ -31,12 +31,18 @@ const char * const CGenerator::mpszId     = "_id";
 
 CGenerator::CGenerator()
   :
-  mfHeader(0),
-  mfSerialize(0),
-  mfDeserialize(0),
-  mstrHeader("struct.h"),
-  mstrSerialize("structSer.cpp"),
-  mstrDeserialize("structDes.cpp")
+  mfCommonHdr(0),
+  mfCommonImp(0),
+  mfSerializeHdr(0),
+  mfSerializeImp(0),
+  mfDeserializeHdr(0),
+  mfDeserializeImp(0),
+  mstrCommonHdr("structCom.h"),
+  mstrCommonImp("structCom.cpp"),
+  mstrSerializeHdr("structSer.h"),
+  mstrSerializeImp("structSer.cpp"),
+  mstrDeserializeHdr("structDes.h"),
+  mstrDeserializeImp("structDes.cpp")
 {
   SetVariable(VAR_PACKAGE, PACKAGE_STRING);
   SetVariable(VAR_BUGREPORT, PACKAGE_BUGREPORT);
@@ -50,25 +56,38 @@ CGenerator::~CGenerator()
 
 
 
-
-
-void CGenerator::SetHeaderFilename(const char * pszFilename)
+void CGenerator::SetFileComHdr(const char * pszFilename)
 {
-  mstrHeader = pszFilename;
+  mstrCommonHdr = pszFilename;
+}
+
+void CGenerator::SetFileComImp(const char * pszFilename)
+{
+  mstrCommonImp = pszFilename;
 }
 
 
 
-void CGenerator::SetSerializerFilename(const char * pszFilename)
+void CGenerator::SetFileSerHdr(const char * pszFilename)
 {
-  mstrSerialize = pszFilename;
+  mstrSerializeHdr = pszFilename;
+}
+
+void CGenerator::SetFileSerImp(const char * pszFilename)
+{
+  mstrSerializeImp = pszFilename;
 }
 
 
 
-void CGenerator::SetDeserializerFilename(const char * pszFilename)
+void CGenerator::SetFileDesHdr(const char * pszFilename)
 {
-  mstrDeserialize = pszFilename;
+  mstrDeserializeHdr = pszFilename;
+}
+
+void CGenerator::SetFileDesImp(const char * pszFilename)
+{
+  mstrDeserializeImp = pszFilename;
 }
 
 
@@ -90,9 +109,12 @@ int yyparse(void);
 void CGenerator::Generate()
 {
   // init file pointers for output files
-  mfHeader      = fopen(mstrHeader.c_str(),       "w");
-  mfSerialize   = fopen(mstrSerialize.c_str(),    "w");
-  mfDeserialize = fopen(mstrDeserialize.c_str(),  "w");
+  mfCommonHdr       = fopen(mstrCommonHdr.c_str(),      "w");
+  mfCommonImp       = fopen(mstrCommonImp.c_str(),      "w");
+  mfSerializeHdr    = fopen(mstrSerializeHdr.c_str(),   "w");
+  mfSerializeImp    = fopen(mstrSerializeImp.c_str(),   "w");
+  mfDeserializeHdr  = fopen(mstrDeserializeHdr.c_str(), "w");
+  mfDeserializeImp  = fopen(mstrDeserializeImp.c_str(), "w");
 
   // write header
   header();
@@ -156,14 +178,20 @@ void CGenerator::Generate()
   footer();
 
   // close files
-  fclose(mfHeader);
-  fclose(mfSerialize);
-  fclose(mfDeserialize);
+  fclose(mfCommonHdr);
+  fclose(mfCommonImp);
+  fclose(mfSerializeHdr);
+  fclose(mfSerializeImp);
+  fclose(mfDeserializeHdr);
+  fclose(mfDeserializeImp);
 
   // reset file pointers
-  mfHeader      = 0;
-  mfSerialize   = 0;
-  mfDeserialize = 0;
+  mfCommonHdr = 0;
+  mfCommonImp = 0;
+  mfSerializeHdr = 0;
+  mfSerializeImp = 0;
+  mfDeserializeHdr = 0;
+  mfDeserializeImp = 0;
 }
 
 

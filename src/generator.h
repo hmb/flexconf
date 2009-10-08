@@ -38,13 +38,19 @@ public:
   virtual ~CGenerator();
 
   // set output filenames
-  void SetHeaderFilename(const char * pszFilename);
-  void SetSerializerFilename(const char * pszFilename);
-  void SetDeserializerFilename(const char * pszFilename);
+  void SetFileComHdr(const char * pszFilename);
+  void SetFileComImp(const char * pszFilename);
+  void SetFileSerHdr(const char * pszFilename);
+  void SetFileSerImp(const char * pszFilename);
+  void SetFileDesHdr(const char * pszFilename);
+  void SetFileDesImp(const char * pszFilename);
+
   // add header files to process
   void AddSourceFile(const char * pszFilename);
+
   // generate output files by parsing header files
   void Generate();
+
   // reset generator to do more processing
   void Reset();
 
@@ -109,15 +115,21 @@ protected:
   ContVariableType  mcontVariables;
 
   // file pointer for output files
-  FILE * mfHeader;
-  FILE * mfSerialize;
-  FILE * mfDeserialize;
+  FILE * mfCommonHdr;
+  FILE * mfCommonImp;
+  FILE * mfSerializeHdr;
+  FILE * mfSerializeImp;
+  FILE * mfDeserializeHdr;
+  FILE * mfDeserializeImp;
 
 private:
   // file names for output files
-  std::string mstrHeader;
-  std::string mstrSerialize;
-  std::string mstrDeserialize;
+  std::string mstrCommonHdr;
+  std::string mstrCommonImp;
+  std::string mstrSerializeHdr;
+  std::string mstrSerializeImp;
+  std::string mstrDeserializeHdr;
+  std::string mstrDeserializeImp;
 
   // list of source files to process
   typedef std::list<std::string>              lstSourceFilesType;

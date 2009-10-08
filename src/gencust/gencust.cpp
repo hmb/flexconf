@@ -26,58 +26,60 @@
 
 const char * const CGeneratorCustom::mpszSeparator[CGeneratorCustom::eStringCount * CGeneratorCustom::eFileCount] =
 {
-//  "********** GLOB PROLOG\n",
+  "********** [GL] PROLOG\n",
+  "********** [GL] FILE PROLOG\n",
+  "********** [GL] STRUCT PROLOG\n",
+  "********** [GL] GENERIC DECL\n",
+  "********** [GL] VECTOR DECL\n",
+  "********** [GL] SET/LIST DECL\n",
+  "********** [GL] MAP DECL\n",
+  "********** [GL] STRUCT EPILOG\n",
+  "********** [GL] FILE EPILOG\n",
+  "********** [GL] EPILOG\n",
 
   "********** [SH] PROLOG\n",
-  "********** [DH] PROLOG\n",
-  "********** [SI] PROLOG\n",
-  "********** [DI] PROLOG\n",
-
   "********** [SH] FILE PROLOG\n",
-  "********** [DH] FILE PROLOG\n",
-  "********** [SI] FILE PROLOG\n",
-  "********** [DI] FILE PROLOG\n",
-
   "********** [SH] STRUCT PROLOG\n",
-  "********** [DH] STRUCT PROLOG\n",
-  "********** [SI] STRUCT PROLOG\n",
-  "********** [DI] STRUCT PROLOG\n",
-
   "********** [SH] GENERIC DECL\n",
-  "********** [DH] GENERIC DECL\n",
-  "********** [SI] GENERIC DECL\n",
-  "********** [DI] GENERIC DECL\n",
-
   "********** [SH] VECTOR DECL\n",
-  "********** [DH] VECTOR DECL\n",
-  "********** [SI] VECTOR DECL\n",
-  "********** [DI] VECTOR DECL\n",
-
   "********** [SH] SET/LIST DECL\n",
-  "********** [DH] SET/LIST DECL\n",
-  "********** [SI] SET/LIST DECL\n",
-  "********** [DI] SET/LIST DECL\n",
-
   "********** [SH] MAP DECL\n",
-  "********** [DH] MAP DECL\n",
-  "********** [SI] MAP DECL\n",
-  "********** [DI] MAP DECL\n",
-
   "********** [SH] STRUCT EPILOG\n",
-  "********** [DH] STRUCT EPILOG\n",
-  "********** [SI] STRUCT EPILOG\n",
-  "********** [DI] STRUCT EPILOG\n",
-
   "********** [SH] FILE EPILOG\n",
-  "********** [DH] FILE EPILOG\n",
-  "********** [SI] FILE EPILOG\n",
-  "********** [DI] FILE EPILOG\n",
-
   "********** [SH] EPILOG\n",
-  "********** [DH] EPILOG\n",
-  "********** [SI] EPILOG\n",
-  "********** [DI] EPILOG\n"
 
+  "********** [DH] PROLOG\n",
+  "********** [DH] FILE PROLOG\n",
+  "********** [DH] STRUCT PROLOG\n",
+  "********** [DH] GENERIC DECL\n",
+  "********** [DH] VECTOR DECL\n",
+  "********** [DH] SET/LIST DECL\n",
+  "********** [DH] MAP DECL\n",
+  "********** [DH] STRUCT EPILOG\n",
+  "********** [DH] FILE EPILOG\n",
+  "********** [DH] EPILOG\n",
+
+  "********** [SI] PROLOG\n",
+  "********** [SI] FILE PROLOG\n",
+  "********** [SI] STRUCT PROLOG\n",
+  "********** [SI] GENERIC DECL\n",
+  "********** [SI] VECTOR DECL\n",
+  "********** [SI] SET/LIST DECL\n",
+  "********** [SI] MAP DECL\n",
+  "********** [SI] STRUCT EPILOG\n",
+  "********** [SI] FILE EPILOG\n",
+  "********** [SI] EPILOG\n",
+
+  "********** [DI] PROLOG\n",
+  "********** [DI] FILE PROLOG\n",
+  "********** [DI] STRUCT PROLOG\n",
+  "********** [DI] GENERIC DECL\n",
+  "********** [DI] VECTOR DECL\n",
+  "********** [DI] SET/LIST DECL\n",
+  "********** [DI] MAP DECL\n",
+  "********** [DI] STRUCT EPILOG\n",
+  "********** [DI] FILE EPILOG\n",
+  "********** [DI] EPILOG\n"
 //  ,"" // too many initializer test
 };
 
@@ -123,7 +125,7 @@ void CGeneratorCustom::Load(const char * pszStrings)
       {
         if (0==strcmp(mpszSeparator[n], szBuffer))
         {
-          pstrRead    = &mstrGeneratorString[n/eFileCount][n%eFileCount];
+          pstrRead    = &mstrGeneratorString[n%eFileCount][n/eFileCount];
           fSeparator  = true;
           break;
         }
@@ -153,10 +155,19 @@ void CGeneratorCustom::Load(const char * pszStrings)
 
 int CGeneratorCustom::output(EGeneratorString eString)
 {
-  writeRep(mstrGeneratorString[eString][eSerializerHdr],    mfHeader);
-  writeRep(mstrGeneratorString[eString][eDeserializerHdr],  mfHeader);
-  writeRep(mstrGeneratorString[eString][eSerializerImp],    mfSerialize);
-  writeRep(mstrGeneratorString[eString][eDeserializerImp],  mfDeserialize);
+  writeRep(mstrGeneratorString[eGlobal][eString],           mfCommonHdr);
+  writeRep(mstrGeneratorString[eGlobal][eString],           mfCommonImp);
+  writeRep(mstrGeneratorString[eGlobal][eString],           mfSerializeHdr);
+  writeRep(mstrGeneratorString[eGlobal][eString],           mfSerializeImp);
+  writeRep(mstrGeneratorString[eGlobal][eString],           mfDeserializeHdr);
+  writeRep(mstrGeneratorString[eGlobal][eString],           mfDeserializeImp);
+
+  writeRep(mstrGeneratorString[eCommonHdr][eString],        mfCommonHdr);
+  writeRep(mstrGeneratorString[eCommonImp][eString],        mfCommonImp);
+  writeRep(mstrGeneratorString[eSerializerHdr][eString],    mfSerializeHdr);
+  writeRep(mstrGeneratorString[eSerializerImp][eString],    mfSerializeImp);
+  writeRep(mstrGeneratorString[eDeserializerHdr][eString],  mfDeserializeHdr);
+  writeRep(mstrGeneratorString[eDeserializerImp][eString],  mfDeserializeImp);
   return 0;
 }
 
@@ -167,19 +178,19 @@ int CGeneratorCustom::output(EGeneratorString eString)
 
 int CGeneratorCustom::header()
 {
-  return output(eHeader);
+  return output(eProlog);
 }
 
 int CGeneratorCustom::headerfile()
 {
-  return output(eHeaderFile);
+  return output(ePrologFile);
 }
 
 
 
 void CGeneratorCustom::writeStructBegin()
 {
-  output(eStructBegin);
+  output(ePrologStruct);
 }
 
 void CGeneratorCustom::writeVarDecl()
@@ -204,17 +215,17 @@ void CGeneratorCustom::writeVarDeclMap()
 
 void CGeneratorCustom::writeStructEnd()
 {
-  output(eStructEnd);
+  output(eEpilogStruct);
 }
 
 
 
 int CGeneratorCustom::footerfile()
 {
-  return output(eFooterFile);
+  return output(eEpilogFile);
 }
 
 int CGeneratorCustom::footer()
 {
-  return output(eFooter);
+  return output(eEpilog);
 }

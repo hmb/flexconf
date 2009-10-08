@@ -50,37 +50,40 @@ protected:
   virtual int footerfile();
   virtual int footer();
 
+  enum EOutputFile
+  {
+    eGlobal,                // will be used in all files
+    eCommonHdr,             // header file common to both serializer and deserializer
+    eCommonImp,             // implementation file common to both serializer and deserializer
+    eSerializerHdr,         // header file for serializer
+    eSerializerImp,         // implementation file for serializer
+    eDeserializerHdr,       // header file for deserializer
+    eDeserializerImp,       // implementation file for deserializer
+    eFileCount
+  };
+
   enum EGeneratorString
   {
-    eHeader,
-    eHeaderFile,
+    eProlog,
+    ePrologFile,
 
-    eStructBegin,
+    ePrologStruct,
     eVarDecl,
     eVarDeclVector,
     eVarDeclSetList,
     eVarDeclMap,
-    eStructEnd,
+    eEpilogStruct,
 
-    eFooterFile,
-    eFooter,
+    eEpilogFile,
+    eEpilog,
 
     eStringCount
-  };
-
-  enum EOutputFile
-  {
-    eSerializerHdr,
-    eDeserializerHdr,
-    eSerializerImp,
-    eDeserializerImp,
-    eFileCount
   };
 
 private:
   int output(EGeneratorString eString);
 
-  std::string   mstrGeneratorString[eStringCount][eFileCount];
+  std::string   mstrGeneratorString[eFileCount][eStringCount];
 
   std::string   mstrStructBegin;
   std::string   mstrVarDecl;
@@ -88,7 +91,7 @@ private:
   std::string   mstrVarDeclMap;
   std::string   mstrStructEnd;
 
-  static const char * const mpszSeparator[eStringCount * eFileCount];
+  static const char * const mpszSeparator[eFileCount * eStringCount];
   static const char * const mpszEnd;
 };
 
