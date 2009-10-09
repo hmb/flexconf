@@ -30,6 +30,7 @@ test_SOURCES = \
   test.cpp
 
 nodist_test_SOURCES = \
+  structCom.cpp \
   structSer.cpp \
   structDes.cpp
 
@@ -62,15 +63,15 @@ test_CXXFLAGS = -g
 #---------------------------------------------------------------------------------
 # generate the cpp files from test.h
 
-struct.h structSer.cpp structDes.cpp: test.h ../flexconf
-	../flexconf $<
+structCom.h structSer.h structDes.h structCom.cpp structSer.cpp structDes.cpp: test.h ../flexconf
+	../flexconf -c $<
 
 # list dependencies of struct.h (cpp files that include struct.h)
-test.cpp: struct.h
+test.cpp: structCom.h structSer.h structDes.h
 
 
 #---------------------------------------------------------------------------------
 # add cleanup
 
 distclean-local:
-	rm -f struct.h structSer.cpp structDes.cpp
+	rm -f structCom.h structSer.h structDes.h structCom.cpp structSer.cpp structDes.cpp

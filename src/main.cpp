@@ -46,10 +46,18 @@ int main(int argc, char * argv[])
   {
     std::cout << "found -c, using custom generator" << std::endl;
     CGeneratorCustom * pCust = new CGeneratorCustom;
-    pCust->Load("../genxml.src");
+    if (!pCust->Load("../gencust/genxml.src"))
+    {
+      std::cout << "ERR: could not load custom generator file" << std::endl;
+      return 1;
+    }
+
+    pCust->Save("intern.src");
+
     auto_ptr_assign(pGenerator, CGenerator, pCust);
     ++nFileStart;
   }
+/*
   else if (argc>=2 && 0==strcmp(argv[1], "-r"))
   {
     std::cout << "found -r, using registry generator" << std::endl;
@@ -67,15 +75,22 @@ int main(int argc, char * argv[])
     std::cout << "no generation option given, defaulting to xml generator" << std::endl;
     auto_ptr_assign(pGenerator, CGenerator, new CGeneratorXml);
   }
+*/
+  else
+  {
+    std::cout << "ERR: no generation option given" << std::endl;
+    return 1;
+  }
 
   /*
   Generator.SetHeaderFilename(argv[nFile]);
   Generator.SetSerializerFilename(argv[nFile]);
   Generator.SetDeserializerFilename(argv[nFile]);
   */
+
   if (nFileStart==argc)
   {
-    std::cout << "input files missing" << std::endl;
+    std::cout << "ERR: input files missing" << std::endl;
     return 1;
   }
 

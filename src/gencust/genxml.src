@@ -20,6 +20,168 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+********** [GL] PROLOG
+//[GL] PROLOG
+********** [END]
+
+
+********** [GL] FILE PROLOG
+//[GL] FILE PROLOG
+********** [END]
+
+
+********** [GL] STRUCT PROLOG
+//[GL] STRUCT PROLOG
+********** [END]
+
+
+********** [GL] GENERIC DECL
+//[GL] GENERIC DECL
+********** [END]
+
+
+********** [GL] VECTOR DECL
+//[GL] VECTOR DECL
+********** [END]
+
+
+********** [GL] SET/LIST DECL
+//[GL] SET/LIST DECL
+********** [END]
+
+
+********** [GL] MAP DECL
+//[GL] MAP DECL
+********** [END]
+
+
+********** [GL] STRUCT EPILOG
+//[GL] STRUCT EPILOG
+********** [END]
+
+
+********** [GL] FILE EPILOG
+//[GL] FILE EPILOG
+********** [END]
+
+
+********** [GL] EPILOG
+//[GL] EPILOG
+********** [END]
+
+
+
+
+
+
+********** [CH] PROLOG
+//[CH] PROLOG
+********** [END]
+
+
+********** [CH] FILE PROLOG
+//[CH] FILE PROLOG
+********** [END]
+
+
+********** [CH] STRUCT PROLOG
+//[CH] STRUCT PROLOG
+********** [END]
+
+
+********** [CH] GENERIC DECL
+//[CH] GENERIC DECL
+********** [END]
+
+
+********** [CH] VECTOR DECL
+//[CH] VECTOR DECL
+********** [END]
+
+
+********** [CH] SET/LIST DECL
+//[CH] SET/LIST DECL
+********** [END]
+
+
+********** [CH] MAP DECL
+//[CH] MAP DECL
+********** [END]
+
+
+********** [CH] STRUCT EPILOG
+//[CH] STRUCT EPILOG
+********** [END]
+
+
+********** [CH] FILE EPILOG
+//[CH] FILE EPILOG
+********** [END]
+
+
+********** [CH] EPILOG
+//[CH] EPILOG
+********** [END]
+
+
+
+
+
+
+********** [CI] PROLOG
+//[CI] PROLOG
+********** [END]
+
+
+********** [CI] FILE PROLOG
+//[CI] FILE PROLOG
+********** [END]
+
+
+********** [CI] STRUCT PROLOG
+//[CI] STRUCT PROLOG
+********** [END]
+
+
+********** [CI] GENERIC DECL
+//[CI] GENERIC DECL
+********** [END]
+
+
+********** [CI] VECTOR DECL
+//[CI] VECTOR DECL
+********** [END]
+
+
+********** [CI] SET/LIST DECL
+//[CI] SET/LIST DECL
+********** [END]
+
+
+********** [CI] MAP DECL
+//[CI] MAP DECL
+********** [END]
+
+
+********** [CI] STRUCT EPILOG
+//[CI] STRUCT EPILOG
+********** [END]
+
+
+********** [CI] FILE EPILOG
+//[CI] FILE EPILOG
+********** [END]
+
+
+********** [CI] EPILOG
+//[CI] EPILOG
+********** [END]
+
+
+
+
+
+
 ********** [SH] PROLOG
 // TODO separate serializer and deserializer header
 ********** [END]
@@ -365,9 +527,88 @@ void serialize(
 
 
 
+********** [SI] PROLOG
+#include "structSer.h"
+********** [END]
+
+
+********** [SI] FILE PROLOG
+********** [END]
+
+
+********** [SI] STRUCT PROLOG
+
+
+
+void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszTag, bool fRoot,
+  const char * pszIdTag, const std::string * pstrIdValue)
+{
+  if (!pszTag)
+    pszTag="$(alias)";
+  rWriteXml.StartTag(pszTag, fRoot);
+  if (pszIdTag && pstrIdValue)
+  {
+    serialize(rWriteXml, *pstrIdValue, pszIdTag, false);
+  }
+********** [END]
+
+
+********** [SI] GENERIC DECL
+  serialize(rWriteXml, rObject.$(name), "$(alias)", false);
+********** [END]
+
+
+********** [SI] VECTOR DECL
+  {for (int n=0; n<$(size); n++)
+  {
+    serialize(rWriteXml, rObject.$(name)[n], "$(alias)", false);
+  }}
+********** [END]
+
+
+********** [SI] SET/LIST DECL
+  serialize(rWriteXml, rObject.$(name), "$(alias)", "$(item)", false);
+********** [END]
+
+
+********** [SI] MAP DECL
+  serialize(rWriteXml, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
+********** [END]
+
+
+********** [SI] STRUCT EPILOG
+  rWriteXml.EndTag(pszTag);
+}
+********** [END]
+
+
+********** [SI] FILE EPILOG
+********** [END]
+
+
+********** [SI] EPILOG
+
+
+
+void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * pszTag, bool fRoot)
+{
+  rWriteXml.StartTag(pszTag, fRoot);
+  rWriteXml.PutData(rObject.data(), rObject.length());
+  rWriteXml.EndTag(pszTag);
+}
+
+
+
+********** [END]
+
+
+
+
+
+
 ********** [DH] PROLOG
-#ifndef _Struct_h_
-#define _Struct_h_
+#ifndef _StructDes_h_
+#define _StructDes_h_
 
 #ifdef _MSC_VER
 #define snprintf _snprintf
@@ -877,85 +1118,6 @@ void deserialize(
 
 
 #endif // _Struct_h_
-********** [END]
-
-
-
-
-
-
-********** [SI] PROLOG
-#include "struct.h"
-********** [END]
-
-
-********** [SI] FILE PROLOG
-********** [END]
-
-
-********** [SI] STRUCT PROLOG
-
-
-
-void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszTag, bool fRoot,
-  const char * pszIdTag, const std::string * pstrIdValue)
-{
-  if (!pszTag)
-    pszTag="$(alias)";
-  rWriteXml.StartTag(pszTag, fRoot);
-  if (pszIdTag && pstrIdValue)
-  {
-    serialize(rWriteXml, *pstrIdValue, pszIdTag, false);
-  }
-********** [END]
-
-
-********** [SI] GENERIC DECL
-  serialize(rWriteXml, rObject.$(name), "$(alias)", false);
-********** [END]
-
-
-********** [SI] VECTOR DECL
-  {for (int n=0; n<$(size); n++)
-  {
-    serialize(rWriteXml, rObject.$(name)[n], "$(alias)", false);
-  }}
-********** [END]
-
-
-********** [SI] SET/LIST DECL
-  serialize(rWriteXml, rObject.$(name), "$(alias)", "$(item)", false);
-********** [END]
-
-
-********** [SI] MAP DECL
-  serialize(rWriteXml, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
-********** [END]
-
-
-********** [SI] STRUCT EPILOG
-  rWriteXml.EndTag(pszTag);
-}
-********** [END]
-
-
-********** [SI] FILE EPILOG
-********** [END]
-
-
-********** [SI] EPILOG
-
-
-
-void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * pszTag, bool fRoot)
-{
-  rWriteXml.StartTag(pszTag, fRoot);
-  rWriteXml.PutData(rObject.data(), rObject.length());
-  rWriteXml.EndTag(pszTag);
-}
-
-
-
 ********** [END]
 
 

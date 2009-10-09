@@ -24,7 +24,7 @@
 
 
 
-const char * const CGeneratorCustom::mpszSeparator[CGeneratorCustom::eStringCount * CGeneratorCustom::eFileCount] =
+const char * const CGeneratorCustom::mpszSeparator[CGeneratorCustom::eFileCount * CGeneratorCustom::eStringCount] =
 {
   "********** [GL] PROLOG\n",
   "********** [GL] FILE PROLOG\n",
@@ -37,6 +37,28 @@ const char * const CGeneratorCustom::mpszSeparator[CGeneratorCustom::eStringCoun
   "********** [GL] FILE EPILOG\n",
   "********** [GL] EPILOG\n",
 
+  "********** [CH] PROLOG\n",
+  "********** [CH] FILE PROLOG\n",
+  "********** [CH] STRUCT PROLOG\n",
+  "********** [CH] GENERIC DECL\n",
+  "********** [CH] VECTOR DECL\n",
+  "********** [CH] SET/LIST DECL\n",
+  "********** [CH] MAP DECL\n",
+  "********** [CH] STRUCT EPILOG\n",
+  "********** [CH] FILE EPILOG\n",
+  "********** [CH] EPILOG\n",
+
+  "********** [CI] PROLOG\n",
+  "********** [CI] FILE PROLOG\n",
+  "********** [CI] STRUCT PROLOG\n",
+  "********** [CI] GENERIC DECL\n",
+  "********** [CI] VECTOR DECL\n",
+  "********** [CI] SET/LIST DECL\n",
+  "********** [CI] MAP DECL\n",
+  "********** [CI] STRUCT EPILOG\n",
+  "********** [CI] FILE EPILOG\n",
+  "********** [CI] EPILOG\n",
+
   "********** [SH] PROLOG\n",
   "********** [SH] FILE PROLOG\n",
   "********** [SH] STRUCT PROLOG\n",
@@ -48,17 +70,6 @@ const char * const CGeneratorCustom::mpszSeparator[CGeneratorCustom::eStringCoun
   "********** [SH] FILE EPILOG\n",
   "********** [SH] EPILOG\n",
 
-  "********** [DH] PROLOG\n",
-  "********** [DH] FILE PROLOG\n",
-  "********** [DH] STRUCT PROLOG\n",
-  "********** [DH] GENERIC DECL\n",
-  "********** [DH] VECTOR DECL\n",
-  "********** [DH] SET/LIST DECL\n",
-  "********** [DH] MAP DECL\n",
-  "********** [DH] STRUCT EPILOG\n",
-  "********** [DH] FILE EPILOG\n",
-  "********** [DH] EPILOG\n",
-
   "********** [SI] PROLOG\n",
   "********** [SI] FILE PROLOG\n",
   "********** [SI] STRUCT PROLOG\n",
@@ -69,6 +80,17 @@ const char * const CGeneratorCustom::mpszSeparator[CGeneratorCustom::eStringCoun
   "********** [SI] STRUCT EPILOG\n",
   "********** [SI] FILE EPILOG\n",
   "********** [SI] EPILOG\n",
+
+  "********** [DH] PROLOG\n",
+  "********** [DH] FILE PROLOG\n",
+  "********** [DH] STRUCT PROLOG\n",
+  "********** [DH] GENERIC DECL\n",
+  "********** [DH] VECTOR DECL\n",
+  "********** [DH] SET/LIST DECL\n",
+  "********** [DH] MAP DECL\n",
+  "********** [DH] STRUCT EPILOG\n",
+  "********** [DH] FILE EPILOG\n",
+  "********** [DH] EPILOG\n",
 
   "********** [DI] PROLOG\n",
   "********** [DI] FILE PROLOG\n",
@@ -108,48 +130,80 @@ CGeneratorCustom::~CGeneratorCustom()
 
 
 
-void CGeneratorCustom::Load(const char * pszStrings)
+bool CGeneratorCustom::Load(const char * filename)
 {
-  FILE * fString = fopen(pszStrings, "r");
-  if (fString)
+  FILE * fString = fopen(filename, "r");
+
+  if (!fString)
   {
-    std::string   * pstrRead  = 0;
-    const int       BUFSIZE   = 256;
-    char            szBuffer[BUFSIZE];
+    return false;
+  }
 
-    while (NULL!=fgets(szBuffer, BUFSIZE, fString))
+  std::string   * pstrRead  = 0;
+  const int       BUFSIZE   = 256;
+  char            szBuffer[BUFSIZE];
+
+  while (NULL!=fgets(szBuffer, BUFSIZE, fString))
+  {
+    bool fSeparator = false;
+
+    for (int n=0; n<eFileCount*eStringCount; n++)
     {
-      bool fSeparator = false;
-
-      for (int n=0; n<eStringCount*eFileCount; n++)
+      if (0==strcmp(mpszSeparator[n], szBuffer))
       {
-        if (0==strcmp(mpszSeparator[n], szBuffer))
-        {
-          pstrRead    = &mstrGeneratorString[n%eFileCount][n/eFileCount];
-          fSeparator  = true;
-          break;
-        }
-      }
-
-      if (fSeparator)
-        continue;
-
-      if (0==strcmp(mpszEnd, szBuffer))
-      {
-        pstrRead = 0;
-      }
-      else if (0!=pstrRead)
-      {
-        pstrRead->append(szBuffer);
+        pstrRead    = &mstrGeneratorString[n/eStringCount][n%eStringCount];
+        fSeparator  = true;
+        break;
       }
     }
 
-    fclose(fString);
+    if (fSeparator)
+    {
+      continue;
+    }
+
+    if (0==strcmp(mpszEnd, szBuffer))
+    {
+      pstrRead = 0;
+    }
+    else if (0!=pstrRead)
+    {
+      pstrRead->append(szBuffer);
+    }
   }
+
+  fclose(fString);
+
+  return true;
 }
 
 
 
+bool CGeneratorCustom::Save(const char * filename)
+{
+  FILE * fString = fopen(filename, "w");
+
+  if (!fString)
+  {
+    return false;
+  }
+
+  for (int nfile=0; nfile<eFileCount; ++nfile)
+  {
+    for (int nstring=0; nstring<eStringCount; ++nstring)
+    {
+      fputs(mpszSeparator[nfile * eStringCount + nstring], fString);
+      fputs(mstrGeneratorString[nfile][nstring].c_str(), fString);
+      fputs(mpszEnd, fString);
+      fputs("\n\n", fString);
+    }
+    fputs("\n\n\n\n", fString);
+  }
+
+  fclose(fString);
+
+  return true;
+}
 
 
 

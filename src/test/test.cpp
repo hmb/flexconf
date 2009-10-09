@@ -23,7 +23,9 @@
 #endif
 
 # include <iostream>
-# include "struct.h"
+# include "structCom.h"
+# include "structSer.h"
+# include "structDes.h"
 
 void serialize(CWriteXml & rWriteXml, const CData & rObject, const char * pszTag, bool fRoot,
   const char * pszIdTag, const std::string * pstrIdValue)

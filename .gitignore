@@ -1,3 +1,5 @@
+flexconf.kdevelop.pcs
+flexconf.kdevses
 Makefile
 Makefile.in
 *~
@@ -18,7 +20,10 @@ config.status
 configure
 src/flexconf
 src/genxml/testread
-src/test/struct.h
+src/test/structCom.h
+src/test/structCom.cpp
+src/test/structDes.h
 src/test/structDes.cpp
+src/test/structSer.h
 src/test/structSer.cpp
 src/test/test

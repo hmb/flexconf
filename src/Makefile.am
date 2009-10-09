@@ -1,4 +1,4 @@
-#   flexconf - flexible configuration generator
+# flexconf - flexible configuration generator
 #   Copyright (C) 2003-2008 Holger Böhnke
 #
 #   This file is part of flexconf.
@@ -21,11 +21,11 @@
 
 SUBDIRS = \
   gencust \
-  .
-
-#  genreg \
-  genxml \
+  . \
   test
+
+#  genxml
+#  genreg
 
 
 #---------------------------------------------------------------------------------
@@ -98,10 +98,10 @@ AM_YFLAGS = -d
 # additional libs needed for the the targets defined above
 
 flexconf_LDADD = \
-  genxml/libgenxml.a \
-  genreg/libgenreg.a \
   gencust/libgencust.a
 
+#  genxml/libgenxml.a
+#  genreg/libgenreg.a
 
 
 #---------------------------------------------------------------------------------

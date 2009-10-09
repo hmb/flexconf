@@ -31,7 +31,8 @@ public:
   CGeneratorCustom();
   virtual ~CGeneratorCustom();
 
-  void Load(const char * pszStrings);
+  bool Load(const char * filename);
+  bool Save(const char * filename);
 
 protected:
   // virtual functions to write headers
