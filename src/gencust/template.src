@@ -1,0 +1,324 @@
+***************************************************************************
+flexconf - flexible configuration generator
+Copyright (c) 2008-2009 Holger Böhnke
+
+This file is part of flexconf.
+
+Flexconf is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+***************************************************************************
+
+
+
+********** [GL] PROLOG
+********** [END]
+
+
+********** [GL] FILE PROLOG
+********** [END]
+
+
+********** [GL] STRUCT PROLOG
+********** [END]
+
+
+********** [GL] GENERIC DECL
+********** [END]
+
+
+********** [GL] VECTOR DECL
+********** [END]
+
+
+********** [GL] SET/LIST DECL
+********** [END]
+
+
+********** [GL] MAP DECL
+********** [END]
+
+
+********** [GL] STRUCT EPILOG
+********** [END]
+
+
+********** [GL] FILE EPILOG
+********** [END]
+
+
+********** [GL] EPILOG
+********** [END]
+
+
+
+
+
+
+********** [CH] PROLOG
+********** [END]
+
+
+********** [CH] FILE PROLOG
+********** [END]
+
+
+********** [CH] STRUCT PROLOG
+********** [END]
+
+
+********** [CH] GENERIC DECL
+********** [END]
+
+
+********** [CH] VECTOR DECL
+********** [END]
+
+
+********** [CH] SET/LIST DECL
+********** [END]
+
+
+********** [CH] MAP DECL
+********** [END]
+
+
+********** [CH] STRUCT EPILOG
+********** [END]
+
+
+********** [CH] FILE EPILOG
+********** [END]
+
+
+********** [CH] EPILOG
+********** [END]
+
+
+
+
+
+
+********** [CI] PROLOG
+********** [END]
+
+
+********** [CI] FILE PROLOG
+********** [END]
+
+
+********** [CI] STRUCT PROLOG
+********** [END]
+
+
+********** [CI] GENERIC DECL
+********** [END]
+
+
+********** [CI] VECTOR DECL
+********** [END]
+
+
+********** [CI] SET/LIST DECL
+********** [END]
+
+
+********** [CI] MAP DECL
+********** [END]
+
+
+********** [CI] STRUCT EPILOG
+********** [END]
+
+
+********** [CI] FILE EPILOG
+********** [END]
+
+
+********** [CI] EPILOG
+********** [END]
+
+
+
+
+
+
+********** [SH] PROLOG
+********** [END]
+
+
+********** [SH] FILE PROLOG
+********** [END]
+
+
+********** [SH] STRUCT PROLOG
+********** [END]
+
+
+********** [SH] GENERIC DECL
+********** [END]
+
+
+********** [SH] VECTOR DECL
+********** [END]
+
+
+********** [SH] SET/LIST DECL
+********** [END]
+
+
+********** [SH] MAP DECL
+********** [END]
+
+
+********** [SH] STRUCT EPILOG
+********** [END]
+
+
+********** [SH] FILE EPILOG
+********** [END]
+
+
+********** [SH] EPILOG
+********** [END]
+
+
+
+
+
+
+********** [SI] PROLOG
+********** [END]
+
+
+********** [SI] FILE PROLOG
+********** [END]
+
+
+********** [SI] STRUCT PROLOG
+********** [END]
+
+
+********** [SI] GENERIC DECL
+********** [END]
+
+
+********** [SI] VECTOR DECL
+********** [END]
+
+
+********** [SI] SET/LIST DECL
+********** [END]
+
+
+********** [SI] MAP DECL
+********** [END]
+
+
+********** [SI] STRUCT EPILOG
+********** [END]
+
+
+********** [SI] FILE EPILOG
+********** [END]
+
+
+********** [SI] EPILOG
+********** [END]
+
+
+
+
+
+
+********** [DH] PROLOG
+********** [END]
+
+
+********** [DH] FILE PROLOG
+********** [END]
+
+
+********** [DH] STRUCT PROLOG
+********** [END]
+
+
+********** [DH] GENERIC DECL
+********** [END]
+
+
+********** [DH] VECTOR DECL
+********** [END]
+
+
+********** [DH] SET/LIST DECL
+********** [END]
+
+
+********** [DH] MAP DECL
+********** [END]
+
+
+********** [DH] STRUCT EPILOG
+********** [END]
+
+
+********** [DH] FILE EPILOG
+********** [END]
+
+
+********** [DH] EPILOG
+********** [END]
+
+
+
+
+
+
+********** [DI] PROLOG
+********** [END]
+
+
+********** [DI] FILE PROLOG
+********** [END]
+
+
+********** [DI] STRUCT PROLOG
+********** [END]
+
+
+********** [DI] GENERIC DECL
+********** [END]
+
+
+********** [DI] VECTOR DECL
+********** [END]
+
+
+********** [DI] SET/LIST DECL
+********** [END]
+
+
+********** [DI] MAP DECL
+********** [END]
+
+
+********** [DI] STRUCT EPILOG
+********** [END]
+
+
+********** [DI] FILE EPILOG
+********** [END]
+
+
+********** [DI] EPILOG
+********** [END]
