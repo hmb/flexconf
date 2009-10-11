@@ -89,8 +89,8 @@ struct SLongHex
   bool operator == (const SLongHex & cmp) const { return mulHex == cmp.mulHex; }
   bool operator >= (const SLongHex & cmp) const { return mulHex >= cmp.mulHex; }
   bool operator <= (const SLongHex & cmp) const { return mulHex <= cmp.mulHex; }
-  bool operator <  (const SLongHex & cmp) const { return mulHex >  cmp.mulHex; }
-  bool operator >  (const SLongHex & cmp) const { return mulHex <  cmp.mulHex; }
+  bool operator >  (const SLongHex & cmp) const { return mulHex >  cmp.mulHex; }
+  bool operator <  (const SLongHex & cmp) const { return mulHex <  cmp.mulHex; }
   bool operator != (const SLongHex & cmp) const { return mulHex != cmp.mulHex; }
 
   unsigned long operator = (unsigned long ulHex) { return mulHex=ulHex; }
@@ -466,12 +466,12 @@ inline void serialize(char * pBuffer, int nBufSize, const unsigned long & rObjec
 
 inline void serialize(char * pBuffer, int nBufSize, const float & rObject)
 {
-  snprintf(pBuffer, nBufSize, "%f", rObject);
+  snprintf(pBuffer, nBufSize, "%f", static_cast<double>(rObject));
 }
 
 inline void serialize(char * pBuffer, int nBufSize, const double & rObject)
 {
-  snprintf(pBuffer, nBufSize, "%lf", rObject);
+  snprintf(pBuffer, nBufSize, "%f", rObject);
 }
 
 inline void serialize(char * pBuffer, int nBufSize, const SLongHex & rObject)
@@ -559,8 +559,9 @@ void serialize(
   for (typename std::map<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
   {
     // first serialize the key to a string
-    char szBuffer[80];
-    serialize(szBuffer, 80, itr->first);
+    const int BUFSIZE = 1024;
+    char szBuffer[BUFSIZE];
+    serialize(szBuffer, BUFSIZE, itr->first);
     std::string strBuffer(szBuffer);
     // serialize the object with a string key
     serialize(rWriteXml, itr->second, pszTagItem, false, pszTagId, &strBuffer);
@@ -628,6 +629,7 @@ void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszT
 
 
 ********** [SI] STRUCT EPILOG
+  /* end of struct serialize function */
   rWriteXml.EndTag(pszTag);
 }
 ********** [END]
@@ -1227,6 +1229,7 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
 
 
 ********** [DI] STRUCT EPILOG
+    /* end of struct deserialize function */
     rReadXml.SkipTag();
   } // while (!rReadXml.IsEndTag(...))
 }
