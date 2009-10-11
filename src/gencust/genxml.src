@@ -75,7 +75,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 ********** [CH] PROLOG
-//[CH] PROLOG
+/* ------------------------------------------------------------------
+   This file is the structure common header file.
+   It has been automatically created by:
+
+   " PACKAGE_STRING "
+
+   !!! DO NOT MODIFY MANUALLY !!!
+
+   Bugreports to " PACKAGE_BUGREPORT "
+   ------------------------------------------------------------------
+*/
+
 #ifndef _StructCom_h_
 #define _StructCom_h_
 
@@ -160,7 +171,18 @@ class CReadXml;
 
 
 ********** [CI] PROLOG
-//[CI] PROLOG
+/* ------------------------------------------------------------------
+   This file is the structure common implementation file.
+   It has been automatically created by:
+
+   " PACKAGE_STRING "
+
+   !!! DO NOT MODIFY MANUALLY !!!
+
+   Bugreports to " PACKAGE_BUGREPORT "
+   ------------------------------------------------------------------
+*/
+
 #include "structCom.h"
 ********** [END]
 
@@ -215,7 +237,18 @@ class CReadXml;
 
 
 ********** [SH] PROLOG
-//[SH] PROLOG
+/* ------------------------------------------------------------------
+   This file is the structure serializer header file.
+   It has been automatically created by:
+
+   " PACKAGE_STRING "
+
+   !!! DO NOT MODIFY MANUALLY !!!
+
+   Bugreports to " PACKAGE_BUGREPORT "
+   ------------------------------------------------------------------
+*/
+
 #ifndef _StructSer_h_
 #define _StructSer_h_
 
@@ -580,6 +613,18 @@ void serialize(
 
 
 ********** [SI] PROLOG
+/* ------------------------------------------------------------------
+   This file is the structure serializer implementation file.
+   It has been automatically created by:
+
+   " PACKAGE_STRING "
+
+   !!! DO NOT MODIFY MANUALLY !!!
+
+   Bugreports to " PACKAGE_BUGREPORT "
+   ------------------------------------------------------------------
+*/
+
 #include "structCom.h"
 #include "structSer.h"
 ********** [END]
@@ -663,6 +708,18 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
 
 
 ********** [DH] PROLOG
+/* ------------------------------------------------------------------
+   This file is the structure deserializer header file.
+   It has been automatically created by:
+
+   " PACKAGE_STRING "
+
+   !!! DO NOT MODIFY MANUALLY !!!
+
+   Bugreports to " PACKAGE_BUGREPORT "
+   ------------------------------------------------------------------
+*/
+
 #ifndef _StructDes_h_
 #define _StructDes_h_
 
@@ -1149,6 +1206,18 @@ void deserialize(
 
 
 ********** [DI] PROLOG
+/* ------------------------------------------------------------------
+   This file is the structure deserializer implementation file.
+   It has been automatically created by:
+
+   " PACKAGE_STRING "
+
+   !!! DO NOT MODIFY MANUALLY !!!
+
+   Bugreports to " PACKAGE_BUGREPORT "
+   ------------------------------------------------------------------
+*/
+
 #include "structCom.h"
 #include "structDes.h"
 //#include <stdlib.h>
