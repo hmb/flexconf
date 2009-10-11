@@ -77,8 +77,8 @@ bool operator == (const STest & testOne, const STest & testTwo)
     testOne.mlstString    == testTwo.mlstString   &&
     testOne.mapDataL      == testTwo.mapDataL     &&
     testOne.mapDataStr    == testTwo.mapDataStr   &&
-//    testOne.mmapDataL     == testTwo.mmapDataL    &&
-//    testOne.mmapDataStr   == testTwo.mmapDataStr  &&
+    testOne.mmapDataL     == testTwo.mmapDataL    &&
+    testOne.mmapDataStr   == testTwo.mmapDataStr  &&
 //    testOne.mapData   == testTwo.mapData      &&
 //    testOne.mapNotags == testTwo.mapNotags    &&
     true;
@@ -170,7 +170,6 @@ int main(int argc, char *argv[])
 //    testFirst.mapData["eropw"]    = data;
     testFirst.mapDataL[79]        = data;
 
-/*
     // multimap long
     data.strString = "1001-1";
     testFirst.mmapDataL.insert(std::pair<long, SData>(1001, data));
@@ -195,7 +194,6 @@ int main(int argc, char *argv[])
     testFirst.mmapDataL.insert(std::pair<long, SData>(2004, data));
     data.strString = "2004-4";
     testFirst.mmapDataL.insert(std::pair<long, SData>(2004, data));
-*/
 
     // map string
     data.strString = "key: asdfg";
@@ -205,7 +203,6 @@ int main(int argc, char *argv[])
     data.strString = "key: eropw";
     testFirst.mapDataStr["eropw"]    = data;
 
-/*
     // multimap string
     data.strString = "multi key: test1-1";
     testFirst.mmapDataStr.insert(std::pair<std::string, SData>("test1", data));
@@ -225,7 +222,6 @@ int main(int argc, char *argv[])
     testFirst.mmapDataStr.insert(std::pair<std::string, SData>("test4", data));
     data.strString = "multi key: test4-4";
     testFirst.mmapDataStr.insert(std::pair<std::string, SData>("test4", data));
-*/
 
 
     CWriteXmlString writeString(strXmlFirst);
