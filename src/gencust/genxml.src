@@ -611,10 +611,12 @@ void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszT
 
 
 ********** [SI] VECTOR DECL
+/* TODO
   {for (int n=0; n<$(size); n++)
   {
     serialize(rWriteXml, rObject.$(name)[n], "$(alias)", false);
   }}
+*/
 ********** [END]
 
 
@@ -1202,11 +1204,13 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
 
 
 ********** [DI] VECTOR DECL
-    //if (rReadXml.IsStartTag("%s", false))\n", mstrAlias.c_str());
+/* TODO
+    if (rReadXml.IsStartTag("%s", false))\n", mstrAlias.c_str());
     {
-      // deserialize(rReadXml, rObject.%s, "%s", false);\n", mstrName.c_str(), mstrAlias.c_str());
+      deserialize(rReadXml, rObject.%s, "%s", false);\n", mstrName.c_str(), mstrAlias.c_str());
       continue;
     }
+*/
 ********** [END]
 
 
