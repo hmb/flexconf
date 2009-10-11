@@ -79,6 +79,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef _StructCom_h_
 #define _StructCom_h_
 
+#include <string>
+#include <list>
+#include <set>
+#include <map>
+
 struct SLongHex
 {
   SLongHex() { }
@@ -105,6 +110,7 @@ class CReadXml;
 
 ********** [CH] FILE PROLOG
 //[CH] FILE PROLOG
+#include "$(headerfile)"
 ********** [END]
 
 
@@ -213,23 +219,18 @@ class CReadXml;
 #ifndef _StructSer_h_
 #define _StructSer_h_
 
+//#include <stdio.h>
+
 #ifdef _MSC_VER
 #define snprintf _snprintf
 #pragma warning(disable: 4786)
 #endif
-
-#include <string>
-#include <list>
-#include <set>
-#include <map>
-#include <stdio.h>
 
 ********** [END]
 
 
 ********** [SH] FILE PROLOG
 //[SH] FILE PROLOG
-#include "$(headerfile)"
 ********** [END]
 
 
@@ -665,22 +666,10 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
 #ifndef _StructDes_h_
 #define _StructDes_h_
 
-#ifdef _MSC_VER
-#define snprintf _snprintf
-#pragma warning(disable: 4786)
-#endif
-
-#include <string>
-#include <list>
-#include <set>
-#include <map>
-#include <stdio.h>
-
 ********** [END]
 
 
 ********** [DH] FILE PROLOG
-#include "$(headerfile)"
 ********** [END]
 
 
@@ -1162,7 +1151,7 @@ void deserialize(
 ********** [DI] PROLOG
 #include "structCom.h"
 #include "structDes.h"
-#include <stdlib.h>
+//#include <stdlib.h>
 ********** [END]
 
 
