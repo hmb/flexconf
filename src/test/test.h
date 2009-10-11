@@ -117,11 +117,11 @@ struct STestBase
 
   std::map<long, SData>  mapDataL; //flexconf alias maplong item app id longid
 
-  std::multimap<long, SData>  mmapDataL; //flexconf alias mmaplong item app id longid
+//  std::multimap<long, SData>  mmapDataL; //flexconf alias mmaplong item app id longid
 
   std::map<std::string, SData>  mapDataStr; //flexconf alias mapstr item app id strid
 
-  std::multimap<std::string, SData>  mmapDataStr; //flexconf alias mmapstr item app id strid
+//  std::multimap<std::string, SData>  mmapDataStr; //flexconf alias mmapstr item app id strid
 
 #ifndef _MSC_VER
 //<!--

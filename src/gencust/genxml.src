@@ -76,6 +76,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ********** [CH] PROLOG
 //[CH] PROLOG
+#ifndef _StructCom_h_
+#define _StructCom_h_
+
+struct SLongHex
+{
+  SLongHex() { }
+  SLongHex(unsigned long ulHex) : mulHex(ulHex) { }
+
+  unsigned long mulHex;
+
+  bool operator == (const SLongHex & cmp) const { return mulHex == cmp.mulHex; }
+  bool operator >= (const SLongHex & cmp) const { return mulHex >= cmp.mulHex; }
+  bool operator <= (const SLongHex & cmp) const { return mulHex <= cmp.mulHex; }
+  bool operator <  (const SLongHex & cmp) const { return mulHex >  cmp.mulHex; }
+  bool operator >  (const SLongHex & cmp) const { return mulHex <  cmp.mulHex; }
+  bool operator != (const SLongHex & cmp) const { return mulHex != cmp.mulHex; }
+
+  unsigned long operator = (unsigned long ulHex) { return mulHex=ulHex; }
+  operator unsigned long () const { return mulHex; }
+};
+
+class CWriteXml;
+class CReadXml;
+
 ********** [END]
 
 
@@ -121,6 +145,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ********** [CH] EPILOG
 //[CH] EPILOG
+#endif // _StructCom_h_
 ********** [END]
 
 
@@ -130,6 +155,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ********** [CI] PROLOG
 //[CI] PROLOG
+#include "structCom.h"
 ********** [END]
 
 
@@ -183,16 +209,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 ********** [SH] PROLOG
-// TODO separate serializer and deserializer header
+//[SH] PROLOG
+#ifndef _StructSer_h_
+#define _StructSer_h_
+
+#ifdef _MSC_VER
+#define snprintf _snprintf
+#pragma warning(disable: 4786)
+#endif
+
+#include <string>
+#include <list>
+#include <set>
+#include <map>
+#include <stdio.h>
+
 ********** [END]
 
 
 ********** [SH] FILE PROLOG
+//[SH] FILE PROLOG
 #include "$(headerfile)"
 ********** [END]
 
 
 ********** [SH] STRUCT PROLOG
+//[SH] STRUCT PROLOG
 void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszTag = 0, bool fRoot = true,
   const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
 ********** [END]
@@ -231,6 +273,14 @@ const int IDENT_WIDTH = 2;
 class CWriteXml
 {
 public:
+  CWriteXml()
+  {
+  }
+
+  virtual ~CWriteXml()
+  {
+  }
+
   void StartTag(const char * pszTag, bool fRoot)
   {
     startTag(pszTag, fRoot);
@@ -454,7 +504,7 @@ void serialize(
   const char * pszTag, const char * pszTagItem, bool fRoot = true)
 {
   rWriteXml.StartTag(pszTag, fRoot);
-  for (std::set<_K>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  for (typename std::set<_K>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
   {
     // serialize the key object
     serialize(rWriteXml, *itr, pszTagItem, false);
@@ -471,7 +521,7 @@ void serialize(
   const char * pszTag, const char * pszTagItem, bool fRoot = true)
 {
   rWriteXml.StartTag(pszTag, fRoot);
-  for (std::list<_T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  for (typename std::list<_T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
   {
     // serialize the key object
     serialize(rWriteXml, *itr, pszTagItem, false);
@@ -489,7 +539,7 @@ void serialize(
   bool fRoot = true)
 {
   rWriteXml.StartTag(pszTag, fRoot);
-  for (std::map<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  for (typename std::map<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
   {
     serialize(rWriteXml, itr->second, pszTagItem, false, pszTagId, &itr->first);
   }
@@ -506,7 +556,7 @@ void serialize(
   bool fRoot = true)
 {
   rWriteXml.StartTag(pszTag, fRoot);
-  for (std::map<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  for (typename std::map<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
   {
     // first serialize the key to a string
     char szBuffer[80];
@@ -519,7 +569,7 @@ void serialize(
 }
 
 
-#endif // _Struct_h_
+#endif // _StructSer_h_
 ********** [END]
 
 
@@ -528,6 +578,7 @@ void serialize(
 
 
 ********** [SI] PROLOG
+#include "structCom.h"
 #include "structSer.h"
 ********** [END]
 
@@ -615,40 +666,11 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
 #pragma warning(disable: 4786)
 #endif
 
-
-
 #include <string>
 #include <list>
 #include <set>
 #include <map>
 #include <stdio.h>
-
-
-
-class CReadXml;
-class CWriteXml;
-
-
-
-struct SLongHex
-{
-  SLongHex() { }
-  SLongHex(unsigned long ulHex) : mulHex(ulHex) { }
-
-  unsigned long mulHex;
-
-  bool operator == (const SLongHex & cmp) const { return mulHex == cmp.mulHex; }
-  bool operator >= (const SLongHex & cmp) const { return mulHex >= cmp.mulHex; }
-  bool operator <= (const SLongHex & cmp) const { return mulHex <= cmp.mulHex; }
-  bool operator <  (const SLongHex & cmp) const { return mulHex >  cmp.mulHex; }
-  bool operator >  (const SLongHex & cmp) const { return mulHex <  cmp.mulHex; }
-  bool operator != (const SLongHex & cmp) const { return mulHex != cmp.mulHex; }
-
-  unsigned long operator = (unsigned long ulHex) { return mulHex=ulHex; }
-  operator unsigned long () const { return mulHex; }
-};
-
-
 
 ********** [END]
 
@@ -695,6 +717,14 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag =0,
 class CReadXml
 {
 public:
+  CReadXml()
+  {
+  }
+
+  virtual ~CReadXml()
+  {
+  }
+
   bool IsEof()
   {
     return isEof();
@@ -1117,7 +1147,7 @@ void deserialize(
 }
 
 
-#endif // _Struct_h_
+#endif // _StructDes_h_
 ********** [END]
 
 
@@ -1126,7 +1156,8 @@ void deserialize(
 
 
 ********** [DI] PROLOG
-#include "struct.h"
+#include "structCom.h"
+#include "structDes.h"
 #include <stdlib.h>
 ********** [END]
 
@@ -1169,9 +1200,9 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
 
 
 ********** [DI] VECTOR DECL
-    if (rReadXml.IsStartTag("%s", false))\n", mstrAlias.c_str());
+    //if (rReadXml.IsStartTag("%s", false))\n", mstrAlias.c_str());
     {
-      deserialize(rReadXml, rObject.%s, "%s", false);\n", mstrName.c_str(), mstrAlias.c_str());
+      // deserialize(rReadXml, rObject.%s, "%s", false);\n", mstrName.c_str(), mstrAlias.c_str());
       continue;
     }
 ********** [END]
