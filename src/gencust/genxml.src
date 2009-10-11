@@ -604,6 +604,46 @@ void serialize(
 }
 
 
+
+// serialize a std::multimap<std::string, _T> object
+template <class _T>
+void serialize(
+  CWriteXml & rWriteXml, const std::multimap<std::string, _T> & rObject,
+  const char * pszTag, const char * pszTagItem, const char * pszTagId,
+  bool fRoot = true)
+{
+  rWriteXml.StartTag(pszTag, fRoot);
+  for (typename std::multimap<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  {
+    serialize(rWriteXml, itr->second, pszTagItem, false, pszTagId, &itr->first);
+  }
+  rWriteXml.EndTag(pszTag);
+}
+
+
+
+// serialize any other multimap object for witch a key serialize function exists
+template <class _K, class _T>
+void serialize(
+  CWriteXml & rWriteXml, const std::multimap<_K, _T> & rObject,
+  const char * pszTag, const char * pszTagItem, const char * pszTagId,
+  bool fRoot = true)
+{
+  rWriteXml.StartTag(pszTag, fRoot);
+  for (typename std::multimap<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  {
+    // first serialize the key to a string
+    const int BUFSIZE = 1024;
+    char szBuffer[BUFSIZE];
+    serialize(szBuffer, BUFSIZE, itr->first);
+    std::string strBuffer(szBuffer);
+    // serialize the object with a string key
+    serialize(rWriteXml, itr->second, pszTagItem, false, pszTagId, &strBuffer);
+  }
+  rWriteXml.EndTag(pszTag);
+}
+
+
 #endif // _StructSer_h_
 ********** [END]
 
@@ -1208,6 +1248,62 @@ void deserialize(
       }
       rObject.insert(std::pair<_K, _T>(_k, _t));
 #endif
+      continue;
+    }
+    rReadXml.SkipTag();
+  } // while (!rReadXml.IsEndTag(...))
+}
+
+
+
+template <class _T>
+void deserialize(
+  CReadXml & rReadXml, std::multimap<std::string, _T> & rObject,
+  const char * pszTag, const char * pszTagItem, const char * pszTagId,
+  bool fRoot = true)
+{
+  if (fRoot)
+  {
+    if (!rReadXml.IsStartTag(pszTag, fRoot))
+      return;
+  }
+  while (!rReadXml.IsEof() && !rReadXml.IsEndTag(pszTag))
+  {
+    if (rReadXml.IsStartTag(pszTagItem, false))
+    {
+      std::string strKey;
+      _T _t;
+      deserialize(rReadXml, _t, pszTagItem, false, pszTagId, &strKey);
+      rObject.insert(std::pair<std::string, _T>(strKey, _t));
+      continue;
+    }
+    rReadXml.SkipTag();
+  } // while (!rReadXml.IsEndTag(...))
+}
+
+
+
+template <class _K, class _T>
+void deserialize(
+  CReadXml & rReadXml, std::multimap<_K, _T> & rObject,
+  const char * pszTag, const char * pszTagItem, const char * pszTagId,
+  bool fRoot = true)
+{
+  if (fRoot)
+  {
+    if (!rReadXml.IsStartTag(pszTag, fRoot))
+      return;
+  }
+  while (!rReadXml.IsEof() && !rReadXml.IsEndTag(pszTag))
+  {
+    if (rReadXml.IsStartTag(pszTagItem, false))
+    {
+      std::string strKey;
+      _T _t;
+      deserialize(rReadXml, _t, pszTagItem, false, pszTagId, &strKey);
+      _K _k;
+      deserialize(strKey.c_str(), _k);
+      rObject.insert(std::pair<_K, _T>(_k, _t));
       continue;
     }
     rReadXml.SkipTag();
