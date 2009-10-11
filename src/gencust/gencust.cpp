@@ -139,7 +139,7 @@ bool CGeneratorCustom::Load(const char * filename)
     return false;
   }
 
-  std::string   * pstrRead  = 0;
+  std::string   * pstrRead  = &mstrSourceFileProlog;
   const int       BUFSIZE   = 256;
   char            szBuffer[BUFSIZE];
 
@@ -188,16 +188,23 @@ bool CGeneratorCustom::Save(const char * filename)
     return false;
   }
 
+  fputs(mstrSourceFileProlog.c_str(), fString);
+
+  char const * const sepstring  = "\n\n";
+  char const * const sepfile    = "\n\n\n\n\n\n";
+  const char * sepnext = "";
+
   for (int nfile=0; nfile<eFileCount; ++nfile)
   {
     for (int nstring=0; nstring<eStringCount; ++nstring)
     {
+      fputs(sepnext, fString);
       fputs(mpszSeparator[nfile * eStringCount + nstring], fString);
       fputs(mstrGeneratorString[nfile][nstring].c_str(), fString);
       fputs(mpszEnd, fString);
-      fputs("\n\n", fString);
+      sepnext = sepstring;
     }
-    fputs("\n\n\n\n", fString);
+    sepnext = sepfile;
   }
 
   fclose(fString);

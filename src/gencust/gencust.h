@@ -84,6 +84,7 @@ protected:
 private:
   int output(EGeneratorString eString);
 
+  std::string   mstrSourceFileProlog;
   std::string   mstrGeneratorString[eFileCount][eStringCount];
 
   std::string   mstrStructBegin;
