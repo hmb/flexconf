@@ -22,10 +22,11 @@
   #pragma warning( disable : 4786 4996 )
 #endif
 
-# include <iostream>
 # include "structCom.h"
 # include "structSer.h"
 # include "structDes.h"
+
+# include <iostream>
 
 void serialize(CWriteXml & rWriteXml, const CData & rObject, const char * pszTag, bool fRoot,
   const char * pszIdTag, const std::string * pstrIdValue)
