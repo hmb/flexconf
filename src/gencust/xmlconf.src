@@ -21,52 +21,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 ********** [GL] PROLOG
-//[GL] PROLOG
 ********** [END]
 
 
 ********** [GL] FILE PROLOG
-//[GL] FILE PROLOG
 ********** [END]
 
 
 ********** [GL] STRUCT PROLOG
-//[GL] STRUCT PROLOG
 ********** [END]
 
 
 ********** [GL] GENERIC DECL
-//[GL] GENERIC DECL
 ********** [END]
 
 
 ********** [GL] VECTOR DECL
-//[GL] VECTOR DECL
 ********** [END]
 
 
 ********** [GL] SET/LIST DECL
-//[GL] SET/LIST DECL
 ********** [END]
 
 
 ********** [GL] MAP DECL
-//[GL] MAP DECL
 ********** [END]
 
 
 ********** [GL] STRUCT EPILOG
-//[GL] STRUCT EPILOG
 ********** [END]
 
 
 ********** [GL] FILE EPILOG
-//[GL] FILE EPILOG
 ********** [END]
 
 
 ********** [GL] EPILOG
-//[GL] EPILOG
 ********** [END]
 
 
@@ -120,48 +110,39 @@ class CReadXml;
 
 
 ********** [CH] FILE PROLOG
-//[CH] FILE PROLOG
 #include "$(headerfile)"
 ********** [END]
 
 
 ********** [CH] STRUCT PROLOG
-//[CH] STRUCT PROLOG
 ********** [END]
 
 
 ********** [CH] GENERIC DECL
-//[CH] GENERIC DECL
 ********** [END]
 
 
 ********** [CH] VECTOR DECL
-//[CH] VECTOR DECL
 ********** [END]
 
 
 ********** [CH] SET/LIST DECL
-//[CH] SET/LIST DECL
 ********** [END]
 
 
 ********** [CH] MAP DECL
-//[CH] MAP DECL
 ********** [END]
 
 
 ********** [CH] STRUCT EPILOG
-//[CH] STRUCT EPILOG
 ********** [END]
 
 
 ********** [CH] FILE EPILOG
-//[CH] FILE EPILOG
 ********** [END]
 
 
 ********** [CH] EPILOG
-//[CH] EPILOG
 #endif // _StructCom_h_
 ********** [END]
 
@@ -188,47 +169,38 @@ class CReadXml;
 
 
 ********** [CI] FILE PROLOG
-//[CI] FILE PROLOG
 ********** [END]
 
 
 ********** [CI] STRUCT PROLOG
-//[CI] STRUCT PROLOG
 ********** [END]
 
 
 ********** [CI] GENERIC DECL
-//[CI] GENERIC DECL
 ********** [END]
 
 
 ********** [CI] VECTOR DECL
-//[CI] VECTOR DECL
 ********** [END]
 
 
 ********** [CI] SET/LIST DECL
-//[CI] SET/LIST DECL
 ********** [END]
 
 
 ********** [CI] MAP DECL
-//[CI] MAP DECL
 ********** [END]
 
 
 ********** [CI] STRUCT EPILOG
-//[CI] STRUCT EPILOG
 ********** [END]
 
 
 ********** [CI] FILE EPILOG
-//[CI] FILE EPILOG
 ********** [END]
 
 
 ********** [CI] EPILOG
-//[CI] EPILOG
 ********** [END]
 
 
@@ -263,12 +235,10 @@ class CReadXml;
 
 
 ********** [SH] FILE PROLOG
-//[SH] FILE PROLOG
 ********** [END]
 
 
 ********** [SH] STRUCT PROLOG
-//[SH] STRUCT PROLOG
 void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszTag = 0, bool fRoot = true,
   const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
 ********** [END]
