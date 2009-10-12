@@ -106,7 +106,7 @@ int yyparse(void);
 
 
 
-void CGenerator::Generate()
+int CGenerator::Generate()
 {
   // init file pointers for output files
   mfCommonHdr       = fopen(mstrCommonHdr.c_str(),      "w");
@@ -134,11 +134,12 @@ void CGenerator::Generate()
   // :TODO: pass this as param to yyparse
   spGenerator = this;
 
+  int nRetVal = 0;
+
   // parse files and create the main work
-  {for (lstSourceFilesCtrType ctr=mlstSourceFiles.begin(); ctr!=mlstSourceFiles.end(); ctr++)
+  {for (lstSourceFilesCtrType ctr=mlstSourceFiles.begin(); nRetVal==0 && ctr!=mlstSourceFiles.end(); ctr++)
   {
     SetVariable(VAR_HEADERFILE, ctr->c_str());
-    int nRetVal = 0;
     #if YYDEBUG
       yydebug   = 1;
     #endif
@@ -154,11 +155,6 @@ void CGenerator::Generate()
     {
       printf("error: could not open file %s\n", ctr->c_str());
       nRetVal = -1;
-    }
-
-    if (0!=nRetVal)
-    {
-      break;
     }
   }}
   ClearVariable(VAR_HEADERFILE);
@@ -192,6 +188,8 @@ void CGenerator::Generate()
   mfSerializeImp = 0;
   mfDeserializeHdr = 0;
   mfDeserializeImp = 0;
+
+  return nRetVal;
 }
 
 

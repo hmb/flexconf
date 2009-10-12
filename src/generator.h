@@ -49,7 +49,7 @@ public:
   void AddSourceFile(const char * pszFilename);
 
   // generate output files by parsing header files
-  void Generate();
+  int Generate();
 
   // reset generator to do more processing
   void Reset();

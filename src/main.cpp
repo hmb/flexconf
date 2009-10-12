@@ -228,7 +228,5 @@ int main(int argc, const char * argv[])
     pGenerator->AddSourceFile(ctr->c_str());
   }
 
-  pGenerator->Generate();
-
-  return 0;
+  return pGenerator->Generate();
 }
