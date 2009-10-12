@@ -67,7 +67,8 @@ FCGENERATOR = ../gencust/xmlconf.src
 FCSOURCES   = test.h
 
 structCom.h structSer.h structDes.h structCom.cpp structSer.cpp structDes.cpp: ../flexconf $(FCGENERATOR) $(FCSOURCES)
-	../flexconf -c $(FCGENERATOR) $(FCSOURCES)
+	../flexconf -x $(FCSOURCES)
+#	../flexconf -c $(FCGENERATOR) $(FCSOURCES)
 
 # list dependencies of struct.h (cpp files that include struct.h)
 test.cpp: test.h structCom.h structSer.h structDes.h

@@ -63,7 +63,7 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag =0,
 
 
 /* begin section: SerProlog */
-#include "struct.h"
+#include "structCom.h"
 
 /* end section */
 
@@ -125,7 +125,7 @@ void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszT
 
 
 /* begin section: DesProlog */
-#include "struct.h"
+#include "structCom.h"
 #include <stdlib.h>
 
 /* end section */

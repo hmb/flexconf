@@ -203,8 +203,8 @@ int main(int argc, const char * argv[])
     break;
 
   case eGenTypXmlconf:
-//     std::cout << "found -x, using xml generator" << std::endl;
-//     auto_ptr_assign(pGenerator, CGenerator, new CGeneratorXml);
+    std::cout << "using xml generator" << std::endl;
+    auto_ptr_assign(pGenerator, CGenerator, new CGeneratorXml);
     break;
 
   default:

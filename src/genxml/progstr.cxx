@@ -95,7 +95,7 @@ const char * pszHdrEpilog =
   "#endif // _Struct_h_\n"
 ;
 const char * pszSerProlog =
-  "#include \"struct.h\"\n"
+  "#include \"structCom.h\"\n"
   "\n"
 ;
 const char * pszSerStructBegin =
@@ -133,7 +133,7 @@ const char * pszSerStructEnd =
   "\n"
 ;
 const char * pszDesProlog =
-  "#include \"struct.h\"\n"
+  "#include \"structCom.h\"\n"
   "#include <stdlib.h>\n"
   "\n"
 ;
