@@ -21,6 +21,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 ********** [GL] PROLOG
+/*-------------------------------------------------------------------
+  This file is part of the structure de/serializer flexconf.
+  It has been automatically created by:
+
+  $(packagename)
+
+  !!! DO NOT MODIFY MANUALLY !!!
+
+  Bugreports to $(bugreport)
+  -------------------------------------------------------------------
+  flexconf - flexible configuration generator
+  Copyright (c) 2008-2009 Holger Böhnke
+
+  This file is part of flexconf.
+
+  Flexconf is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -------------------------------------------------------------------
+  As a special exception, you may create a larger work that contains
+  part or all of the de/serializer functions and distribute that work
+  under terms of your choice, as long as that work itself does not
+  provide a functionality similar to flexconf.
+  Alternatively, if you modify or redistribute this file itself,
+  you may (at your option) remove this special exception, which will
+  cause the file to be licensed under the GNU General Public
+  License without this special exception.
+*/
+
 ********** [END]
 
 
@@ -65,17 +103,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 ********** [CH] PROLOG
-/* ------------------------------------------------------------------
-   This file is the structure common header file.
-   It has been automatically created by:
-
-   " PACKAGE_STRING "
-
-   !!! DO NOT MODIFY MANUALLY !!!
-
-   Bugreports to " PACKAGE_BUGREPORT "
-   ------------------------------------------------------------------
-*/
+// ------------------------------------------------------------------
+// This is the structure common header file.
+// ------------------------------------------------------------------
 
 #ifndef _StructCom_h_
 #define _StructCom_h_
@@ -152,17 +182,9 @@ class CReadXml;
 
 
 ********** [CI] PROLOG
-/* ------------------------------------------------------------------
-   This file is the structure common implementation file.
-   It has been automatically created by:
-
-   " PACKAGE_STRING "
-
-   !!! DO NOT MODIFY MANUALLY !!!
-
-   Bugreports to " PACKAGE_BUGREPORT "
-   ------------------------------------------------------------------
-*/
+// ------------------------------------------------------------------
+// This is the structure common implementation file.
+// ------------------------------------------------------------------
 
 #include "structCom.h"
 ********** [END]
@@ -209,17 +231,9 @@ class CReadXml;
 
 
 ********** [SH] PROLOG
-/* ------------------------------------------------------------------
-   This file is the structure serializer header file.
-   It has been automatically created by:
-
-   " PACKAGE_STRING "
-
-   !!! DO NOT MODIFY MANUALLY !!!
-
-   Bugreports to " PACKAGE_BUGREPORT "
-   ------------------------------------------------------------------
-*/
+// ------------------------------------------------------------------
+// This is the structure serializer header file.
+// ------------------------------------------------------------------
 
 #ifndef _StructSer_h_
 #define _StructSer_h_
@@ -623,17 +637,9 @@ void serialize(
 
 
 ********** [SI] PROLOG
-/* ------------------------------------------------------------------
-   This file is the structure serializer implementation file.
-   It has been automatically created by:
-
-   " PACKAGE_STRING "
-
-   !!! DO NOT MODIFY MANUALLY !!!
-
-   Bugreports to " PACKAGE_BUGREPORT "
-   ------------------------------------------------------------------
-*/
+// ------------------------------------------------------------------
+// This is the structure serializer implementation file.
+// ------------------------------------------------------------------
 
 #include "structCom.h"
 #include "structSer.h"
@@ -718,17 +724,9 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
 
 
 ********** [DH] PROLOG
-/* ------------------------------------------------------------------
-   This file is the structure deserializer header file.
-   It has been automatically created by:
-
-   " PACKAGE_STRING "
-
-   !!! DO NOT MODIFY MANUALLY !!!
-
-   Bugreports to " PACKAGE_BUGREPORT "
-   ------------------------------------------------------------------
-*/
+// ------------------------------------------------------------------
+// This is the structure deserializer header file.
+// ------------------------------------------------------------------
 
 #ifndef _StructDes_h_
 #define _StructDes_h_
@@ -1290,17 +1288,9 @@ void deserialize(
 
 
 ********** [DI] PROLOG
-/* ------------------------------------------------------------------
-   This file is the structure deserializer implementation file.
-   It has been automatically created by:
-
-   " PACKAGE_STRING "
-
-   !!! DO NOT MODIFY MANUALLY !!!
-
-   Bugreports to " PACKAGE_BUGREPORT "
-   ------------------------------------------------------------------
-*/
+// ------------------------------------------------------------------
+// This is the structure deserializer implementation file.
+// ------------------------------------------------------------------
 
 #include "structCom.h"
 #include "structDes.h"
