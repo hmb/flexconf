@@ -63,11 +63,13 @@ test_CXXFLAGS = -g
 #---------------------------------------------------------------------------------
 # generate the cpp files from test.h
 
-structCom.h structSer.h structDes.h structCom.cpp structSer.cpp structDes.cpp: test.h ../flexconf
-	../flexconf -c $<
+FCSOURCES = test.h
+
+structCom.h structSer.h structDes.h structCom.cpp structSer.cpp structDes.cpp: ../flexconf $(FCSOURCES)
+	../flexconf -c ../gencust/xmlconf.src $(FCSOURCES)
 
 # list dependencies of struct.h (cpp files that include struct.h)
-test.cpp: structCom.h structSer.h structDes.h
+test.cpp: test.h structCom.h structSer.h structDes.h
 
 
 #---------------------------------------------------------------------------------

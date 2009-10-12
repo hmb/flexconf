@@ -25,8 +25,6 @@
 #include "gencust/gencust.h"
 #include <iostream>
 
-
-
 #if defined(_MSC_VER) && _MSC_VER <= 1200
   #define auto_ptr_assign(_ptr, _class, _value) _ptr = std::auto_ptr<_class>(_value)
 #else
@@ -34,71 +32,202 @@
 #endif
 
 
+enum EGeneratorType
+{
+  eGenTypCustom,
+  eGenTypRegistry,
+  eGenTypXmlconf
+};
 
-int main(int argc, char * argv[])
+
+
+struct SOptions
+{
+  SOptions();
+
+  EGeneratorType  mGenType;     // -c <filename> | -r | -x
+  std::string     mGenFile;     // -c <filename>
+  bool            mDbgOut;      // -d <filename>
+  std::string     mDbgFile;     // -d <filename>
+};
+
+
+
+SOptions::SOptions()
+  :
+  mGenType(eGenTypXmlconf),
+  mGenFile("flexconf.src"),
+  mDbgOut(false),
+  mDbgFile("debug.src")
+{
+}
+
+
+
+// ------------------------------------------------------------------------
+// BEGIN TEMPORARY
+/* This function is a temporary workaround to read the commandline options.
+   It shall be replaced by flexconfs future own option generator.
+*/
+static bool getoptionparam(int argc, const char * argv[], int & n, std::string & param)
+{
+  if ( n == argc-1 )
+  {
+    return false;
+  }
+
+  param = argv[++n];
+  return true;
+}
+
+
+
+static bool getoptions(int argc, const char * argv[], SOptions & options, std::list<std::string> & files)
+{
+  bool readoptions = true;
+
+  for (int n=1; n<argc; ++n)
+  {
+    if ( !readoptions  ||  argv[n][0] != '-' )
+    {
+      files.push_back(argv[n]);
+      continue;
+    }
+
+    if (argv[n][1] == '-')
+    {
+      if (argv[n][2] == 0) // parameter separator: "--"
+      {
+        readoptions = false;
+      }
+      else
+      {
+        std::cout << "INF: currently ignoring long options: '" << argv[n] << '\'' << std::endl;
+      }
+
+      continue;
+    }
+
+    if (argv[n][2] != 0)
+    {
+      std::cout << "ERR: trailing characters after option: '-" << argv[n][1] << '\'' << std::endl;
+      return false;
+    }
+
+    switch (argv[n][1])
+    {
+    case 'c':
+      if (!getoptionparam(argc, argv, n, options.mGenFile))
+      {
+        std::cout << "ERR: missing generator file for option: '-" << argv[n][1] << '\'' << std::endl;
+        return false;
+      }
+      options.mGenType = eGenTypCustom;
+      break;
+
+    case 'r':
+      options.mGenType = eGenTypRegistry;
+      break;
+
+    case 'x':
+      options.mGenType = eGenTypXmlconf;
+      break;
+
+    case 'd':
+      if (!getoptionparam(argc, argv, n, options.mDbgFile))
+      {
+        std::cout << "ERR: missing debug output file for option: '-" << argv[n][1] << '\'' << std::endl;
+        return false;
+      }
+      options.mDbgOut = true;
+      break;
+
+    default:
+      std::cout << "ERR: unknown option: '-" << argv[n][1] << '\'' << std::endl;
+      return false;
+      // break; // obsolete, due to the above return
+    }
+  }
+
+  return true;
+}
+// END TEMPORARY
+// ------------------------------------------------------------------------
+
+
+
+int main(int argc, const char * argv[])
 {
   std::cout << PACKAGE " - " PACKAGE_STRING << std::endl;
 
-  std::auto_ptr<CGenerator>   pGenerator;
-  int                         nFileStart = 1;
+  SOptions                options;
+  std::list<std::string>  files;
 
-  if (argc>=2 && 0==strcmp(argv[1], "-c"))
+  if (!getoptions(argc, argv, options, files))
   {
-    std::cout << "found -c, using custom generator" << std::endl;
-    CGeneratorCustom * pCust = new CGeneratorCustom;
-    if (!pCust->Load("../gencust/genxml.src"))
+    return 1;
+  }
+
+  if (files.empty())
+  {
+    std::cout << "ERR: no input files" << std::endl;
+    return 1;
+  }
+
+  std::auto_ptr<CGenerator> pGenerator;
+
+  switch (options.mGenType)
+  {
+  case eGenTypCustom:
     {
-      std::cout << "ERR: could not load custom generator file" << std::endl;
-      return 1;
+      std::cout << "using custom generator" << std::endl;
+      CGeneratorCustom * pCust = new CGeneratorCustom;
+      if (!pCust->Load(options.mGenFile.c_str()))
+      {
+        std::cout << "ERR: could not load custom generator file" << std::endl;
+        return 1;
+      }
+
+      if (options.mDbgOut)
+      {
+        pCust->Save(options.mDbgFile.c_str());
+      }
+
+      auto_ptr_assign(pGenerator, CGenerator, pCust);
     }
+    break;
 
-    pCust->Save("intern.src");
+  case eGenTypRegistry:
+//     std::cout << "using registry generator" << std::endl;
+//     auto_ptr_assign(pGenerator, CGenerator, new CGeneratorReg);
+    break;
 
-    auto_ptr_assign(pGenerator, CGenerator, pCust);
-    ++nFileStart;
-  }
-/*
-  else if (argc>=2 && 0==strcmp(argv[1], "-r"))
-  {
-    std::cout << "found -r, using registry generator" << std::endl;
-    auto_ptr_assign(pGenerator, CGenerator, new CGeneratorReg);
-    ++nFileStart;
-  }
-  else if (argc>=2 && 0==strcmp(argv[1], "-x"))
-  {
-    std::cout << "found -x, using xml generator" << std::endl;
-    auto_ptr_assign(pGenerator, CGenerator, new CGeneratorXml);
-    ++nFileStart;
-  }
-  else
-  {
-    std::cout << "no generation option given, defaulting to xml generator" << std::endl;
-    auto_ptr_assign(pGenerator, CGenerator, new CGeneratorXml);
-  }
-*/
-  else
-  {
+  case eGenTypXmlconf:
+//     std::cout << "found -x, using xml generator" << std::endl;
+//     auto_ptr_assign(pGenerator, CGenerator, new CGeneratorXml);
+    break;
+
+  default:
     std::cout << "ERR: no generation option given" << std::endl;
     return 1;
+    // break;
   }
 
   /*
-  Generator.SetHeaderFilename(argv[nFile]);
-  Generator.SetSerializerFilename(argv[nFile]);
-  Generator.SetDeserializerFilename(argv[nFile]);
+  SetFileComHdr(const char * pszFilename);
+  SetFileComImp(const char * pszFilename);
+  SetFileSerHdr(const char * pszFilename);
+  SetFileSerImp(const char * pszFilename);
+  SetFileDesHdr(const char * pszFilename);
+  SetFileDesImp(const char * pszFilename);
   */
 
-  if (nFileStart==argc)
+  for (std::list<std::string>::const_iterator ctr=files.begin(); ctr!=files.end(); ++ctr)
   {
-    std::cout << "ERR: input files missing" << std::endl;
-    return 1;
+    std::cout << "adding input files :" << *ctr << std::endl;
+    pGenerator->AddSourceFile(ctr->c_str());
   }
 
-  for (int nFile=nFileStart; nFile<argc; nFile++)
-  {
-    std::cout << "adding input files :" << argv[nFile] << std::endl;
-    pGenerator->AddSourceFile(argv[nFile]);
-  }
   pGenerator->Generate();
 
   return 0;
