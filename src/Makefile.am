@@ -22,10 +22,10 @@
 SUBDIRS = \
   gencust \
   genxml  \
+  genreg  \
   . \
   test
 
-#  genreg
 
 
 #---------------------------------------------------------------------------------
@@ -99,9 +99,9 @@ AM_YFLAGS = -d
 
 flexconf_LDADD = \
   gencust/libgencust.a \
-  genxml/libgenxml.a
+  genxml/libgenxml.a \
+  genreg/libgenreg.a
 
-#  genreg/libgenreg.a
 
 
 #---------------------------------------------------------------------------------

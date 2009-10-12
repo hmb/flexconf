@@ -198,8 +198,8 @@ int main(int argc, const char * argv[])
     break;
 
   case eGenTypRegistry:
-//     std::cout << "using registry generator" << std::endl;
-//     auto_ptr_assign(pGenerator, CGenerator, new CGeneratorReg);
+    std::cout << "using registry generator" << std::endl;
+    auto_ptr_assign(pGenerator, CGenerator, new CGeneratorReg);
     break;
 
   case eGenTypXmlconf:

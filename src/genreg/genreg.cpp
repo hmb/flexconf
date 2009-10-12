@@ -37,70 +37,70 @@ CGeneratorReg::~CGeneratorReg()
 int CGeneratorReg::header()
 {
   // write header
-  writeStr("#ifndef _Struct_h_\n", mfHeader);
-  writeStr("#define _Struct_h_\n\n", mfHeader);
-  writeStr("#ifdef _MSC_VER\n", mfHeader);
-  writeStr("#define snprintf _snprintf\n", mfHeader);
-  writeStr("#pragma warning(disable: 4786)\n", mfHeader);
-  writeStr("#endif\n", mfHeader);
-  writeStr("\n\n\n", mfHeader);
-  writeStr("#include <string>\n", mfHeader);
-  writeStr("#include <list>\n", mfHeader);
-  writeStr("#include <set>\n", mfHeader);
-  writeStr("#include <map>\n", mfHeader);
-  writeStr("#include <windows.h>\n", mfHeader);
-  writeStr("#include <amalib/Registry.h>\n", mfHeader);
-  writeStr("\n\n\n", mfHeader);
+  writeStr("#ifndef _Struct_h_\n", mfCommonHdr);
+  writeStr("#define _Struct_h_\n\n", mfCommonHdr);
+  writeStr("#ifdef _MSC_VER\n", mfCommonHdr);
+  writeStr("#define snprintf _snprintf\n", mfCommonHdr);
+  writeStr("#pragma warning(disable: 4786)\n", mfCommonHdr);
+  writeStr("#endif\n", mfCommonHdr);
+  writeStr("\n\n\n", mfCommonHdr);
+  writeStr("#include <string>\n", mfCommonHdr);
+  writeStr("#include <list>\n", mfCommonHdr);
+  writeStr("#include <set>\n", mfCommonHdr);
+  writeStr("#include <map>\n", mfCommonHdr);
+  writeStr("#include <windows.h>\n", mfCommonHdr);
+  writeStr("#include <amalib/Registry.h>\n", mfCommonHdr);
+  writeStr("\n\n\n", mfCommonHdr);
 
-  writeStr("template <class _T>\n", mfHeader);
-  writeStr("void serialize(const amalib::CRegKey & rkeyStruct, const _T & rObject, const char * pszKeyName)\n", mfHeader);
-  writeStr("{\n", mfHeader);
-  writeStr("  rkeyStruct.SetValue(pszKeyName, rObject);\n", mfHeader);
-  writeStr("}\n", mfHeader);
-  writeStr("\n", mfHeader);
+  writeStr("template <class _T>\n", mfCommonHdr);
+  writeStr("void serialize(const amalib::CRegKey & rkeyStruct, const _T & rObject, const char * pszKeyName)\n", mfCommonHdr);
+  writeStr("{\n", mfCommonHdr);
+  writeStr("  rkeyStruct.SetValue(pszKeyName, rObject);\n", mfCommonHdr);
+  writeStr("}\n", mfCommonHdr);
+  writeStr("\n", mfCommonHdr);
 
-  writeStr("template <class _T>\n", mfHeader);
-  writeStr("void serialize(const amalib::CRegKey & rkeyStruct, const _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)\n", mfHeader);
-  writeStr("{\n", mfHeader);
-  writeStr("  amalib::CRegKey keyArray;\n", mfHeader);
-  writeStr("  keyArray.Create(rkeyStruct, pszKeyName);\n", mfHeader);
-  writeStr("  for (int n=0; n<nCount; n++)\n", mfHeader);
-  writeStr("  {\n", mfHeader);
-  writeStr("    const int BUFSIZE   = 200;\n", mfHeader);
-  writeStr("    char szBuffer[BUFSIZE];\n", mfHeader);
-  writeStr("    snprintf(szBuffer, BUFSIZE, \"%.150s%d\", pszItemName, n);\n", mfHeader);
-  writeStr("    serialize(keyArray, arObject[n], szBuffer);\n", mfHeader);
-  writeStr("  } // for\n", mfHeader);
-  writeStr("}\n", mfHeader);
-  writeStr("\n\n\n", mfHeader);
+  writeStr("template <class _T>\n", mfCommonHdr);
+  writeStr("void serialize(const amalib::CRegKey & rkeyStruct, const _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)\n", mfCommonHdr);
+  writeStr("{\n", mfCommonHdr);
+  writeStr("  amalib::CRegKey keyArray;\n", mfCommonHdr);
+  writeStr("  keyArray.Create(rkeyStruct, pszKeyName);\n", mfCommonHdr);
+  writeStr("  for (int n=0; n<nCount; n++)\n", mfCommonHdr);
+  writeStr("  {\n", mfCommonHdr);
+  writeStr("    const int BUFSIZE   = 200;\n", mfCommonHdr);
+  writeStr("    char szBuffer[BUFSIZE];\n", mfCommonHdr);
+  writeStr("    snprintf(szBuffer, BUFSIZE, \"%.150s%d\", pszItemName, n);\n", mfCommonHdr);
+  writeStr("    serialize(keyArray, arObject[n], szBuffer);\n", mfCommonHdr);
+  writeStr("  } // for\n", mfCommonHdr);
+  writeStr("}\n", mfCommonHdr);
+  writeStr("\n\n\n", mfCommonHdr);
 
-  writeStr("template <class _T>\n", mfHeader);
-  writeStr("void deserialize(const amalib::CRegKey & rkeyStruct, _T & rObject, const char * pszKeyName)\n", mfHeader);
-  writeStr("{\n", mfHeader);
-  writeStr("  rkeyStruct.QueryValue(pszKeyName, rObject);\n", mfHeader);
-  writeStr("}\n", mfHeader);
-  writeStr("\n\n\n", mfHeader);
+  writeStr("template <class _T>\n", mfCommonHdr);
+  writeStr("void deserialize(const amalib::CRegKey & rkeyStruct, _T & rObject, const char * pszKeyName)\n", mfCommonHdr);
+  writeStr("{\n", mfCommonHdr);
+  writeStr("  rkeyStruct.QueryValue(pszKeyName, rObject);\n", mfCommonHdr);
+  writeStr("}\n", mfCommonHdr);
+  writeStr("\n\n\n", mfCommonHdr);
 
-  writeStr("template <class _T>\n", mfHeader);
-  writeStr("void deserialize(const amalib::CRegKey & rkeyStruct, _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)\n", mfHeader);
-  writeStr("{\n", mfHeader);
-  writeStr("  amalib::CRegKey keyArray;\n", mfHeader);
-  writeStr("  keyArray.Create(rkeyStruct, pszKeyName);\n", mfHeader);
-  writeStr("  for (int n=0; n<nCount; n++)\n", mfHeader);
-  writeStr("  {\n", mfHeader);
-  writeStr("    const int BUFSIZE   = 200;\n", mfHeader);
-  writeStr("    char szBuffer[BUFSIZE];\n", mfHeader);
-  writeStr("    snprintf(szBuffer, BUFSIZE, \"%.150s%d\", pszItemName, n);\n", mfHeader);
-  writeStr("    deserialize(keyArray, arObject[n], szBuffer);\n", mfHeader);
-  writeStr("  } // for\n", mfHeader);
-  writeStr("\n\n\n", mfHeader);
-  writeStr("}\n", mfHeader);
+  writeStr("template <class _T>\n", mfCommonHdr);
+  writeStr("void deserialize(const amalib::CRegKey & rkeyStruct, _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)\n", mfCommonHdr);
+  writeStr("{\n", mfCommonHdr);
+  writeStr("  amalib::CRegKey keyArray;\n", mfCommonHdr);
+  writeStr("  keyArray.Create(rkeyStruct, pszKeyName);\n", mfCommonHdr);
+  writeStr("  for (int n=0; n<nCount; n++)\n", mfCommonHdr);
+  writeStr("  {\n", mfCommonHdr);
+  writeStr("    const int BUFSIZE   = 200;\n", mfCommonHdr);
+  writeStr("    char szBuffer[BUFSIZE];\n", mfCommonHdr);
+  writeStr("    snprintf(szBuffer, BUFSIZE, \"%.150s%d\", pszItemName, n);\n", mfCommonHdr);
+  writeStr("    deserialize(keyArray, arObject[n], szBuffer);\n", mfCommonHdr);
+  writeStr("  } // for\n", mfCommonHdr);
+  writeStr("\n\n\n", mfCommonHdr);
+  writeStr("}\n", mfCommonHdr);
 
   // write serializer
-  writeStr("#include \"struct.h\"\n", mfSerialize);
+  writeStr("#include \"struct.h\"\n", mfSerializeImp);
 
   // write deserializer
-  writeStr("#include \"struct.h\"\n", mfDeserialize);
+  writeStr("#include \"struct.h\"\n", mfDeserializeImp);
 
   return 0;
 }
@@ -109,7 +109,7 @@ int CGeneratorReg::header()
 
 int CGeneratorReg::headerfile()
 {
-  writeRep("#include \"$(headerfile)\"\n", mfHeader);
+  writeRep("#include \"$(headerfile)\"\n", mfCommonHdr);
   return 0;
 }
 
@@ -120,40 +120,40 @@ int CGeneratorReg::headerfile()
 
 void CGeneratorReg::writeStructBegin()
 {
-  writeRep("void serialize(const amalib::CRegKey & rkeyParent, const $(name) & rObject, const char * pszKeyName = 0,\n", mfHeader);
-  writeStr("  const char * pszIdTag = 0, const std::string * pstrIdValue = 0);\n", mfHeader);
-  writeRep("void deserialize(const amalib::CRegKey & rkeyParent, $(name) & rObject, const char * pszKeyName = 0,\n", mfHeader);
-  writeStr("  const char * pszIdTag = 0, std::string * pstrIdValue = 0);\n\n", mfHeader);
+  writeRep("void serialize(const amalib::CRegKey & rkeyParent, const $(name) & rObject, const char * pszKeyName = 0,\n", mfCommonHdr);
+  writeStr("  const char * pszIdTag = 0, const std::string * pstrIdValue = 0);\n", mfCommonHdr);
+  writeRep("void deserialize(const amalib::CRegKey & rkeyParent, $(name) & rObject, const char * pszKeyName = 0,\n", mfCommonHdr);
+  writeStr("  const char * pszIdTag = 0, std::string * pstrIdValue = 0);\n\n", mfCommonHdr);
 
   /* start of struct serialize function */
-  writeStr("\n\n\n", mfSerialize);
-  writeRep("void serialize(const amalib::CRegKey & rkeyParent, const $(name) & rObject, const char * pszKeyName,\n", mfSerialize);
-  writeStr("  const char * pszIdTag, const std::string * pstrIdValue)\n", mfSerialize);
-  writeStr("{\n", mfSerialize);
-  writeStr("  if (!pszKeyName)\n", mfSerialize);
-  writeRep("    pszKeyName=\"$(alias)\";\n", mfSerialize);
-  writeStr("  amalib::CRegKey keyStruct;\n", mfSerialize);
-  writeStr("  keyStruct.Create(rkeyParent, pszKeyName);\n", mfSerialize);
-  writeStr("  if (pszIdTag && pstrIdValue)\n", mfSerialize);
-  writeStr("  {\n", mfSerialize);
-  writeStr("    return; // :TODO: not yet implemented\n", mfSerialize);
-  writeStr("  //  serialize(rWriteXml, *pstrIdValue, pszIdTag);\n", mfSerialize);
-  writeStr("  }\n", mfSerialize);
+  writeStr("\n\n\n", mfSerializeImp);
+  writeRep("void serialize(const amalib::CRegKey & rkeyParent, const $(name) & rObject, const char * pszKeyName,\n", mfSerializeImp);
+  writeStr("  const char * pszIdTag, const std::string * pstrIdValue)\n", mfSerializeImp);
+  writeStr("{\n", mfSerializeImp);
+  writeStr("  if (!pszKeyName)\n", mfSerializeImp);
+  writeRep("    pszKeyName=\"$(alias)\";\n", mfSerializeImp);
+  writeStr("  amalib::CRegKey keyStruct;\n", mfSerializeImp);
+  writeStr("  keyStruct.Create(rkeyParent, pszKeyName);\n", mfSerializeImp);
+  writeStr("  if (pszIdTag && pstrIdValue)\n", mfSerializeImp);
+  writeStr("  {\n", mfSerializeImp);
+  writeStr("    return; // :TODO: not yet implemented\n", mfSerializeImp);
+  writeStr("  //  serialize(rWriteXml, *pstrIdValue, pszIdTag);\n", mfSerializeImp);
+  writeStr("  }\n", mfSerializeImp);
 
   /* start of struct deserialize function */
-  writeStr("\n\n\n", mfDeserialize);
-  writeRep("void deserialize(const amalib::CRegKey & rkeyParent, $(name) & rObject, const char * pszKeyName,\n", mfDeserialize);
-  writeStr("  const char * pszIdTag, std::string * pstrIdValue)\n", mfDeserialize);
-  writeStr("{\n", mfDeserialize);
-  writeStr("  if (!pszKeyName)\n", mfDeserialize);
-  writeRep("    pszKeyName=\"$(alias)\";\n", mfDeserialize);
-  writeStr("  amalib::CRegKey keyStruct;\n", mfDeserialize);
-  writeStr("  keyStruct.Open(rkeyParent, pszKeyName);\n", mfDeserialize);
-  writeStr("  if (pszIdTag && pstrIdValue)\n", mfDeserialize);
-  writeStr("  {\n", mfDeserialize);
-  writeStr("    return; // :TODO: not yet implemented\n", mfDeserialize);
-  writeStr("    //  deserialize(rReadXml, *pstrIdValue, pszIdTag);\n", mfDeserialize);
-  writeStr("  }\n", mfDeserialize);
+  writeStr("\n\n\n", mfDeserializeImp);
+  writeRep("void deserialize(const amalib::CRegKey & rkeyParent, $(name) & rObject, const char * pszKeyName,\n", mfDeserializeImp);
+  writeStr("  const char * pszIdTag, std::string * pstrIdValue)\n", mfDeserializeImp);
+  writeStr("{\n", mfDeserializeImp);
+  writeStr("  if (!pszKeyName)\n", mfDeserializeImp);
+  writeRep("    pszKeyName=\"$(alias)\";\n", mfDeserializeImp);
+  writeStr("  amalib::CRegKey keyStruct;\n", mfDeserializeImp);
+  writeStr("  keyStruct.Open(rkeyParent, pszKeyName);\n", mfDeserializeImp);
+  writeStr("  if (pszIdTag && pstrIdValue)\n", mfDeserializeImp);
+  writeStr("  {\n", mfDeserializeImp);
+  writeStr("    return; // :TODO: not yet implemented\n", mfDeserializeImp);
+  writeStr("    //  deserialize(rReadXml, *pstrIdValue, pszIdTag);\n", mfDeserializeImp);
+  writeStr("  }\n", mfDeserializeImp);
 }
 
 
@@ -161,9 +161,9 @@ void CGeneratorReg::writeStructBegin()
 void CGeneratorReg::writeVarDecl()
 {
   // write serializer
-  writeRep("  serialize(keyStruct, rObject.$(name), \"$(alias)\");\n", mfSerialize);
+  writeRep("  serialize(keyStruct, rObject.$(name), \"$(alias)\");\n", mfSerializeImp);
   // write deserializer
-  writeRep("  deserialize(keyStruct, rObject.$(name), \"$(alias)\");\n", mfDeserialize);
+  writeRep("  deserialize(keyStruct, rObject.$(name), \"$(alias)\");\n", mfDeserializeImp);
 }
 
 
@@ -171,9 +171,9 @@ void CGeneratorReg::writeVarDecl()
 void CGeneratorReg::writeVarDeclVector()
 {
   // write serializer
-  writeRep("  serialize(keyStruct, rObject.$(name), $(size), \"$(alias)\", \"$(item)\");\n", mfSerialize);
+  writeRep("  serialize(keyStruct, rObject.$(name), $(size), \"$(alias)\", \"$(item)\");\n", mfSerializeImp);
   // write deserializer
-  writeRep("  deserialize(keyStruct, rObject.$(name), $(size), \"$(alias)\", \"$(item)\");\n", mfDeserialize);
+  writeRep("  deserialize(keyStruct, rObject.$(name), $(size), \"$(alias)\", \"$(item)\");\n", mfDeserializeImp);
 }
 
 
@@ -181,9 +181,9 @@ void CGeneratorReg::writeVarDeclVector()
 void CGeneratorReg::writeVarDeclSetList()
 {
   // write serializer
-  writeRep("  // :TODO: serialize(keyStruct, rObject.$(name), \"$(alias)\", \"$(item)\");\n", mfSerialize);
+  writeRep("  // :TODO: serialize(keyStruct, rObject.$(name), \"$(alias)\", \"$(item)\");\n", mfSerializeImp);
   // write deserializer
-  writeRep("  // :TODO: deserialize(keyStruct, rObject.$(name), \"$(alias)\", \"$(item)\");\n", mfDeserialize);
+  writeRep("  // :TODO: deserialize(keyStruct, rObject.$(name), \"$(alias)\", \"$(item)\");\n", mfDeserializeImp);
 }
 
 
@@ -191,9 +191,9 @@ void CGeneratorReg::writeVarDeclSetList()
 void CGeneratorReg::writeVarDeclMap()
 {
   // write serializer
-  writeRep("  // :TODO: serialize(keyStruct, rObject.$(name), \"$(alias)\", \"$(item)\", \"$(id)\");\n", mfSerialize);
+  writeRep("  // :TODO: serialize(keyStruct, rObject.$(name), \"$(alias)\", \"$(item)\", \"$(id)\");\n", mfSerializeImp);
   // write deserializer
-  writeRep("  // :TODO: deserialize(keyStruct, rObject.$(name), \"$(alias)\", \"$(item)\", \"$(id)\");\n", mfDeserialize);
+  writeRep("  // :TODO: deserialize(keyStruct, rObject.$(name), \"$(alias)\", \"$(item)\", \"$(id)\");\n", mfDeserializeImp);
 }
 
 
@@ -201,9 +201,9 @@ void CGeneratorReg::writeVarDeclMap()
 void CGeneratorReg::writeStructEnd()
 {
   // write serializer
-  writeStr("}\n", mfSerialize);
+  writeStr("}\n", mfSerializeImp);
   // write deserializer
-  writeStr("}\n", mfDeserialize);
+  writeStr("}\n", mfDeserializeImp);
 }
 
 
@@ -221,14 +221,14 @@ int CGeneratorReg::footerfile()
 int CGeneratorReg::footer()
 {
   // write header
-  writeStr("\n\n", mfHeader);
-  writeStr("#endif // _Struct_h_\n", mfHeader);
+  writeStr("\n\n", mfCommonHdr);
+  writeStr("#endif // _Struct_h_\n", mfCommonHdr);
 
   // write serializer
-  writeStr("\n\n\n", mfSerialize);
+  writeStr("\n\n\n", mfSerializeImp);
 
   // write deserializer
-  writeStr("\n\n\n", mfDeserialize);
+  writeStr("\n\n\n", mfDeserializeImp);
 
   return 0;
 }
