@@ -33,6 +33,7 @@ public:
 
   bool Load(const char * filename);
   bool Save(const char * filename);
+  bool SaveSource(const char * filename);
 
 protected:
   // virtual functions to write headers

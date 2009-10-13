@@ -214,6 +214,149 @@ bool CGeneratorCustom::Save(const char * filename)
 
 
 
+static inline int isnonalpha(int c)
+{
+  return !isalpha(c);
+}
+
+static void mkvarname(std::string & varname)
+{
+  replace_if(varname.begin(), varname.end(), &isnonalpha, '_');
+}
+
+
+
+static void replace(std::string & replace, const char * what, const char * with)
+{
+  std::string::size_type lenwhat = strlen(what);
+  std::string::size_type lenwith = strlen(with);
+  std::string::size_type pos = 0;
+
+  while ( (pos=replace.find(what, pos)) != std::string::npos )
+  {
+    replace.replace(pos, lenwhat, with);
+    pos += lenwith;
+  }
+}
+
+
+
+void writeStringSource(char const * separator, std::string const & string,
+  FILE * fString, std::string & array)
+{
+  std::string varname(separator);
+  mkvarname(varname);
+  fprintf(fString, "static char const * const %s =\n", varname.c_str());
+
+  if (!array.empty())
+    array += ",\n";
+  array += "  ";
+  array += varname;
+
+//   fprintf(fString, "char const * const %c%c_%.*s =\n",
+//     separator[12], separator[13], strlen(separator+16)-1, separator+16);
+
+  std::string::size_type start = 0;
+  std::string::size_type end = std::string::npos;
+
+  while (start != std::string::npos)
+  {
+    end = string.find('\n', start);
+
+    if (end != std::string::npos)
+    {
+      if (end+1 == string.size())
+        end = std::string::npos;
+      else
+        ++end;
+    }
+
+    std::string line = string.substr(start, end-start);
+
+    replace(line, "\\", "\\\\");
+    replace(line, "\n", "\\n");
+    replace(line, "\r", "\\r");
+    replace(line, "\t", "\\t");
+    replace(line, "\"", "\\\"");
+
+    fputs("  \"", fString);
+    fputs(line.c_str(), fString);
+    fputs("\"\n", fString);
+
+    start = end;
+  }
+
+  fputs(";\n", fString);
+}
+
+
+
+bool CGeneratorCustom::SaveSource(const char * name)
+{
+  std::string sname(name);
+
+  FILE * fString = fopen((sname + ".h").c_str(), "w");
+  if (!fString)
+  {
+    return false;
+  }
+
+  fprintf(fString, "#ifndef flexconf_source_%s_h\n", name);
+  fprintf(fString, "#define ifndef flexconf_source_%s_h\n", name);
+  fputs("\n", fString);
+  fputs("\n", fString);
+  fputs("\n", fString);
+  fprintf(fString, "char const * const * const get_%s();\n", name);
+  fputs("\n", fString);
+  fputs("\n", fString);
+  fprintf(fString, "#endif // flexconf_source_%s_h\n", name);
+  fclose(fString);
+
+  fString = fopen((sname + ".cpp").c_str(), "w");
+
+  if (!fString)
+  {
+    return false;
+  }
+
+  std::string array;
+
+//  fputs(mstrSourceFileProlog.c_str(), fString);
+
+  char const * const sepstring  = "\n\n";
+  char const * const sepfile    = "\n\n\n\n\n\n";
+  const char * sepnext = "";
+
+  for (int nfile=0; nfile<eFileCount; ++nfile)
+  {
+    for (int nstring=0; nstring<eStringCount; ++nstring)
+    {
+      fputs(sepnext, fString);
+      writeStringSource(mpszSeparator[nfile * eStringCount + nstring],
+        mstrGeneratorString[nfile][nstring], fString, array);
+      sepnext = sepstring;
+    }
+    sepnext = sepfile;
+  }
+
+  fprintf(fString, "\n\n\nstatic char const * const pointers[%d] =\n{\n%s\n};\n",
+    eFileCount*eStringCount, array.c_str());
+
+  fputs("\n", fString);
+  fputs("\n", fString);
+  fputs("\n", fString);
+  fprintf(fString, "char const * const * const get_%s()\n", name);
+  fputs("{\n", fString);
+  fputs("  return pointers;\n", fString);
+  fputs("}\n", fString);
+
+  fclose(fString);
+
+  return true;
+}
+
+
+
 int CGeneratorCustom::output(EGeneratorString eString)
 {
   writeRep(mstrGeneratorString[eGlobal][eString],           mfCommonHdr);
