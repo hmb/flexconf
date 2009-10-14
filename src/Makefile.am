@@ -43,6 +43,7 @@ flexconf_SOURCES = \
   grammar.yxx \
   lexical.cxx \
   generator.cpp \
+  genstrngrepl.cpp \
   main.cpp
 
 

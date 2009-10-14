@@ -273,79 +273,23 @@ bool CGeneratorCustom::SaveSource(const char * name)
 
 
 
-int CGeneratorCustom::output(EGeneratorString stringid)
+const char * const CGeneratorCustom::getSourceFileProlog()
 {
-  writeRep(mGeneratorString[eCommonHdr][stringid],       eCommonHdr);
-  writeRep(mGeneratorString[eCommonImp][stringid],       eCommonImp);
-  writeRep(mGeneratorString[eSerializerHdr][stringid],   eSerializerHdr);
-  writeRep(mGeneratorString[eSerializerImp][stringid],   eSerializerImp);
-  writeRep(mGeneratorString[eDeserializerHdr][stringid], eDeserializerHdr);
-  writeRep(mGeneratorString[eDeserializerImp][stringid], eDeserializerImp);
-
-  return 0;
+  return mSourceFileProlog.c_str();
 }
 
 
 
-int CGeneratorCustom::header()
+const char * const CGeneratorCustom::getGlobalProlog()
 {
-  writeRep(mGlobalProlog, eCommonHdr);
-  writeRep(mGlobalProlog, eCommonImp);
-  writeRep(mGlobalProlog, eSerializerHdr);
-  writeRep(mGlobalProlog, eSerializerImp);
-  writeRep(mGlobalProlog, eDeserializerHdr);
-  writeRep(mGlobalProlog, eDeserializerImp);
-
-  return output(eProlog);
-}
-
-int CGeneratorCustom::headerfile()
-{
-  return output(ePrologFile);
+  return mGlobalProlog.c_str();
 }
 
 
 
-void CGeneratorCustom::writeStructBegin()
+const char * const CGeneratorCustom::getGeneratorString(EOutputFile fileid, EGeneratorString stringid)
 {
-  output(ePrologStruct);
-}
-
-void CGeneratorCustom::writeVarDecl()
-{
-  output(eVarDecl);
-}
-
-void CGeneratorCustom::writeVarDeclVector()
-{
-  output(eVarDeclVector);
-}
-
-void CGeneratorCustom::writeVarDeclSetList()
-{
-  output(eVarDeclSetList);
-}
-
-void CGeneratorCustom::writeVarDeclMap()
-{
-  output(eVarDeclMap);
-}
-
-void CGeneratorCustom::writeStructEnd()
-{
-  output(eEpilogStruct);
-}
-
-
-
-int CGeneratorCustom::footerfile()
-{
-  return output(eEpilogFile);
-}
-
-int CGeneratorCustom::footer()
-{
-  return output(eEpilog);
+  return mGeneratorString[fileid][stringid].c_str();
 }
 
 
@@ -420,8 +364,12 @@ const char * const CGeneratorCustom::mTagSections[CGeneratorCustom::eFileCount *
 //  ,"" // too many initializer test
 };
 
+
+
 const char * const CGeneratorCustom::mTagGlobalProlog =
   "********** [GL] PROLOG\n";
+
+
 
 const char * const CGeneratorCustom::mTagEnd =
   "********** [END]\n";

@@ -21,11 +21,11 @@
 #ifndef GeneratorCustom_h
 #define GeneratorCustom_h
 
-#include "../generator.h"
+#include "../genstrngrepl.h"
 
 
 
-class CGeneratorCustom : public CGenerator
+class CGeneratorCustom : public CGeneratorStringReplace
 {
 public:
   CGeneratorCustom();
@@ -35,25 +35,10 @@ public:
   bool Save(const char * filename);
   bool SaveSource(const char * filename);
 
-protected:
-  // virtual functions to write headers
-  virtual int header();
-  virtual int headerfile();
-
-  // virtual functions called by the parser to generate de/serializers
-  virtual void writeStructBegin();
-  virtual void writeVarDecl();
-  virtual void writeVarDeclVector();
-  virtual void writeVarDeclSetList();
-  virtual void writeVarDeclMap();
-  virtual void writeStructEnd();
-
-  // virtual functions to write footers
-  virtual int footerfile();
-  virtual int footer();
-
 private:
-  int output(EGeneratorString stringid);
+  virtual const char * const getSourceFileProlog();
+  virtual const char * const getGlobalProlog();
+  virtual const char * const getGeneratorString(EOutputFile fileid, EGeneratorString stringid);
 
   std::string   mSourceFileProlog;
   std::string   mGlobalProlog;
