@@ -26,5 +26,4 @@ src/test/structDes.h
 src/test/structDes.cpp
 src/test/structSer.h
 src/test/structSer.cpp
-src/test/intern.src
 src/test/test
