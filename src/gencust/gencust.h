@@ -58,12 +58,6 @@ private:
   std::string   mstrSourceFileProlog;
   std::string   mstrGeneratorString[eFileCount][eStringCount];
 
-  std::string   mstrStructBegin;
-  std::string   mstrVarDecl;
-  std::string   mstrVarDeclSetList;
-  std::string   mstrVarDeclMap;
-  std::string   mstrStructEnd;
-
   static const char * const mpszSeparator[eFileCount * eStringCount];
   static const char * const mpszEnd;
 };
