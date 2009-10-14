@@ -24,42 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ********** [END]
 
 
-********** [GL] FILE PROLOG
-********** [END]
-
-
-********** [GL] STRUCT PROLOG
-********** [END]
-
-
-********** [GL] GENERIC DECL
-********** [END]
-
-
-********** [GL] VECTOR DECL
-********** [END]
-
-
-********** [GL] SET/LIST DECL
-********** [END]
-
-
-********** [GL] MAP DECL
-********** [END]
-
-
-********** [GL] STRUCT EPILOG
-********** [END]
-
-
-********** [GL] FILE EPILOG
-********** [END]
-
-
-********** [GL] EPILOG
-********** [END]
-
-
 
 
 
