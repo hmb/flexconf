@@ -53,13 +53,15 @@ protected:
   virtual int footer();
 
 private:
-  int output(EGeneratorString eString);
+  int output(EGeneratorString stringid);
 
-  std::string   mstrSourceFileProlog;
-  std::string   mstrGeneratorString[eFileCount][eStringCount];
+  std::string   mSourceFileProlog;
+  std::string   mGlobalProlog;
+  std::string   mGeneratorString[eFileCount][eStringCount];
 
-  static const char * const mpszSeparator[eFileCount * eStringCount];
-  static const char * const mpszEnd;
+  static const char * const mTagGlobalProlog;
+  static const char * const mTagSections[eFileCount * eStringCount];
+  static const char * const mTagEnd;
 };
 
 

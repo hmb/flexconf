@@ -45,19 +45,25 @@ bool CGeneratorCustom::Load(const char * filename)
     return false;
   }
 
-  std::string   * pstrRead  = &mstrSourceFileProlog;
-  const int       BUFSIZE   = 256;
+  std::string   * pstrRead  = &mSourceFileProlog;
+  const int       BUFSIZE   = 2048;
   char            szBuffer[BUFSIZE];
 
   while (NULL!=fgets(szBuffer, BUFSIZE, fString))
   {
     bool fSeparator = false;
 
+    if (0==strcmp(mTagGlobalProlog, szBuffer))
+    {
+      pstrRead = &mGlobalProlog;
+      continue;
+    }
+
     for (int n=0; n<eFileCount*eStringCount; n++)
     {
-      if (0==strcmp(mpszSeparator[n], szBuffer))
+      if (0==strcmp(mTagSections[n], szBuffer))
       {
-        pstrRead    = &mstrGeneratorString[n/eStringCount][n%eStringCount];
+        pstrRead    = &mGeneratorString[n/eStringCount][n%eStringCount];
         fSeparator  = true;
         break;
       }
@@ -68,7 +74,7 @@ bool CGeneratorCustom::Load(const char * filename)
       continue;
     }
 
-    if (0==strcmp(mpszEnd, szBuffer))
+    if (0==strcmp(mTagEnd, szBuffer))
     {
       pstrRead = 0;
     }
@@ -94,20 +100,24 @@ bool CGeneratorCustom::Save(const char * filename)
     return false;
   }
 
-  fputs(mstrSourceFileProlog.c_str(), fString);
+  fputs(mSourceFileProlog.c_str(), fString);
+
+  fputs(mTagGlobalProlog, fString);
+  fputs(mGlobalProlog.c_str(), fString);
+  fputs(mTagEnd, fString);
 
   char const * const sepstring  = "\n\n";
   char const * const sepfile    = "\n\n\n\n\n\n";
-  const char * sepnext = "";
+  const char * sepnext = sepfile;
 
   for (int nfile=0; nfile<eFileCount; ++nfile)
   {
     for (int nstring=0; nstring<eStringCount; ++nstring)
     {
       fputs(sepnext, fString);
-      fputs(mpszSeparator[nfile * eStringCount + nstring], fString);
-      fputs(mstrGeneratorString[nfile][nstring].c_str(), fString);
-      fputs(mpszEnd, fString);
+      fputs(mTagSections[nfile * eStringCount + nstring], fString);
+      fputs(mGeneratorString[nfile][nstring].c_str(), fString);
+      fputs(mTagEnd, fString);
       sepnext = sepstring;
     }
     sepnext = sepfile;
@@ -227,7 +237,7 @@ bool CGeneratorCustom::SaveSource(const char * name)
 
   std::string array;
 
-//  fputs(mstrSourceFileProlog.c_str(), fString);
+//  fputs(mSourceFileProlog.c_str(), fString);
 
   char const * const sepstring  = "\n\n";
   char const * const sepfile    = "\n\n\n\n\n\n";
@@ -238,8 +248,8 @@ bool CGeneratorCustom::SaveSource(const char * name)
     for (int nstring=0; nstring<eStringCount; ++nstring)
     {
       fputs(sepnext, fString);
-      writeStringSource(mpszSeparator[nfile * eStringCount + nstring],
-        mstrGeneratorString[nfile][nstring], fString, array);
+      writeStringSource(mTagSections[nfile * eStringCount + nstring],
+        mGeneratorString[nfile][nstring], fString, array);
       sepnext = sepstring;
     }
     sepnext = sepfile;
@@ -263,21 +273,15 @@ bool CGeneratorCustom::SaveSource(const char * name)
 
 
 
-int CGeneratorCustom::output(EGeneratorString eString)
+int CGeneratorCustom::output(EGeneratorString stringid)
 {
-  writeRep(mstrGeneratorString[eGlobal][eString],           eCommonHdr);
-  writeRep(mstrGeneratorString[eGlobal][eString],           eCommonImp);
-  writeRep(mstrGeneratorString[eGlobal][eString],           eSerializerHdr);
-  writeRep(mstrGeneratorString[eGlobal][eString],           eSerializerImp);
-  writeRep(mstrGeneratorString[eGlobal][eString],           eDeserializerHdr);
-  writeRep(mstrGeneratorString[eGlobal][eString],           eDeserializerImp);
+  writeRep(mGeneratorString[eCommonHdr][stringid],       eCommonHdr);
+  writeRep(mGeneratorString[eCommonImp][stringid],       eCommonImp);
+  writeRep(mGeneratorString[eSerializerHdr][stringid],   eSerializerHdr);
+  writeRep(mGeneratorString[eSerializerImp][stringid],   eSerializerImp);
+  writeRep(mGeneratorString[eDeserializerHdr][stringid], eDeserializerHdr);
+  writeRep(mGeneratorString[eDeserializerImp][stringid], eDeserializerImp);
 
-  writeRep(mstrGeneratorString[eCommonHdr][eString],        eCommonHdr);
-  writeRep(mstrGeneratorString[eCommonImp][eString],        eCommonImp);
-  writeRep(mstrGeneratorString[eSerializerHdr][eString],    eSerializerHdr);
-  writeRep(mstrGeneratorString[eSerializerImp][eString],    eSerializerImp);
-  writeRep(mstrGeneratorString[eDeserializerHdr][eString],  eDeserializerHdr);
-  writeRep(mstrGeneratorString[eDeserializerImp][eString],  eDeserializerImp);
   return 0;
 }
 
@@ -285,6 +289,13 @@ int CGeneratorCustom::output(EGeneratorString eString)
 
 int CGeneratorCustom::header()
 {
+  writeRep(mGlobalProlog, eCommonHdr);
+  writeRep(mGlobalProlog, eCommonImp);
+  writeRep(mGlobalProlog, eSerializerHdr);
+  writeRep(mGlobalProlog, eSerializerImp);
+  writeRep(mGlobalProlog, eDeserializerHdr);
+  writeRep(mGlobalProlog, eDeserializerImp);
+
   return output(eProlog);
 }
 
@@ -339,19 +350,8 @@ int CGeneratorCustom::footer()
 
 
 
-const char * const CGeneratorCustom::mpszSeparator[CGeneratorCustom::eFileCount * CGeneratorCustom::eStringCount] =
+const char * const CGeneratorCustom::mTagSections[CGeneratorCustom::eFileCount * CGeneratorCustom::eStringCount] =
 {
-  "********** [GL] PROLOG\n",
-  "********** [GL] FILE PROLOG\n",
-  "********** [GL] STRUCT PROLOG\n",
-  "********** [GL] GENERIC DECL\n",
-  "********** [GL] VECTOR DECL\n",
-  "********** [GL] SET/LIST DECL\n",
-  "********** [GL] MAP DECL\n",
-  "********** [GL] STRUCT EPILOG\n",
-  "********** [GL] FILE EPILOG\n",
-  "********** [GL] EPILOG\n",
-
   "********** [CH] PROLOG\n",
   "********** [CH] FILE PROLOG\n",
   "********** [CH] STRUCT PROLOG\n",
@@ -420,7 +420,8 @@ const char * const CGeneratorCustom::mpszSeparator[CGeneratorCustom::eFileCount 
 //  ,"" // too many initializer test
 };
 
+const char * const CGeneratorCustom::mTagGlobalProlog =
+  "********** [GL] PROLOG\n";
 
-
-const char * const CGeneratorCustom::mpszEnd =
+const char * const CGeneratorCustom::mTagEnd =
   "********** [END]\n";

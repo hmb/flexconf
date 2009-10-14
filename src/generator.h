@@ -39,7 +39,6 @@ public:
 
   enum EOutputFile
   {
-    eGlobal,                // will be used in all files
     eCommonHdr,             // header file common to both serializer and deserializer
     eCommonImp,             // implementation file common to both serializer and deserializer
     eSerializerHdr,         // header file for serializer
