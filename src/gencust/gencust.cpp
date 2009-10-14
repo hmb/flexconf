@@ -19,6 +19,7 @@
 */
 
 #include "gencust.h"
+#include "../misc.h"
 
 #define PRINTF  printf
 
@@ -140,24 +141,7 @@ static void mkvarname(std::string & varname)
   replace_if(varname.begin(), varname.end(), &isnonalpha, '_');
 }
 
-
-
-static void replace(std::string & replace, const char * what, const char * with)
-{
-  std::string::size_type lenwhat = strlen(what);
-  std::string::size_type lenwith = strlen(with);
-  std::string::size_type pos = 0;
-
-  while ( (pos=replace.find(what, pos)) != std::string::npos )
-  {
-    replace.replace(pos, lenwhat, with);
-    pos += lenwith;
-  }
-}
-
-
-
-void writeStringSource(char const * separator, std::string const & string,
+static void writeStringSource(char const * separator, std::string const & string,
   FILE * fString, std::string & array)
 {
   std::string varname(separator);
@@ -168,9 +152,6 @@ void writeStringSource(char const * separator, std::string const & string,
     array += ",\n";
   array += "  ";
   array += varname;
-
-//   fprintf(fString, "char const * const %c%c_%.*s =\n",
-//     separator[12], separator[13], strlen(separator+16)-1, separator+16);
 
   std::string::size_type start = 0;
   std::string::size_type end = std::string::npos;

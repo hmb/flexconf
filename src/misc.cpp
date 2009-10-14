@@ -23,6 +23,21 @@
 
 
 
+void replace(std::string & replace, const char * what, const char * with)
+{
+  std::string::size_type lenwhat = strlen(what);
+  std::string::size_type lenwith = strlen(with);
+  std::string::size_type pos = 0;
+
+  while ( (pos=replace.find(what, pos)) != std::string::npos )
+  {
+    replace.replace(pos, lenwhat, with);
+    pos += lenwith;
+  }
+}
+
+
+
 /* TODO use these general function but write unittests first
 int replaceVariables(
   const char              * source,

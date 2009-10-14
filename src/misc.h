@@ -30,6 +30,10 @@
 
 
 
+void replace(std::string & replace, const char * what, const char * with);
+
+
+
 /* TODO use these general function but write unittests first
 typedef std::map<std::string, std::string>  ContVariableType;
 typedef ContVariableType::iterator          ContVariableItrType;
