@@ -37,6 +37,36 @@ public:
   CGenerator();
   virtual ~CGenerator();
 
+  enum EOutputFile
+  {
+    eGlobal,                // will be used in all files
+    eCommonHdr,             // header file common to both serializer and deserializer
+    eCommonImp,             // implementation file common to both serializer and deserializer
+    eSerializerHdr,         // header file for serializer
+    eSerializerImp,         // implementation file for serializer
+    eDeserializerHdr,       // header file for deserializer
+    eDeserializerImp,       // implementation file for deserializer
+    eFileCount
+  };
+
+  enum EGeneratorString
+  {
+    eProlog,
+    ePrologFile,
+
+    ePrologStruct,
+    eVarDecl,
+    eVarDeclVector,
+    eVarDeclSetList,
+    eVarDeclMap,
+    eEpilogStruct,
+
+    eEpilogFile,
+    eEpilog,
+
+    eStringCount
+  };
+
   // set output filenames
   void SetFileComHdr(const char * pszFilename);
   void SetFileComImp(const char * pszFilename);
