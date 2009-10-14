@@ -108,9 +108,9 @@ public:
 
 protected:
   // replace variables and write resulting string to file
-  void writeRep(const std::string & strSource, EOutputFile fileid);
+  void writeRep(const char * source, EOutputFile fileid);
   // write string of non replaced vars
-  void writeStr(const char * pszSource, EOutputFile fileid);
+  void writeStr(const char * source, EOutputFile fileid);
 
 private:
   // virtual functions to write headers
@@ -130,11 +130,11 @@ private:
   virtual int footer()                = 0;
 
   // replace all $(varname) vars with values from map
-  int replaceVariables(const std::string & strSource, std::string & rstrReplace);
+  int replaceVariables(const char * source, std::string & rstrReplace);
   // replace variables and write resulting string to file
-  void writeRep(const std::string & strSource, FILE * fWrite);
+  void writeRep(const char * source, FILE * fWrite);
   // write string of non replaced vars
-  void writeStr(const char * pszSource, FILE * fWrite);
+  void writeStr(const char * source, FILE * fWrite);
 
   // container types for variables in form of $(varname)
   typedef std::map<std::string, std::string>  ContVariableType;

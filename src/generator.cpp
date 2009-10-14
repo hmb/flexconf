@@ -297,32 +297,32 @@ void CGenerator::EndStruct()
 
 
 
-int CGenerator::replaceVariables(const std::string & strSource, std::string & rstrReplace)
+int CGenerator::replaceVariables(const char * source, std::string & rstrReplace)
 {
-  int nReplaced = 0;
+  int           nReplaced = 0;
+  const char  * ctrPos    = source;
+  const char  * ctrDollar = 0;
+  const char  * ctrEnd    = source + strlen(source);
 
-  std::string::size_type ctrPos     = 0;
-  std::string::size_type ctrDollar  = 0;
-
-  for (ctrPos=0; std::string::npos!=(ctrDollar=strSource.find('$', ctrPos)); ctrPos=ctrDollar)
+  for (; 0!=(ctrDollar=strchr(ctrPos, '$')); ctrPos=ctrDollar)
   {
     // append the part of the string preceeding the found dollar
-    rstrReplace.append(strSource.substr(ctrPos, ctrDollar-ctrPos));
+    rstrReplace.append(ctrPos, ctrDollar-ctrPos);
 
     // no space left for '(...)'
-    if (strSource.size() < ctrDollar+3)
+    if (ctrEnd <= ctrDollar+3)
       break;
 
-    switch (strSource[ctrDollar+1])
+    switch (ctrDollar[1])
     {
     case '(':
       // skip character and '('
       ctrPos    = ctrDollar + 2;
-      ctrDollar = strSource.find(')', ctrPos);
-      if (std::string::npos != ctrDollar)
+      ctrDollar = strchr(ctrPos, ')');
+      if (0 != ctrDollar)
       {
         // :TODO: use find_not_first_of or sth. like while (isalpha())...
-        ContVariableCtrType fnd = mcontVariables.find(strSource.substr(ctrPos, ctrDollar-ctrPos));
+        ContVariableCtrType fnd = mcontVariables.find(std::string(ctrPos, ctrDollar-ctrPos));
         if (fnd != mcontVariables.end())
         {
           rstrReplace.append(fnd->second);
@@ -340,14 +340,14 @@ int CGenerator::replaceVariables(const std::string & strSource, std::string & rs
 
     case '$':
       // append the character found
-      rstrReplace.append(1, strSource[ctrDollar]);
+      rstrReplace.append(ctrDollar, 1);
       // skip found character and second dollar
       ctrDollar += 2;
       break;
 
     default:
       // append the character found
-      rstrReplace.append(1, strSource[ctrDollar]);
+      rstrReplace.append(ctrDollar, 1);
       // skip character
       ctrDollar++;
       break;
@@ -355,36 +355,36 @@ int CGenerator::replaceVariables(const std::string & strSource, std::string & rs
   }
 
   // append the rest of the string 'as is'
-  if (std::string::npos != ctrPos)
-    rstrReplace.append(strSource.substr(ctrPos));
+  if (0 != ctrPos)
+    rstrReplace.append(ctrPos);
 
   return nReplaced;
 }
 
 
 
-void CGenerator::writeRep(const std::string & strSource, EOutputFile fileid)
+void CGenerator::writeRep(const char * source, EOutputFile fileid)
 {
   if (fileid>=0 && fileid<eFileCount && mOutputFiles[fileid] != 0)
-    writeRep(strSource, mOutputFiles[fileid]);
+    writeRep(source, mOutputFiles[fileid]);
 }
 
-void CGenerator::writeRep(const std::string & strSource, FILE * fWrite)
+void CGenerator::writeRep(const char * source, FILE * fWrite)
 {
   std::string strWrite;
-  replaceVariables(strSource, strWrite);
+  replaceVariables(source, strWrite);
   fputs(strWrite.c_str(), fWrite);
 }
 
 
 
-void CGenerator::writeStr(const char * pszSource, EOutputFile fileid)
+void CGenerator::writeStr(const char * source, EOutputFile fileid)
 {
   if (fileid>=0 && fileid<eFileCount && mOutputFiles[fileid] != 0)
-    writeStr(pszSource, mOutputFiles[fileid]);
+    writeStr(source, mOutputFiles[fileid]);
 }
 
-void CGenerator::writeStr(const char * pszSource, FILE * fWrite)
+void CGenerator::writeStr(const char * source, FILE * fWrite)
 {
-  fputs(pszSource, fWrite);
+  fputs(source, fWrite);
 }
