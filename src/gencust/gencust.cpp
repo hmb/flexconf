@@ -24,97 +24,6 @@
 
 
 
-const char * const CGeneratorCustom::mpszSeparator[CGeneratorCustom::eFileCount * CGeneratorCustom::eStringCount] =
-{
-  "********** [GL] PROLOG\n",
-  "********** [GL] FILE PROLOG\n",
-  "********** [GL] STRUCT PROLOG\n",
-  "********** [GL] GENERIC DECL\n",
-  "********** [GL] VECTOR DECL\n",
-  "********** [GL] SET/LIST DECL\n",
-  "********** [GL] MAP DECL\n",
-  "********** [GL] STRUCT EPILOG\n",
-  "********** [GL] FILE EPILOG\n",
-  "********** [GL] EPILOG\n",
-
-  "********** [CH] PROLOG\n",
-  "********** [CH] FILE PROLOG\n",
-  "********** [CH] STRUCT PROLOG\n",
-  "********** [CH] GENERIC DECL\n",
-  "********** [CH] VECTOR DECL\n",
-  "********** [CH] SET/LIST DECL\n",
-  "********** [CH] MAP DECL\n",
-  "********** [CH] STRUCT EPILOG\n",
-  "********** [CH] FILE EPILOG\n",
-  "********** [CH] EPILOG\n",
-
-  "********** [CI] PROLOG\n",
-  "********** [CI] FILE PROLOG\n",
-  "********** [CI] STRUCT PROLOG\n",
-  "********** [CI] GENERIC DECL\n",
-  "********** [CI] VECTOR DECL\n",
-  "********** [CI] SET/LIST DECL\n",
-  "********** [CI] MAP DECL\n",
-  "********** [CI] STRUCT EPILOG\n",
-  "********** [CI] FILE EPILOG\n",
-  "********** [CI] EPILOG\n",
-
-  "********** [SH] PROLOG\n",
-  "********** [SH] FILE PROLOG\n",
-  "********** [SH] STRUCT PROLOG\n",
-  "********** [SH] GENERIC DECL\n",
-  "********** [SH] VECTOR DECL\n",
-  "********** [SH] SET/LIST DECL\n",
-  "********** [SH] MAP DECL\n",
-  "********** [SH] STRUCT EPILOG\n",
-  "********** [SH] FILE EPILOG\n",
-  "********** [SH] EPILOG\n",
-
-  "********** [SI] PROLOG\n",
-  "********** [SI] FILE PROLOG\n",
-  "********** [SI] STRUCT PROLOG\n",
-  "********** [SI] GENERIC DECL\n",
-  "********** [SI] VECTOR DECL\n",
-  "********** [SI] SET/LIST DECL\n",
-  "********** [SI] MAP DECL\n",
-  "********** [SI] STRUCT EPILOG\n",
-  "********** [SI] FILE EPILOG\n",
-  "********** [SI] EPILOG\n",
-
-  "********** [DH] PROLOG\n",
-  "********** [DH] FILE PROLOG\n",
-  "********** [DH] STRUCT PROLOG\n",
-  "********** [DH] GENERIC DECL\n",
-  "********** [DH] VECTOR DECL\n",
-  "********** [DH] SET/LIST DECL\n",
-  "********** [DH] MAP DECL\n",
-  "********** [DH] STRUCT EPILOG\n",
-  "********** [DH] FILE EPILOG\n",
-  "********** [DH] EPILOG\n",
-
-  "********** [DI] PROLOG\n",
-  "********** [DI] FILE PROLOG\n",
-  "********** [DI] STRUCT PROLOG\n",
-  "********** [DI] GENERIC DECL\n",
-  "********** [DI] VECTOR DECL\n",
-  "********** [DI] SET/LIST DECL\n",
-  "********** [DI] MAP DECL\n",
-  "********** [DI] STRUCT EPILOG\n",
-  "********** [DI] FILE EPILOG\n",
-  "********** [DI] EPILOG\n"
-//  ,"" // too many initializer test
-};
-
-
-
-const char * const CGeneratorCustom::mpszEnd =
-  "********** [END]\n";
-
-
-
-
-
-
 CGeneratorCustom::CGeneratorCustom()
 {
 }
@@ -124,9 +33,6 @@ CGeneratorCustom::CGeneratorCustom()
 CGeneratorCustom::~CGeneratorCustom()
 {
 }
-
-
-
 
 
 
@@ -377,9 +283,6 @@ int CGeneratorCustom::output(EGeneratorString eString)
 
 
 
-
-
-
 int CGeneratorCustom::header()
 {
   return output(eProlog);
@@ -433,3 +336,91 @@ int CGeneratorCustom::footer()
 {
   return output(eEpilog);
 }
+
+
+
+const char * const CGeneratorCustom::mpszSeparator[CGeneratorCustom::eFileCount * CGeneratorCustom::eStringCount] =
+{
+  "********** [GL] PROLOG\n",
+  "********** [GL] FILE PROLOG\n",
+  "********** [GL] STRUCT PROLOG\n",
+  "********** [GL] GENERIC DECL\n",
+  "********** [GL] VECTOR DECL\n",
+  "********** [GL] SET/LIST DECL\n",
+  "********** [GL] MAP DECL\n",
+  "********** [GL] STRUCT EPILOG\n",
+  "********** [GL] FILE EPILOG\n",
+  "********** [GL] EPILOG\n",
+
+  "********** [CH] PROLOG\n",
+  "********** [CH] FILE PROLOG\n",
+  "********** [CH] STRUCT PROLOG\n",
+  "********** [CH] GENERIC DECL\n",
+  "********** [CH] VECTOR DECL\n",
+  "********** [CH] SET/LIST DECL\n",
+  "********** [CH] MAP DECL\n",
+  "********** [CH] STRUCT EPILOG\n",
+  "********** [CH] FILE EPILOG\n",
+  "********** [CH] EPILOG\n",
+
+  "********** [CI] PROLOG\n",
+  "********** [CI] FILE PROLOG\n",
+  "********** [CI] STRUCT PROLOG\n",
+  "********** [CI] GENERIC DECL\n",
+  "********** [CI] VECTOR DECL\n",
+  "********** [CI] SET/LIST DECL\n",
+  "********** [CI] MAP DECL\n",
+  "********** [CI] STRUCT EPILOG\n",
+  "********** [CI] FILE EPILOG\n",
+  "********** [CI] EPILOG\n",
+
+  "********** [SH] PROLOG\n",
+  "********** [SH] FILE PROLOG\n",
+  "********** [SH] STRUCT PROLOG\n",
+  "********** [SH] GENERIC DECL\n",
+  "********** [SH] VECTOR DECL\n",
+  "********** [SH] SET/LIST DECL\n",
+  "********** [SH] MAP DECL\n",
+  "********** [SH] STRUCT EPILOG\n",
+  "********** [SH] FILE EPILOG\n",
+  "********** [SH] EPILOG\n",
+
+  "********** [SI] PROLOG\n",
+  "********** [SI] FILE PROLOG\n",
+  "********** [SI] STRUCT PROLOG\n",
+  "********** [SI] GENERIC DECL\n",
+  "********** [SI] VECTOR DECL\n",
+  "********** [SI] SET/LIST DECL\n",
+  "********** [SI] MAP DECL\n",
+  "********** [SI] STRUCT EPILOG\n",
+  "********** [SI] FILE EPILOG\n",
+  "********** [SI] EPILOG\n",
+
+  "********** [DH] PROLOG\n",
+  "********** [DH] FILE PROLOG\n",
+  "********** [DH] STRUCT PROLOG\n",
+  "********** [DH] GENERIC DECL\n",
+  "********** [DH] VECTOR DECL\n",
+  "********** [DH] SET/LIST DECL\n",
+  "********** [DH] MAP DECL\n",
+  "********** [DH] STRUCT EPILOG\n",
+  "********** [DH] FILE EPILOG\n",
+  "********** [DH] EPILOG\n",
+
+  "********** [DI] PROLOG\n",
+  "********** [DI] FILE PROLOG\n",
+  "********** [DI] STRUCT PROLOG\n",
+  "********** [DI] GENERIC DECL\n",
+  "********** [DI] VECTOR DECL\n",
+  "********** [DI] SET/LIST DECL\n",
+  "********** [DI] MAP DECL\n",
+  "********** [DI] STRUCT EPILOG\n",
+  "********** [DI] FILE EPILOG\n",
+  "********** [DI] EPILOG\n"
+//  ,"" // too many initializer test
+};
+
+
+
+const char * const CGeneratorCustom::mpszEnd =
+  "********** [END]\n";
