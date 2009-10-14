@@ -44,6 +44,7 @@ flexconf_SOURCES = \
   lexical.cxx \
   generator.cpp \
   genstrngrepl.cpp \
+  misc.cpp \
   main.cpp
 
 
