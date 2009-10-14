@@ -359,19 +359,19 @@ bool CGeneratorCustom::SaveSource(const char * name)
 
 int CGeneratorCustom::output(EGeneratorString eString)
 {
-  writeRep(mstrGeneratorString[eGlobal][eString],           mfCommonHdr);
-  writeRep(mstrGeneratorString[eGlobal][eString],           mfCommonImp);
-  writeRep(mstrGeneratorString[eGlobal][eString],           mfSerializeHdr);
-  writeRep(mstrGeneratorString[eGlobal][eString],           mfSerializeImp);
-  writeRep(mstrGeneratorString[eGlobal][eString],           mfDeserializeHdr);
-  writeRep(mstrGeneratorString[eGlobal][eString],           mfDeserializeImp);
+  writeRep(mstrGeneratorString[eGlobal][eString],           eCommonHdr);
+  writeRep(mstrGeneratorString[eGlobal][eString],           eCommonImp);
+  writeRep(mstrGeneratorString[eGlobal][eString],           eSerializerHdr);
+  writeRep(mstrGeneratorString[eGlobal][eString],           eSerializerImp);
+  writeRep(mstrGeneratorString[eGlobal][eString],           eDeserializerHdr);
+  writeRep(mstrGeneratorString[eGlobal][eString],           eDeserializerImp);
 
-  writeRep(mstrGeneratorString[eCommonHdr][eString],        mfCommonHdr);
-  writeRep(mstrGeneratorString[eCommonImp][eString],        mfCommonImp);
-  writeRep(mstrGeneratorString[eSerializerHdr][eString],    mfSerializeHdr);
-  writeRep(mstrGeneratorString[eSerializerImp][eString],    mfSerializeImp);
-  writeRep(mstrGeneratorString[eDeserializerHdr][eString],  mfDeserializeHdr);
-  writeRep(mstrGeneratorString[eDeserializerImp][eString],  mfDeserializeImp);
+  writeRep(mstrGeneratorString[eCommonHdr][eString],        eCommonHdr);
+  writeRep(mstrGeneratorString[eCommonImp][eString],        eCommonImp);
+  writeRep(mstrGeneratorString[eSerializerHdr][eString],    eSerializerHdr);
+  writeRep(mstrGeneratorString[eSerializerImp][eString],    eSerializerImp);
+  writeRep(mstrGeneratorString[eDeserializerHdr][eString],  eDeserializerHdr);
+  writeRep(mstrGeneratorString[eDeserializerImp][eString],  eDeserializerImp);
   return 0;
 }
 

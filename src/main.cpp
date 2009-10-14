@@ -190,7 +190,8 @@ int main(int argc, const char * argv[])
 
       if (options.mDbgOut)
       {
-        pCust->Save(options.mDbgFile.c_str());
+//        pCust->Save(options.mDbgFile.c_str());
+        pCust->SaveSource(options.mDbgFile.c_str());
       }
 
       auto_ptr_assign(pGenerator, CGenerator, pCust);

@@ -30,20 +30,19 @@ const char * const CGenerator::mpszId     = "_id";
 
 
 CGenerator::CGenerator()
-  :
-  mfCommonHdr(0),
-  mfCommonImp(0),
-  mfSerializeHdr(0),
-  mfSerializeImp(0),
-  mfDeserializeHdr(0),
-  mfDeserializeImp(0),
-  mstrCommonHdr("structCom.h"),
-  mstrCommonImp("structCom.cpp"),
-  mstrSerializeHdr("structSer.h"),
-  mstrSerializeImp("structSer.cpp"),
-  mstrDeserializeHdr("structDes.h"),
-  mstrDeserializeImp("structDes.cpp")
 {
+  mFileNames[eCommonHdr]        = "structCom.h";
+  mFileNames[eCommonImp]        = "structCom.cpp";
+  mFileNames[eSerializerHdr]    = "structSer.h";
+  mFileNames[eSerializerImp]    = "structSer.cpp";
+  mFileNames[eDeserializerHdr]  = "structDes.h";
+  mFileNames[eDeserializerImp]  = "structDes.cpp";
+
+  for (int n=0; n<eFileCount; ++n)
+  {
+    mOutputFiles[n] = 0;
+  }
+
   SetVariable(VAR_PACKAGE, PACKAGE_STRING);
   SetVariable(VAR_BUGREPORT, PACKAGE_BUGREPORT);
 }
@@ -56,38 +55,16 @@ CGenerator::~CGenerator()
 
 
 
-void CGenerator::SetFileComHdr(const char * pszFilename)
+void CGenerator::SetOutputFileName(EOutputFile fileid, const char * filename)
 {
-  mstrCommonHdr = pszFilename;
+  if (fileid>=0 && fileid<eFileCount)
+    mFileNames[fileid] = filename;
 }
 
-void CGenerator::SetFileComImp(const char * pszFilename)
+void CGenerator::SetOutputFileName(EOutputFile fileid, const std::string & filename)
 {
-  mstrCommonImp = pszFilename;
-}
-
-
-
-void CGenerator::SetFileSerHdr(const char * pszFilename)
-{
-  mstrSerializeHdr = pszFilename;
-}
-
-void CGenerator::SetFileSerImp(const char * pszFilename)
-{
-  mstrSerializeImp = pszFilename;
-}
-
-
-
-void CGenerator::SetFileDesHdr(const char * pszFilename)
-{
-  mstrDeserializeHdr = pszFilename;
-}
-
-void CGenerator::SetFileDesImp(const char * pszFilename)
-{
-  mstrDeserializeImp = pszFilename;
+  if (fileid>=0 && fileid<eFileCount)
+    mFileNames[fileid] = filename;
 }
 
 
@@ -109,12 +86,13 @@ int yyparse(void);
 int CGenerator::Generate()
 {
   // init file pointers for output files
-  mfCommonHdr       = fopen(mstrCommonHdr.c_str(),      "w");
-  mfCommonImp       = fopen(mstrCommonImp.c_str(),      "w");
-  mfSerializeHdr    = fopen(mstrSerializeHdr.c_str(),   "w");
-  mfSerializeImp    = fopen(mstrSerializeImp.c_str(),   "w");
-  mfDeserializeHdr  = fopen(mstrDeserializeHdr.c_str(), "w");
-  mfDeserializeImp  = fopen(mstrDeserializeImp.c_str(), "w");
+  for (int n=0; n<eFileCount; ++n)
+  {
+    if (!mFileNames[n].empty())
+    {
+      mOutputFiles[n] = fopen(mFileNames[n].c_str(), "w");
+    }
+  }
 
   // write header
   header();
@@ -174,20 +152,14 @@ int CGenerator::Generate()
   footer();
 
   // close files
-  fclose(mfCommonHdr);
-  fclose(mfCommonImp);
-  fclose(mfSerializeHdr);
-  fclose(mfSerializeImp);
-  fclose(mfDeserializeHdr);
-  fclose(mfDeserializeImp);
-
-  // reset file pointers
-  mfCommonHdr = 0;
-  mfCommonImp = 0;
-  mfSerializeHdr = 0;
-  mfSerializeImp = 0;
-  mfDeserializeHdr = 0;
-  mfDeserializeImp = 0;
+  for (int n=0; n<eFileCount; ++n)
+  {
+    if (mOutputFiles[n] != 0)
+    {
+      fclose(mOutputFiles[n]);
+      mOutputFiles[n] = 0;
+    }
+  }
 
   return nRetVal;
 }
@@ -391,6 +363,12 @@ int CGenerator::replaceVariables(const std::string & strSource, std::string & rs
 
 
 
+void CGenerator::writeRep(const std::string & strSource, EOutputFile fileid)
+{
+  if (fileid>=0 && fileid<eFileCount && mOutputFiles[fileid] != 0)
+    writeRep(strSource, mOutputFiles[fileid]);
+}
+
 void CGenerator::writeRep(const std::string & strSource, FILE * fWrite)
 {
   std::string strWrite;
@@ -399,6 +377,12 @@ void CGenerator::writeRep(const std::string & strSource, FILE * fWrite)
 }
 
 
+
+void CGenerator::writeStr(const char * pszSource, EOutputFile fileid)
+{
+  if (fileid>=0 && fileid<eFileCount && mOutputFiles[fileid] != 0)
+    writeStr(pszSource, mOutputFiles[fileid]);
+}
 
 void CGenerator::writeStr(const char * pszSource, FILE * fWrite)
 {

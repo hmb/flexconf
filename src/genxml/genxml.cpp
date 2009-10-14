@@ -67,15 +67,15 @@ CGeneratorXml::~CGeneratorXml()
 int CGeneratorXml::header()
 {
   // write header declarations
-  writeRep(pszDisclaimer, mfCommonHdr);
-  writeRep(pszHdrProlog,  mfCommonHdr);
-  writeStr(pszTypes,      mfCommonHdr);
+  writeRep(pszDisclaimer, eCommonHdr);
+  writeRep(pszHdrProlog,  eCommonHdr);
+  writeStr(pszTypes,      eCommonHdr);
   // write serializer
-  writeRep(pszDisclaimer, mfSerializeImp);
-  writeRep(pszSerProlog,  mfSerializeImp);
+  writeRep(pszDisclaimer, eSerializerImp);
+  writeRep(pszSerProlog,  eSerializerImp);
   // write deserializer
-  writeRep(pszDisclaimer, mfDeserializeImp);
-  writeRep(pszDesProlog,  mfDeserializeImp);
+  writeRep(pszDisclaimer, eDeserializerImp);
+  writeRep(pszDesProlog,  eDeserializerImp);
   return 0;
 }
 
@@ -83,7 +83,7 @@ int CGeneratorXml::header()
 
 int CGeneratorXml::headerfile()
 {
-  writeRep(pszHdrFile, mfCommonHdr);
+  writeRep(pszHdrFile, eCommonHdr);
   return 0;
 }
 
@@ -92,11 +92,11 @@ int CGeneratorXml::headerfile()
 void CGeneratorXml::writeStructBegin()
 {
   // declarations
-  writeRep(pszHdrStruct, mfCommonHdr);
+  writeRep(pszHdrStruct, eCommonHdr);
   // start of struct serialize function
-  writeRep(pszSerStructBegin, mfSerializeImp);
+  writeRep(pszSerStructBegin, eSerializerImp);
   // start of struct deserialize function
-  writeRep(pszDesStructBegin, mfDeserializeImp);
+  writeRep(pszDesStructBegin, eDeserializerImp);
 }
 
 
@@ -104,9 +104,9 @@ void CGeneratorXml::writeStructBegin()
 void CGeneratorXml::writeVarDecl()
 {
   // write serializer
-  writeRep(pszSerStructVarDecl, mfSerializeImp);
+  writeRep(pszSerStructVarDecl, eSerializerImp);
   // write deserializer
-  writeRep(pszDesStructVarDecl, mfDeserializeImp);
+  writeRep(pszDesStructVarDecl, eDeserializerImp);
 }
 
 
@@ -114,9 +114,9 @@ void CGeneratorXml::writeVarDecl()
 void CGeneratorXml::writeVarDeclVector()
 {
   // write serializer
-  writeRep(pszSerStructVarDeclVector, mfSerializeImp);
+  writeRep(pszSerStructVarDeclVector, eSerializerImp);
   // write deserializer
-  writeRep(pszDesStructVarDeclVector, mfDeserializeImp);
+  writeRep(pszDesStructVarDeclVector, eDeserializerImp);
 }
 
 
@@ -124,9 +124,9 @@ void CGeneratorXml::writeVarDeclVector()
 void CGeneratorXml::writeVarDeclSetList()
 {
   // write serializer
-  writeRep(pszSerStructVarDeclList, mfSerializeImp);
+  writeRep(pszSerStructVarDeclList, eSerializerImp);
   // write deserializer
-  writeRep(pszDesStructVarDeclList, mfDeserializeImp);
+  writeRep(pszDesStructVarDeclList, eDeserializerImp);
 }
 
 
@@ -134,9 +134,9 @@ void CGeneratorXml::writeVarDeclSetList()
 void CGeneratorXml::writeVarDeclMap()
 {
   // write serializer
-  writeRep(pszSerStructVarDeclMap, mfSerializeImp);
+  writeRep(pszSerStructVarDeclMap, eSerializerImp);
   // write deserializer
-  writeRep(pszDesStructVarDeclMap, mfDeserializeImp);
+  writeRep(pszDesStructVarDeclMap, eDeserializerImp);
 }
 
 
@@ -144,9 +144,9 @@ void CGeneratorXml::writeVarDeclMap()
 void CGeneratorXml::writeStructEnd()
 {
   // end of struct serialize function
-  writeRep(pszSerStructEnd, mfSerializeImp);
+  writeRep(pszSerStructEnd, eSerializerImp);
   // end of struct deserialize function
-  writeRep(pszDesStructEnd, mfDeserializeImp);
+  writeRep(pszDesStructEnd, eDeserializerImp);
 }
 
 
@@ -161,11 +161,11 @@ int CGeneratorXml::footerfile()
 int CGeneratorXml::footer()
 {
   // write header
-  writeStr(pszHeader,       mfCommonHdr);
-  writeStr(pszHdrEpilog,    mfCommonHdr);
+  writeStr(pszHeader,       eCommonHdr);
+  writeStr(pszHdrEpilog,    eCommonHdr);
   // write serializer
-  writeStr(pszSerialize,    mfSerializeImp);
+  writeStr(pszSerialize,    eSerializerImp);
   // write deserializer
-  writeStr(pszDeserialize,  mfDeserializeImp);
+  writeStr(pszDeserialize,  eDeserializerImp);
   return 0;
 }

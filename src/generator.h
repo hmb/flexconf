@@ -67,13 +67,8 @@ public:
     eStringCount
   };
 
-  // set output filenames
-  void SetFileComHdr(const char * pszFilename);
-  void SetFileComImp(const char * pszFilename);
-  void SetFileSerHdr(const char * pszFilename);
-  void SetFileSerImp(const char * pszFilename);
-  void SetFileDesHdr(const char * pszFilename);
-  void SetFileDesImp(const char * pszFilename);
+  void SetOutputFileName(EOutputFile fileid, const char * filename);
+  void SetOutputFileName(EOutputFile fileid, const std::string & filename);
 
   // add header files to process
   void AddSourceFile(const char * pszFilename);
@@ -112,6 +107,12 @@ public:
   void VarDeclMap();
   void EndStruct();
 
+protected:
+  // replace variables and write resulting string to file
+  void writeRep(const std::string & strSource, EOutputFile fileid);
+  // write string of non replaced vars
+  void writeStr(const char * pszSource, EOutputFile fileid);
+
 private:
   // virtual functions to write headers
   virtual int header()                = 0;
@@ -129,7 +130,6 @@ private:
   virtual int footerfile()            = 0;
   virtual int footer()                = 0;
 
-protected:
   // replace all $(varname) vars with values from map
   int replaceVariables(const std::string & strSource, std::string & rstrReplace);
   // replace variables and write resulting string to file
@@ -144,22 +144,9 @@ protected:
   // container for variables in form of $(varname)
   ContVariableType  mcontVariables;
 
-  // file pointer for output files
-  FILE * mfCommonHdr;
-  FILE * mfCommonImp;
-  FILE * mfSerializeHdr;
-  FILE * mfSerializeImp;
-  FILE * mfDeserializeHdr;
-  FILE * mfDeserializeImp;
-
-private:
   // file names for output files
-  std::string mstrCommonHdr;
-  std::string mstrCommonImp;
-  std::string mstrSerializeHdr;
-  std::string mstrSerializeImp;
-  std::string mstrDeserializeHdr;
-  std::string mstrDeserializeImp;
+  std::string mFileNames[eFileCount];
+  FILE *      mOutputFiles[eFileCount];
 
   // list of source files to process
   typedef std::list<std::string>              lstSourceFilesType;
