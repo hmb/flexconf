@@ -71,8 +71,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // This is the structure common header file.
 // ------------------------------------------------------------------
 
-#ifndef _StructCom_h_
-#define _StructCom_h_
+#ifndef _$(basename)Com_h_
+#define _$(basename)Com_h_
 
 #include <string>
 #include <list>
@@ -137,7 +137,7 @@ class CReadXml;
 
 
 ********** [CH] EPILOG
-#endif // _StructCom_h_
+#endif // _$(basename)Com_h_
 ********** [END]
 
 
@@ -150,7 +150,7 @@ class CReadXml;
 // This is the structure common implementation file.
 // ------------------------------------------------------------------
 
-#include "structCom.h"
+#include "$(basename)Com.h"
 ********** [END]
 
 
@@ -199,8 +199,8 @@ class CReadXml;
 // This is the structure serializer header file.
 // ------------------------------------------------------------------
 
-#ifndef _StructSer_h_
-#define _StructSer_h_
+#ifndef _$(basename)Ser_h_
+#define _$(basename)Ser_h_
 
 //#include <stdio.h>
 
@@ -592,7 +592,7 @@ void serialize(
 }
 
 
-#endif // _StructSer_h_
+#endif // _$(basename)Ser_h_
 ********** [END]
 
 
@@ -605,8 +605,8 @@ void serialize(
 // This is the structure serializer implementation file.
 // ------------------------------------------------------------------
 
-#include "structCom.h"
-#include "structSer.h"
+#include "$(basename)Com.h"
+#include "$(basename)Ser.h"
 ********** [END]
 
 
@@ -692,8 +692,8 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
 // This is the structure deserializer header file.
 // ------------------------------------------------------------------
 
-#ifndef _StructDes_h_
-#define _StructDes_h_
+#ifndef _$(basename)Des_h_
+#define _$(basename)Des_h_
 
 ********** [END]
 
@@ -1243,7 +1243,7 @@ void deserialize(
 }
 
 
-#endif // _StructDes_h_
+#endif // _$(basename)Des_h_
 ********** [END]
 
 
@@ -1256,8 +1256,8 @@ void deserialize(
 // This is the structure deserializer implementation file.
 // ------------------------------------------------------------------
 
-#include "structCom.h"
-#include "structDes.h"
+#include "$(basename)Com.h"
+#include "$(basename)Des.h"
 //#include <stdlib.h>
 ********** [END]
 

@@ -69,8 +69,10 @@ public:
   void SetOutputFileBasename(const char * basename);
   void SetOutputFileBasename(const std::string & basename);
 
+/* DISABLED because breaks the generated include machanism
   void SetOutputFileName(EOutputFile fileid, const char * filename);
   void SetOutputFileName(EOutputFile fileid, const std::string & filename);
+*/
 
   // add header files to process
   void AddSourceFile(const char * pszFilename);
@@ -85,6 +87,7 @@ public:
   static const char * const VAR_PACKAGE;      // name of package
   static const char * const VAR_BUGREPORT;    // address for bugreports
   static const char * const VAR_HEADERFILE;   // name of headerfile being processed
+  static const char * const VAR_BASENAME;     // basename of generated source files
   // names of variables filled by c++
   static const char * const VAR_TYPE;         // type of a member declaration
   static const char * const VAR_NAME;         // name of the declared member

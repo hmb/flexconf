@@ -54,7 +54,7 @@ void CGenerator::SetOutputFileBasename(const char * basename)
 {
   for (int i=0; i<eFileCount; ++i)
   {
-    mFileNames[i]        = basename;
+    mFileNames[i] = basename;
   }
 
   mFileNames[eCommonHdr]        += "Com.h";
@@ -63,6 +63,8 @@ void CGenerator::SetOutputFileBasename(const char * basename)
   mFileNames[eSerializerImp]    += "Ser.cpp";
   mFileNames[eDeserializerHdr]  += "Des.h";
   mFileNames[eDeserializerImp]  += "Des.cpp";
+
+  SetVariable(VAR_BASENAME, basename);
 }
 
 void CGenerator::SetOutputFileBasename(const std::string & basename)
@@ -72,6 +74,7 @@ void CGenerator::SetOutputFileBasename(const std::string & basename)
 
 
 
+/* DISABLED because breaks the generated include machanism
 void CGenerator::SetOutputFileName(EOutputFile fileid, const char * filename)
 {
   if (fileid>=0 && fileid<eFileCount)
@@ -83,6 +86,7 @@ void CGenerator::SetOutputFileName(EOutputFile fileid, const std::string & filen
   if (fileid>=0 && fileid<eFileCount)
     mFileNames[fileid] = filename;
 }
+*/
 
 
 
@@ -198,6 +202,7 @@ void CGenerator::Reset()
 const char * const CGenerator::VAR_PACKAGE        = "packagename";
 const char * const CGenerator::VAR_BUGREPORT      = "bugreport";
 const char * const CGenerator::VAR_HEADERFILE     = "headerfile";
+const char * const CGenerator::VAR_BASENAME       = "basename";
 // names of variables filled by c++
 const char * const CGenerator::VAR_TYPE           = "type";
 const char * const CGenerator::VAR_NAME           = "name";
