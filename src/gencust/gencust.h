@@ -31,9 +31,9 @@ public:
   CGeneratorCustom();
   virtual ~CGeneratorCustom();
 
-  bool Load(const char * filename);
-  bool Save(const char * filename);
-  bool SaveSource(const char * filename);
+  bool Load(const std::string & filename);
+  bool Save(const std::string & filename);
+  bool SaveSource(const std::string & filename);
 
 private:
   virtual const char * const getSourceFileProlog();

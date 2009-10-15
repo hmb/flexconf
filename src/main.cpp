@@ -189,7 +189,7 @@ int main(int argc, const char * argv[])
     {
       std::cout << "using custom generator" << std::endl;
       CGeneratorCustom * pCust = new CGeneratorCustom;
-      if (!pCust->Load(options.mGenFile.c_str()))
+      if (!pCust->Load(options.mGenFile))
       {
         std::cout << "ERR: could not load custom generator file" << std::endl;
         return 1;
@@ -197,11 +197,11 @@ int main(int argc, const char * argv[])
 
       if (options.mExtOut)
       {
-        pCust->Save(options.mExtFile.c_str());
+        pCust->Save(options.mExtFile);
       }
       if (options.mIntOut)
       {
-        pCust->SaveSource(options.mIntFile.c_str());
+        pCust->SaveSource(options.mIntFile);
       }
 
       auto_ptr_assign(pGenerator, CGenerator, pCust);
@@ -220,11 +220,11 @@ int main(int argc, const char * argv[])
 
       if (options.mExtOut)
       {
-        pXml->Save(options.mExtFile.c_str());
+        pXml->Save(options.mExtFile);
       }
       if (options.mIntOut)
       {
-        pXml->SaveSource(options.mIntFile.c_str());
+        pXml->SaveSource(options.mIntFile);
       }
 
       auto_ptr_assign(pGenerator, CGenerator, pXml);

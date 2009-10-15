@@ -37,9 +37,9 @@ CGeneratorCustom::~CGeneratorCustom()
 
 
 
-bool CGeneratorCustom::Load(const char * filename)
+bool CGeneratorCustom::Load(const std::string & filename)
 {
-  FILE * fString = fopen(filename, "r");
+  FILE * fString = fopen(filename.c_str(), "r");
 
   if (!fString)
   {
@@ -92,9 +92,9 @@ bool CGeneratorCustom::Load(const char * filename)
 
 
 
-bool CGeneratorCustom::Save(const char * filename)
+bool CGeneratorCustom::Save(const std::string & filename)
 {
-  FILE * fString = fopen(filename, "w");
+  FILE * fString = fopen((filename+".src").c_str(), "w");
 
   if (!fString)
   {
@@ -189,28 +189,26 @@ static void writeStringSource(char const * separator, std::string const & string
 
 
 
-bool CGeneratorCustom::SaveSource(const char * name)
+bool CGeneratorCustom::SaveSource(const std::string & filename)
 {
-  std::string sname(name);
-
-  FILE * fString = fopen((sname + ".h").c_str(), "w");
+  FILE * fString = fopen((filename + ".h").c_str(), "w");
   if (!fString)
   {
     return false;
   }
 
-  fprintf(fString, "#ifndef flexconf_source_%s_h\n", name);
-  fprintf(fString, "#define ifndef flexconf_source_%s_h\n", name);
+  fprintf(fString, "#ifndef flexconf_source_%s_h\n", filename.c_str());
+  fprintf(fString, "#define ifndef flexconf_source_%s_h\n", filename.c_str());
   fputs("\n", fString);
   fputs("\n", fString);
   fputs("\n", fString);
-  fprintf(fString, "char const * const * const get_%s();\n", name);
+  fprintf(fString, "char const * const * const get_%s();\n", filename.c_str());
   fputs("\n", fString);
   fputs("\n", fString);
-  fprintf(fString, "#endif // flexconf_source_%s_h\n", name);
+  fprintf(fString, "#endif // flexconf_source_%s_h\n", filename.c_str());
   fclose(fString);
 
-  fString = fopen((sname + ".cpp").c_str(), "w");
+  fString = fopen((filename + ".cpp").c_str(), "w");
 
   if (!fString)
   {
@@ -250,7 +248,7 @@ bool CGeneratorCustom::SaveSource(const char * name)
   fputs("\n", fString);
   fputs("\n", fString);
   fputs("\n", fString);
-  fprintf(fString, "char const * const * const get_%s()\n", name);
+  fprintf(fString, "char const * const * const get_%s()\n", filename.c_str());
   fputs("{\n", fString);
   fputs("  return pointers;\n", fString);
   fputs("}\n", fString);
