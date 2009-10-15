@@ -218,6 +218,7 @@ int main(int argc, const char * argv[])
       std::cout << "using xml generator" << std::endl;
       CGeneratorXml * pXml = new CGeneratorXml;
 
+/*
       if (options.mExtOut)
       {
         pXml->Save(options.mExtFile);
@@ -226,6 +227,7 @@ int main(int argc, const char * argv[])
       {
         pXml->SaveSource(options.mIntFile);
       }
+*/
 
       auto_ptr_assign(pGenerator, CGenerator, pXml);
     }
