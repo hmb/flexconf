@@ -101,10 +101,10 @@ bool CGeneratorCustom::Save(const char * filename)
     return false;
   }
 
-  fputs(mSourceFileProlog.c_str(), fString);
+  fputs(getSourceFileProlog(), fString);
 
   fputs(mTagGlobalProlog, fString);
-  fputs(mGlobalProlog.c_str(), fString);
+  fputs(getGlobalProlog(), fString);
   fputs(mTagEnd, fString);
 
   char const * const sepstring  = "\n\n";
@@ -117,7 +117,8 @@ bool CGeneratorCustom::Save(const char * filename)
     {
       fputs(sepnext, fString);
       fputs(mTagSections[nfile * eStringCount + nstring], fString);
-      fputs(mGeneratorString[nfile][nstring].c_str(), fString);
+      fputs(getGeneratorString(static_cast<EOutputFile>(nfile),
+        static_cast<EGeneratorString>(nstring)), fString);
       fputs(mTagEnd, fString);
       sepnext = sepstring;
     }
@@ -218,7 +219,11 @@ bool CGeneratorCustom::SaveSource(const char * name)
 
   std::string array;
 
-//  fputs(mSourceFileProlog.c_str(), fString);
+  writeStringSource("SourceFileProlog", getSourceFileProlog(), fString, array);
+  writeStringSource("GlobalProlog", getGlobalProlog(), fString, array);
+
+  // the SourceFileProlog and the global prolog are not part of the infamous array
+  array.clear();
 
   char const * const sepstring  = "\n\n";
   char const * const sepfile    = "\n\n\n\n\n\n";
@@ -229,15 +234,18 @@ bool CGeneratorCustom::SaveSource(const char * name)
     for (int nstring=0; nstring<eStringCount; ++nstring)
     {
       fputs(sepnext, fString);
-      writeStringSource(mTagSections[nfile * eStringCount + nstring],
-        mGeneratorString[nfile][nstring], fString, array);
+      writeStringSource(
+        mTagSections[nfile * eStringCount + nstring],
+        getGeneratorString(static_cast<EOutputFile>(nfile),
+        static_cast<EGeneratorString>(nstring)),
+        fString, array);
       sepnext = sepstring;
     }
     sepnext = sepfile;
   }
 
-  fprintf(fString, "\n\n\nstatic char const * const pointers[%d] =\n{\n%s\n};\n",
-    eFileCount*eStringCount, array.c_str());
+  fprintf(fString, "\n\n\nstatic char const * const pointers[%d][%d] =\n{\n%s\n};\n",
+    eFileCount, eStringCount, array.c_str());
 
   fputs("\n", fString);
   fputs("\n", fString);
