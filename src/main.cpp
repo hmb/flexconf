@@ -181,12 +181,6 @@ int main(int argc, const char * argv[])
     return 1;
   }
 
-  if (files.empty())
-  {
-    std::cout << "ERR: no input files" << std::endl;
-    return 1;
-  }
-
   std::auto_ptr<CGenerator> pGenerator;
 
   switch (options.mGenType)
@@ -241,6 +235,12 @@ int main(int argc, const char * argv[])
     std::cout << "ERR: no generation option given" << std::endl;
     return 1;
     // break;
+  }
+
+  if (files.empty())
+  {
+    std::cout << "WARNING: no input files" << std::endl;
+    return 0;
   }
 
   for (std::list<std::string>::const_iterator ctr=files.begin(); ctr!=files.end(); ++ctr)
