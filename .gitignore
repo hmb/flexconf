@@ -26,4 +26,5 @@ src/test/structDes.h
 src/test/structDes.cpp
 src/test/structSer.h
 src/test/structSer.cpp
-src/test/test
+src/test/testxmlconf
+src/test/testlibxml2

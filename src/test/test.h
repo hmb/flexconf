@@ -36,6 +36,10 @@
 
 /* flexconf skip begin */
 
+class CWriteXml;
+class CReadXml;
+
+
 using namespace std;
 
 // this is some hidden section
@@ -48,9 +52,10 @@ using namespace std;
 
 //<!--
 #ifdef _MSC_VER
-//typedef unsigned long SLongHex;
+typedef unsigned long SLongHex;
 #endif
 //-->
+
 
 
 // flexconf alias data
@@ -59,26 +64,24 @@ struct SData
   int             nInt;       // flexconf alias int
   double          dblDouble;  // flexconf alias double
   std::string     strString;  // flexconf alias string
-
 //  int           & rnInt;      // flexconf alias ref_int
 
   SData();
 };
 
 
+
 //<!--
 class CData : private SData
 {
-
-
-
 friend void serialize(CWriteXml & rWriteXml, const CData & rObject, const char * pszTag = 0, bool fRoot = true,
   const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
 friend void deserialize(CReadXml & rReadXml, CData & rObject, const char * pszTag =0, bool fRoot = true,
   const char * pszIdTag = 0, std::string * pstrIdValue = 0);
 };
-
 //-->
+
+
 
 // flexconf alias TEST
 struct STestBase
@@ -157,6 +160,8 @@ struct STest : public STestBase
   virtual unsigned int abstract_function(int some_int) const  { return 0; }
 };
 
+
+
 // flexconf alias TEST
 struct STestIgnored
 {
@@ -203,6 +208,12 @@ struct STestIgnored
   virtual ~STestIgnored() {}
   virtual unsigned int abstract_function(int some_int)  const = 0 ;
 };
+
+
+bool operator == (const SData & testOne, const SData & testTwo);
+bool operator == (const STest & testOne, const STest & testTwo);
+void winloose(bool fWin);
+void initTest(STest & test);
 
 /* flexconf skip end */
 

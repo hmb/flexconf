@@ -10,6 +10,21 @@
   <fltFloat>797.987000</fltFloat>
   <dblDouble>47.110000</dblDouble>
   <strString>siebenundvierzigelf -&quot;&apos;&lt;&gt;&amp;- siebenundvierzigelf</strString>
+  <datData>
+    <int>0</int>
+    <double>0.000000</double>
+    <string></string>
+  </datData>
+  <Data>
+    <int>0</int>
+    <double>0.000000</double>
+    <string></string>
+  </Data>
+  <datDataDerived>
+    <int>0</int>
+    <double>0.000000</double>
+    <string></string>
+  </datDataDerived>
   <setdata>
     <text>asdf</text>
     <text>jklö</text>
@@ -21,7 +36,6 @@
     <long>852</long>
     <long>9315</long>
   </setlong>
-  </xlong>
   <ListData>
     <DataItem>
       <int>45</int>
@@ -65,4 +79,136 @@
       <string>iurewiou</string>
     </app>
   </maplong>
+  <mmaplong>
+    <app>
+      <longid>1001</longid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>1001-1</string>
+    </app>
+    <app>
+      <longid>1001</longid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>1001-2</string>
+    </app>
+    <app>
+      <longid>1002</longid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>1002</string>
+    </app>
+    <app>
+      <longid>1003</longid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>1003</string>
+    </app>
+    <app>
+      <longid>2002</longid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>2002-1</string>
+    </app>
+    <app>
+      <longid>2002</longid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>2002-2</string>
+    </app>
+    <app>
+      <longid>2004</longid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>2004-1</string>
+    </app>
+    <app>
+      <longid>2004</longid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>2004-2</string>
+    </app>
+    <app>
+      <longid>2004</longid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>2004-3</string>
+    </app>
+    <app>
+      <longid>2004</longid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>2004-4</string>
+    </app>
+  </mmaplong>
+  <mapstr>
+    <app>
+      <strid>asdfg</strid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>key: asdfg</string>
+    </app>
+    <app>
+      <strid>eropw</strid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>key: eropw</string>
+    </app>
+    <app>
+      <strid>kllkrew</strid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>key: kllkrew</string>
+    </app>
+  </mapstr>
+  <mmapstr>
+    <app>
+      <strid>test1</strid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>multi key: test1-1</string>
+    </app>
+    <app>
+      <strid>test1</strid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>multi key: test1-2</string>
+    </app>
+    <app>
+      <strid>test2</strid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>multi key: test2</string>
+    </app>
+    <app>
+      <strid>test3</strid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>multi key: test3</string>
+    </app>
+    <app>
+      <strid>test4</strid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>multi key: test4-1</string>
+    </app>
+    <app>
+      <strid>test4</strid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>multi key: test4-2</string>
+    </app>
+    <app>
+      <strid>test4</strid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>multi key: test4-3</string>
+    </app>
+    <app>
+      <strid>test4</strid>
+      <int>458</int>
+      <double>123287.650000</double>
+      <string>multi key: test4-4</string>
+    </app>
+  </mmapstr>
 </TEST>

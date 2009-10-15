@@ -28,17 +28,7 @@
 
 # include <iostream>
 
-void serialize(CWriteXml & rWriteXml, const CData & rObject, const char * pszTag, bool fRoot,
-  const char * pszIdTag, const std::string * pstrIdValue)
-{
-  serialize(rWriteXml, static_cast<const SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
-}
 
-void deserialize(CReadXml & rReadXml, CData & rObject, const char * pszTag, bool fRoot,
-  const char * pszIdTag, std::string * pstrIdValue)
-{
-  deserialize(rReadXml, static_cast<SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
-}
 
 SData::SData()
   :
@@ -56,6 +46,7 @@ bool operator == (const SData & testOne, const SData & testTwo)
     testOne.dblDouble == testTwo.dblDouble    &&
     testOne.strString == testTwo.strString;
 }
+
 
 
 bool operator == (const STest & testOne, const STest & testTwo)
@@ -108,203 +99,110 @@ void winloose(bool fWin)
 
 
 
-int main(int argc, char *argv[])
+void initTest(STest & test)
 {
-  std::string strXmlFirst;
-  STest       testFirst;
+  test.nShort      = -234;
+  test.nuShort     = 5645;
+  test.nInt        = -48142;
+  test.nuInt       = 900;
+  test.nLong       = -45456644;
+  test.nuLong      = 89890;
+  test.nuLongX     = 0x1010;
+  test.fltFloat    = 797.987f;
+  test.dblDouble   = 47.11;
+  test.strString   = "siebenundvierzigelf -\"'<>&- siebenundvierzigelf";
 
-  {
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-    std::cout << "| write xml to a string                                          |" << std::endl;
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
+  test.setData.insert("asdf");
+  test.setData.insert("jklö");
 
-    testFirst.nShort      = -234;
-    testFirst.nuShort     = 5645;
-    testFirst.nInt        = -48142;
-    testFirst.nuInt       = 900;
-    testFirst.nLong       = -45456644;
-    testFirst.nuLong      = 89890;
-    testFirst.nuLongX     = 0x1010;
-    testFirst.fltFloat    = 797.987f;
-    testFirst.dblDouble   = 47.11;
-    testFirst.strString   = "siebenundvierzigelf -\"'<>&- siebenundvierzigelf";
+  test.setDataL.insert(545);
+  test.setDataL.insert(789);
+  test.setDataL.insert(123);
+  test.setDataL.insert(9315);
+  test.setDataL.insert(852);
 
-    testFirst.setData.insert("asdf");
-    testFirst.setData.insert("jklö");
+  SData data;
+  data.nInt                 = 45;
+  data.dblDouble            = 54456456.564565;
+  data.strString            = "ldksfl";
 
-    testFirst.setDataL.insert(545);
-    testFirst.setDataL.insert(789);
-    testFirst.setDataL.insert(123);
-    testFirst.setDataL.insert(9315);
-    testFirst.setDataL.insert(852);
+  test.vecData[0].nInt = 465;
+  test.vecData[3].nInt = 78;
 
-    SData data;
-    data.nInt                 = 45;
-    data.dblDouble            = 54456456.564565;
-    data.strString            = "ldksfl";
+  test.mlstData.push_back(data);
+  test.mlstData.push_back(data);
+  test.mlstData.push_back(data);
 
-    testFirst.vecData[0].nInt = 465;
-    testFirst.vecData[3].nInt = 78;
+  test.mlstString.push_back("Hallo");
+  test.mlstString.push_back("Hallo");
+  test.mlstString.push_back("Hallo");
+  test.mlstString.push_back("Welt");
 
-    testFirst.mlstData.push_back(data);
-    testFirst.mlstData.push_back(data);
-    testFirst.mlstData.push_back(data);
+//  test.mapData["asdfg"]    = data;
+  test.mapDataL[5]         = data;
 
-    testFirst.mlstString.push_back("Hallo");
-    testFirst.mlstString.push_back("Hallo");
-    testFirst.mlstString.push_back("Hallo");
-    testFirst.mlstString.push_back("Welt");
+  data.nInt                 = 546;
+  data.dblDouble            = 45456.54;
+  data.strString            = "sdalkds";
+//  test.mapData["kllkrew"]  = data;
+  test.mapDataL[6]         = data;
 
-//    testFirst.mapData["asdfg"]    = data;
-    testFirst.mapDataL[5]         = data;
+  data.nInt                 = 458;
+  data.dblDouble            = 123287.65;
+  data.strString            = "iurewiou";
+//  test.mapData["eropw"]    = data;
+  test.mapDataL[79]        = data;
 
-    data.nInt                 = 546;
-    data.dblDouble            = 45456.54;
-    data.strString            = "sdalkds";
-//    testFirst.mapData["kllkrew"]  = data;
-    testFirst.mapDataL[6]         = data;
+  // multimap long
+  data.strString = "1001-1";
+  test.mmapDataL.insert(std::pair<long, SData>(1001, data));
+  data.strString = "1001-2";
+  test.mmapDataL.insert(std::pair<long, SData>(1001, data));
 
-    data.nInt                 = 458;
-    data.dblDouble            = 123287.65;
-    data.strString            = "iurewiou";
-//    testFirst.mapData["eropw"]    = data;
-    testFirst.mapDataL[79]        = data;
+  data.strString = "1002";
+  test.mmapDataL.insert(std::pair<long, SData>(1002, data));
+  data.strString = "1003";
+  test.mmapDataL.insert(std::pair<long, SData>(1003, data));
 
-    // multimap long
-    data.strString = "1001-1";
-    testFirst.mmapDataL.insert(std::pair<long, SData>(1001, data));
-    data.strString = "1001-2";
-    testFirst.mmapDataL.insert(std::pair<long, SData>(1001, data));
+  data.strString = "2002-1";
+  test.mmapDataL.insert(std::pair<long, SData>(2002, data));
+  data.strString = "2002-2";
+  test.mmapDataL.insert(std::pair<long, SData>(2002, data));
 
-    data.strString = "1002";
-    testFirst.mmapDataL.insert(std::pair<long, SData>(1002, data));
-    data.strString = "1003";
-    testFirst.mmapDataL.insert(std::pair<long, SData>(1003, data));
+  data.strString = "2004-1";
+  test.mmapDataL.insert(std::pair<long, SData>(2004, data));
+  data.strString = "2004-2";
+  test.mmapDataL.insert(std::pair<long, SData>(2004, data));
+  data.strString = "2004-3";
+  test.mmapDataL.insert(std::pair<long, SData>(2004, data));
+  data.strString = "2004-4";
+  test.mmapDataL.insert(std::pair<long, SData>(2004, data));
 
-    data.strString = "2002-1";
-    testFirst.mmapDataL.insert(std::pair<long, SData>(2002, data));
-    data.strString = "2002-2";
-    testFirst.mmapDataL.insert(std::pair<long, SData>(2002, data));
+  // map string
+  data.strString = "key: asdfg";
+  test.mapDataStr["asdfg"]    = data;
+  data.strString = "key: kllkrew";
+  test.mapDataStr["kllkrew"]  = data;
+  data.strString = "key: eropw";
+  test.mapDataStr["eropw"]    = data;
 
-    data.strString = "2004-1";
-    testFirst.mmapDataL.insert(std::pair<long, SData>(2004, data));
-    data.strString = "2004-2";
-    testFirst.mmapDataL.insert(std::pair<long, SData>(2004, data));
-    data.strString = "2004-3";
-    testFirst.mmapDataL.insert(std::pair<long, SData>(2004, data));
-    data.strString = "2004-4";
-    testFirst.mmapDataL.insert(std::pair<long, SData>(2004, data));
+  // multimap string
+  data.strString = "multi key: test1-1";
+  test.mmapDataStr.insert(std::pair<std::string, SData>("test1", data));
+  data.strString = "multi key: test1-2";
+  test.mmapDataStr.insert(std::pair<std::string, SData>("test1", data));
 
-    // map string
-    data.strString = "key: asdfg";
-    testFirst.mapDataStr["asdfg"]    = data;
-    data.strString = "key: kllkrew";
-    testFirst.mapDataStr["kllkrew"]  = data;
-    data.strString = "key: eropw";
-    testFirst.mapDataStr["eropw"]    = data;
+  data.strString = "multi key: test2";
+  test.mmapDataStr.insert(std::pair<std::string, SData>("test2", data));
+  data.strString = "multi key: test3";
+  test.mmapDataStr.insert(std::pair<std::string, SData>("test3", data));
 
-    // multimap string
-    data.strString = "multi key: test1-1";
-    testFirst.mmapDataStr.insert(std::pair<std::string, SData>("test1", data));
-    data.strString = "multi key: test1-2";
-    testFirst.mmapDataStr.insert(std::pair<std::string, SData>("test1", data));
-
-    data.strString = "multi key: test2";
-    testFirst.mmapDataStr.insert(std::pair<std::string, SData>("test2", data));
-    data.strString = "multi key: test3";
-    testFirst.mmapDataStr.insert(std::pair<std::string, SData>("test3", data));
-
-    data.strString = "multi key: test4-1";
-    testFirst.mmapDataStr.insert(std::pair<std::string, SData>("test4", data));
-    data.strString = "multi key: test4-2";
-    testFirst.mmapDataStr.insert(std::pair<std::string, SData>("test4", data));
-    data.strString = "multi key: test4-3";
-    testFirst.mmapDataStr.insert(std::pair<std::string, SData>("test4", data));
-    data.strString = "multi key: test4-4";
-    testFirst.mmapDataStr.insert(std::pair<std::string, SData>("test4", data));
-
-    CWriteXmlString writeString(strXmlFirst);
-    serialize(writeString, testFirst);
-    std::cout << strXmlFirst << std::endl;
-  }
-
-  {
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-    std::cout << "| read xml back from the same string...                          |" << std::endl;
-
-    STest sTest;
-
-    CReadXmlPChar readPChar(strXmlFirst.c_str());
-    deserialize(readPChar, sTest);
-
-    std::cout << "| ...and rewrite again to a new string                           |" << std::endl;
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-
-    std::string strXmlSecond;
-
-    CWriteXmlString writeString(strXmlSecond);
-    serialize(writeString, sTest);
-    std::cout << strXmlSecond << std::endl;
-
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-    std::cout << "| compare both strings                                           |" << std::endl;
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-    winloose(strXmlFirst == strXmlSecond);
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-    std::cout << "| compare both objects                                           |" << std::endl;
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-    winloose(testFirst == sTest);
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-  }
-
-  for (int nArg=1; nArg<argc; nArg++)
-  {
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-    std::cout << "| read xml from a file                                           |" << std::endl;
-
-    STest sTest;
-
-    CReadXmlFile readFile;
-    if (readFile.UseFile(argv[nArg]))
-    {
-#if 0
-      try
-      {
-        readFile.EnableExceptions();
-#endif
-        deserialize(readFile, sTest);
-#if 0
-        if (CReadXmlFile::readFile.GetStatus());
-      }
-      catch (CReadXmlFile::EStatus /*eStatus*/)
-      {
-        std::cout << "error parsing file at line " << readFile.GetLine() << ", " << readFile.GetColumn() << std::endl;
-        return 1;
-      }
-#endif
-      std::cout << "| ...and rewrite again to a new string                           |" << std::endl;
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
-
-      std::string strXmlSecond;
-
-      CWriteXmlString writeString(strXmlSecond);
-      serialize(writeString, sTest);
-      std::cout << strXmlSecond << std::endl;
-
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
-      std::cout << "| compare with first string                                      |" << std::endl;
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
-      winloose(readFile.GetData() == strXmlSecond);
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
-    }
-    else
-    {
-      std::cout << "| ...error reading file ???                                      |" << std::endl;
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
-    }
-  }
-
-  return 0;
+  data.strString = "multi key: test4-1";
+  test.mmapDataStr.insert(std::pair<std::string, SData>("test4", data));
+  data.strString = "multi key: test4-2";
+  test.mmapDataStr.insert(std::pair<std::string, SData>("test4", data));
+  data.strString = "multi key: test4-3";
+  test.mmapDataStr.insert(std::pair<std::string, SData>("test4", data));
+  data.strString = "multi key: test4-4";
+  test.mmapDataStr.insert(std::pair<std::string, SData>("test4", data));
 }

@@ -19,17 +19,19 @@
 #---------------------------------------------------------------------------------
 # define your output targets here
 
-noinst_PROGRAMS = test
+noinst_PROGRAMS = \
+  testxmlconf
 
 
 
 #---------------------------------------------------------------------------------
 # sources needed for the the targets defined above
 
-test_SOURCES = \
-  test.cpp
+testxmlconf_SOURCES = \
+  test.cpp \
+  testxmlconf.cpp
 
-nodist_test_SOURCES = \
+nodist_testxmlconf_SOURCES = \
   structCom.cpp \
   structSer.cpp \
   structDes.cpp
@@ -42,21 +44,23 @@ EXTRA_DIST = \
 #---------------------------------------------------------------------------------
 # compiler flags needed for the the targets defined above
 
-test_CXXFLAGS = -g
+testxmlconf_CXXFLAGS = -g
+
+#testxmlconf_CXXFLAGS = -g -I/usr/include/libxml2
 
 
 
 #---------------------------------------------------------------------------------
 # remember autoconf adds AC_CHECK_LIB libraries automatically
 
-#test_LIBADD =
+#testxmlconf_LIBADD =
 
 
 
 #---------------------------------------------------------------------------------
 # linker flags needed for the the targets defined above
 
-#test_LDFLAGS =
+#testxmlconf_LDFLAGS =
 
 
 
@@ -64,6 +68,7 @@ test_CXXFLAGS = -g
 # generate the cpp files from test.h
 
 FCGENERATOR = ../gencust/xmlconf.src
+#FCGENERATOR = ../gencust/libxml2.src
 FCSOURCES   = test.h
 
 structCom.h structSer.h structDes.h structCom.cpp structSer.cpp structDes.cpp: ../flexconf $(FCGENERATOR) $(FCSOURCES)
