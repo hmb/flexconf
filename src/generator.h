@@ -66,6 +66,9 @@ public:
     eStringCount
   };
 
+  void SetOutputFileBasename(const char * basename);
+  void SetOutputFileBasename(const std::string & basename);
+
   void SetOutputFileName(EOutputFile fileid, const char * filename);
   void SetOutputFileName(EOutputFile fileid, const std::string & filename);
 

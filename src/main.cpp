@@ -51,6 +51,7 @@ struct SOptions
   std::string     mExtFile;     // -e <filename>
   bool            mIntOut;      // -i <filename>
   std::string     mIntFile;     // -i <filename>
+  std::string     mBasename;    // -b <filename>
 };
 
 
@@ -155,6 +156,14 @@ static bool getoptions(int argc, const char * argv[], SOptions & options, std::l
       options.mIntOut = true;
       break;
 
+    case 'b':
+      if (!getoptionparam(argc, argv, n, options.mBasename))
+      {
+        std::cout << "ERR: missing basename for option: '-" << argv[n][1] << '\'' << std::endl;
+        return false;
+      }
+      break;
+
     default:
       std::cout << "ERR: unknown option: '-" << argv[n][1] << '\'' << std::endl;
       return false;
@@ -243,6 +252,11 @@ int main(int argc, const char * argv[])
   {
     std::cout << "WARNING: no input files" << std::endl;
     return 0;
+  }
+
+  if (!options.mBasename.empty())
+  {
+    pGenerator->SetOutputFileBasename(options.mBasename);
   }
 
   for (std::list<std::string>::const_iterator ctr=files.begin(); ctr!=files.end(); ++ctr)

@@ -31,12 +31,7 @@ const char * const CGenerator::mpszId     = "_id";
 
 CGenerator::CGenerator()
 {
-  mFileNames[eCommonHdr]        = "structCom.h";
-  mFileNames[eCommonImp]        = "structCom.cpp";
-  mFileNames[eSerializerHdr]    = "structSer.h";
-  mFileNames[eSerializerImp]    = "structSer.cpp";
-  mFileNames[eDeserializerHdr]  = "structDes.h";
-  mFileNames[eDeserializerImp]  = "structDes.cpp";
+  SetOutputFileBasename("struct");
 
   for (int n=0; n<eFileCount; ++n)
   {
@@ -51,6 +46,28 @@ CGenerator::CGenerator()
 
 CGenerator::~CGenerator()
 {
+}
+
+
+
+void CGenerator::SetOutputFileBasename(const char * basename)
+{
+  for (int i=0; i<eFileCount; ++i)
+  {
+    mFileNames[i]        = basename;
+  }
+
+  mFileNames[eCommonHdr]        += "Com.h";
+  mFileNames[eCommonImp]        += "Com.cpp";
+  mFileNames[eSerializerHdr]    += "Ser.h";
+  mFileNames[eSerializerImp]    += "Ser.cpp";
+  mFileNames[eDeserializerHdr]  += "Des.h";
+  mFileNames[eDeserializerImp]  += "Des.cpp";
+}
+
+void CGenerator::SetOutputFileBasename(const std::string & basename)
+{
+  SetOutputFileBasename(basename.c_str());
 }
 
 
