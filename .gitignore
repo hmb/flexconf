@@ -20,11 +20,11 @@ config.status
 configure
 src/flexconf
 src/genxml/testread
-src/test/structCom.h
-src/test/structCom.cpp
-src/test/structDes.h
-src/test/structDes.cpp
-src/test/structSer.h
-src/test/structSer.cpp
+src/test/*Com.h
+src/test/*Com.cpp
+src/test/*Des.h
+src/test/*Des.cpp
+src/test/*Ser.h
+src/test/*Ser.cpp
 src/test/testxmlconf
 src/test/testlibxml2

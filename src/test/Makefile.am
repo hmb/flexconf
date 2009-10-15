@@ -28,15 +28,18 @@ noinst_PROGRAMS = \
 # sources needed for the the targets defined above
 
 testxmlconf_SOURCES = \
+  xmlconfCom.cpp \
+  xmlconfSer.cpp \
+  xmlconfDes.cpp \
   test.cpp \
   testxmlconf.cpp
 
-nodist_testxmlconf_SOURCES = \
-  structCom.cpp \
-  structSer.cpp \
-  structDes.cpp
+#nodist_testxmlconf_SOURCES = \
+  xmlconfCom.cpp \
+  xmlconfSer.cpp \
+  xmlconfDes.cpp
 
-EXTRA_DIST = \
+#EXTRA_DIST = \
   test.h
 
 
@@ -67,21 +70,15 @@ testxmlconf_CXXFLAGS = -g
 #---------------------------------------------------------------------------------
 # generate the cpp files from test.h
 
-FCGENERATOR = ../gencust/xmlconf.src
-#FCGENERATOR = ../gencust/libxml2.src
 FCSOURCES   = test.h
 
-structCom.h structSer.h structDes.h structCom.cpp structSer.cpp structDes.cpp: ../flexconf $(FCGENERATOR) $(FCSOURCES)
-	../flexconf -c $(FCGENERATOR) $(FCSOURCES)
-#	../flexconf -x $(FCSOURCES)
-#	../flexconf -r $(FCSOURCES)
+%Com.cpp: ../flexconf ../gencust/%.src $(FCSOURCES)
+	../flexconf -c ../gencust/$*.src -b $* $(FCSOURCES)
 
-# list dependencies of struct.h (cpp files that include struct.h)
-test.cpp: test.h structCom.h structSer.h structDes.h
 
 
 #---------------------------------------------------------------------------------
 # add cleanup
 
 distclean-local:
-	rm -f structCom.h structSer.h structDes.h structCom.cpp structSer.cpp structDes.cpp
+	rm -f *Com.h *Ser.h *Des.h *Com.cpp *Ser.cpp *Des.cpp

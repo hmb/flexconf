@@ -51,9 +51,10 @@ using namespace std;
 
 
 //<!--
-#ifdef _MSC_VER
-typedef unsigned long SLongHex;
-#endif
+//#ifdef _MSC_VER
+typedef unsigned long SHexNum;
+//typedef SLongHex SHexNum;
+//#endif
 //-->
 
 
@@ -93,7 +94,7 @@ struct STestBase
   unsigned int      nuInt;
   long              nLong;
   unsigned long     nuLong;
-  SLongHex          nuLongX;
+  SHexNum           nuLongX;
   float             fltFloat;
   double            dblDouble;
   std::string       strString;

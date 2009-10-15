@@ -22,9 +22,9 @@
   #pragma warning( disable : 4786 4996 )
 #endif
 
-# include "structCom.h"
-# include "structSer.h"
-# include "structDes.h"
+# include "xmlconfCom.h"
+# include "xmlconfSer.h"
+# include "xmlconfDes.h"
 
 # include <iostream>
 

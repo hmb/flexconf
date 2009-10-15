@@ -22,10 +22,7 @@
   #pragma warning( disable : 4786 4996 )
 #endif
 
-# include "structCom.h"
-# include "structSer.h"
-# include "structDes.h"
-
+# include "test.h"
 # include <iostream>
 
 
