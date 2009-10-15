@@ -47,8 +47,10 @@ struct SOptions
 
   EGeneratorType  mGenType;     // -c <filename> | -r | -x
   std::string     mGenFile;     // -c <filename>
-  bool            mDbgOut;      // -d <filename>
-  std::string     mDbgFile;     // -d <filename>
+  bool            mExtOut;      // -e <filename>
+  std::string     mExtFile;     // -e <filename>
+  bool            mIntOut;      // -i <filename>
+  std::string     mIntFile;     // -i <filename>
 };
 
 
@@ -57,8 +59,10 @@ SOptions::SOptions()
   :
   mGenType(eGenTypXmlconf),
   mGenFile("flexconf.src"),
-  mDbgOut(false),
-  mDbgFile("debug.src")
+  mExtOut(false),
+  mExtFile("external"),
+  mIntOut(false),
+  mIntFile("internal")
 {
 }
 
@@ -133,13 +137,22 @@ static bool getoptions(int argc, const char * argv[], SOptions & options, std::l
       options.mGenType = eGenTypXmlconf;
       break;
 
-    case 'd':
-      if (!getoptionparam(argc, argv, n, options.mDbgFile))
+    case 'e':
+      if (!getoptionparam(argc, argv, n, options.mExtFile))
       {
-        std::cout << "ERR: missing debug output file for option: '-" << argv[n][1] << '\'' << std::endl;
+        std::cout << "ERR: missing external filename for option: '-" << argv[n][1] << '\'' << std::endl;
         return false;
       }
-      options.mDbgOut = true;
+      options.mExtOut = true;
+      break;
+
+    case 'i':
+      if (!getoptionparam(argc, argv, n, options.mIntFile))
+      {
+        std::cout << "ERR: missing internal filename for option: '-" << argv[n][1] << '\'' << std::endl;
+        return false;
+      }
+      options.mIntOut = true;
       break;
 
     default:
@@ -188,10 +201,13 @@ int main(int argc, const char * argv[])
         return 1;
       }
 
-      if (options.mDbgOut)
+      if (options.mExtOut)
       {
-        pCust->Save(options.mDbgFile.c_str());
-//        pCust->SaveSource(options.mDbgFile.c_str());
+        pCust->Save(options.mExtFile.c_str());
+      }
+      if (options.mIntOut)
+      {
+        pCust->SaveSource(options.mIntFile.c_str());
       }
 
       auto_ptr_assign(pGenerator, CGenerator, pCust);
@@ -204,8 +220,21 @@ int main(int argc, const char * argv[])
     break;
 
   case eGenTypXmlconf:
-    std::cout << "using xml generator" << std::endl;
-    auto_ptr_assign(pGenerator, CGenerator, new CGeneratorXml);
+    {
+      std::cout << "using xml generator" << std::endl;
+      CGeneratorXml * pXml = new CGeneratorXml;
+
+      if (options.mExtOut)
+      {
+        pXml->Save(options.mExtFile.c_str());
+      }
+      if (options.mIntOut)
+      {
+        pXml->SaveSource(options.mIntFile.c_str());
+      }
+
+      auto_ptr_assign(pGenerator, CGenerator, pXml);
+    }
     break;
 
   default:
@@ -213,15 +242,6 @@ int main(int argc, const char * argv[])
     return 1;
     // break;
   }
-
-  /*
-  SetFileComHdr(const char * pszFilename);
-  SetFileComImp(const char * pszFilename);
-  SetFileSerHdr(const char * pszFilename);
-  SetFileSerImp(const char * pszFilename);
-  SetFileDesHdr(const char * pszFilename);
-  SetFileDesImp(const char * pszFilename);
-  */
 
   for (std::list<std::string>::const_iterator ctr=files.begin(); ctr!=files.end(); ++ctr)
   {
