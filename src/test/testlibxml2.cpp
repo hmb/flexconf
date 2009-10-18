@@ -22,14 +22,37 @@
   #pragma warning( disable : 4786 4996 )
 #endif
 
-# include "xmlconfCom.h"
-# include "xmlconfSer.h"
-# include "xmlconfDes.h"
+# include "libxml2Com.h"
+# include "libxml2Ser.h"
+# include "libxml2Des.h"
 
 # include <iostream>
 
 
 
+template <class T>
+bool LoadLibxml2(const char * filename, T & t)
+{
+  LIBXML_TEST_VERSION
+
+  xmlDoc  * doc = xmlReadFile(filename, NULL, 0);
+  if (doc == NULL)
+  {
+    std::cout << "error: could not parse file: " << filename << std::endl;
+      return false;
+  }
+
+  deserialize(xmlDocGetRootElement(doc), t);
+
+  xmlFreeDoc(doc);
+  xmlCleanupParser();
+
+  return true;
+}
+
+
+
+/*
 void serialize(CWriteXml & rWriteXml, const CData & rObject, const char * pszTag, bool fRoot,
   const char * pszIdTag, const std::string * pstrIdValue)
 {
@@ -43,6 +66,7 @@ void deserialize(CReadXml & rReadXml, CData & rObject, const char * pszTag, bool
 {
   deserialize(rReadXml, static_cast<SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
 }
+*/
 
 
 
@@ -53,6 +77,7 @@ int main(int argc, char *argv[])
 
   initTest(testFirst);
 
+#if 0
   {
     std::cout << "+----------------------------------------------------------------+" << std::endl;
     std::cout << "| write xml to a string                                          |" << std::endl;
@@ -93,6 +118,7 @@ int main(int argc, char *argv[])
     winloose(testFirst == sTest);
     std::cout << "+----------------------------------------------------------------+" << std::endl;
   }
+#endif
 
   for (int nArg=1; nArg<argc; nArg++)
   {
@@ -101,27 +127,14 @@ int main(int argc, char *argv[])
 
     STest sTest;
 
-    CReadXmlFile readFile;
-    if (readFile.UseFile(argv[nArg]))
+    if (LoadLibxml2(argv[nArg], sTest))
     {
-#if 0
-      try
-      {
-        readFile.EnableExceptions();
-#endif
-        deserialize(readFile, sTest);
-#if 0
-        if (CReadXmlFile::readFile.GetStatus());
-      }
-      catch (CReadXmlFile::EStatus /*eStatus*/)
-      {
-        std::cout << "error parsing file at line " << readFile.GetLine() << ", " << readFile.GetColumn() << std::endl;
-        return 1;
-      }
-#endif
-      std::cout << "| ...and rewrite again to a new string                           |" << std::endl;
       std::cout << "+----------------------------------------------------------------+" << std::endl;
-
+      std::cout << "| compare both objects                                           |" << std::endl;
+      std::cout << "+----------------------------------------------------------------+" << std::endl;
+      winloose(testFirst == sTest);
+      std::cout << "+----------------------------------------------------------------+" << std::endl;
+/*
       std::string strXmlSecond;
 
       CWriteXmlString writeString(strXmlSecond);
@@ -137,6 +150,7 @@ int main(int argc, char *argv[])
       std::cout << "+----------------------------------------------------------------+" << std::endl;
       winloose(readFile.GetData() == strXmlSecond);
       std::cout << "+----------------------------------------------------------------+" << std::endl;
+*/
     }
     else
     {

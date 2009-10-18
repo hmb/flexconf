@@ -102,7 +102,8 @@ struct STestBase
   SData             datData;
   SData             datData2;     // flexconf alias Data
   SData             vecData[4];   // flexconf alias sepp item DataElement
-  CData             datDataDerived;
+  //CData             datDataDerived;
+  SData             datDataDerived;
 
   // illeagal: maps with plain types as value are not allowed
   // std::map<std::string, int>    mapTesting;
