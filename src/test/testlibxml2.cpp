@@ -1,6 +1,6 @@
 /*
   flexconf - flexible configuration generator
-  Copyright (C) 2008 Holger Böhnke
+  Copyright (c) 2008-2009 Holger Böhnke
 
   This file is part of flexconf.
 

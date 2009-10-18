@@ -20,7 +20,8 @@
 # define your output targets here
 
 noinst_PROGRAMS = \
-  testxmlconf
+  testxmlconf \
+  testlibxml2
 
 
 
@@ -42,6 +43,13 @@ testxmlconf_SOURCES = \
 #EXTRA_DIST = \
   test.h
 
+testlibxml2_SOURCES = \
+  libxml2Com.cpp \
+  libxml2Ser.cpp \
+  libxml2Des.cpp \
+  test.cpp \
+  testlibxml2.cpp
+
 
 
 #---------------------------------------------------------------------------------
@@ -49,7 +57,7 @@ testxmlconf_SOURCES = \
 
 testxmlconf_CXXFLAGS = -g
 
-#testxmlconf_CXXFLAGS = -g -I/usr/include/libxml2
+testlibxml2_CXXFLAGS = -g -I/usr/include/libxml2
 
 
 
@@ -58,6 +66,7 @@ testxmlconf_CXXFLAGS = -g
 
 #testxmlconf_LIBADD =
 
+testlibxml2_LDADD = -lxml2
 
 
 #---------------------------------------------------------------------------------

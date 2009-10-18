@@ -1366,4 +1366,7 @@ void deserialize(CReadXml & rReadXml, std::string & rObject, const char * pszTag
   if (!rReadXml.IsEndTag(pszTag))
     return;
 }
+
+
+
 ********** [END]
