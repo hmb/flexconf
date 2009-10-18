@@ -1,0 +1,2 @@
+src/gencust/xmlconf.src     usr/share/flexconf
+src/gencust/libxml2.src     usr/share/flexconf
