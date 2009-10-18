@@ -835,7 +835,6 @@ inline bool isElement(xmlNode * &node, const char * name)
 
   if (retval)
   {
-    std::cerr << "isElement: " << name << (retval? " == " : " != ") << node->name << std::endl;
     node = skipWhitespace(node->children);
   }
 
@@ -848,15 +847,13 @@ inline bool isElement(xmlNode * &node, const char * name)
 template <class _T>
 void deserialize(xmlNode * node, _T & rObject, const char * pszTag, bool fRoot = true)
 {
-  std::cerr << "deserialize: " << node->name << " (" << pszTag << ")" << std::endl;
-
   if (fRoot)
   {
     if (!isElement(node, pszTag))
       return;
   }
 
-  if (!node ||  node->type != XML_TEXT_NODE)
+  if (!node  ||  node->type != XML_TEXT_NODE  ||  !node->content)
     return;
 
   deserialize(reinterpret_cast<char*>(node->content), rObject);
@@ -1060,8 +1057,7 @@ bool LoadLibxml2(const char * filename, const char * roottag, T & t)
   xmlDoc  * doc = xmlReadFile(filename, NULL, 0);
   if (doc == NULL)
   {
-    std::cerr << "error: could not parse file: " << filename << std::endl;
-      return false;
+    return false;
   }
 
   deserialize(xmlDocGetRootElement(doc), t, roottag, true, 0, 0);
@@ -1103,9 +1099,6 @@ bool LoadLibxml2(const char * filename, const char * roottag, T & t)
 void deserialize(xmlNode * node, $(name) & rObject, const char * pszTag, bool fRoot,
   const char * pszIdTag, std::string * pstrIdValue)
 {
-  std::cerr << "strict prolog $(name): " << (pszIdTag? pszIdTag : "<null>") << ", "
-    << pstrIdValue << std::endl;
-
   if (!pszTag)
     pszTag="$(alias)";
   if (fRoot)
@@ -1189,12 +1182,10 @@ void deserialize(xmlNode * node, std::string & rObject, const char * pszTag, boo
   if (node && node->content)
   {
     rObject = reinterpret_cast<char*>(node->content);
-    std::cerr << "content:" << node->content << std::endl;
   }
   else
   {
     rObject.clear();
-    std::cerr << "no content:" << std::endl;
   }
 
   // return node->next == 0;
