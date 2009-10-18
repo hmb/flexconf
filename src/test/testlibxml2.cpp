@@ -26,47 +26,13 @@
 # include "libxml2Ser.h"
 # include "libxml2Des.h"
 
-# include <iostream>
 
 
-
-template <class T>
-bool LoadLibxml2(const char * filename, T & t)
-{
-  LIBXML_TEST_VERSION
-
-  xmlDoc  * doc = xmlReadFile(filename, NULL, 0);
-  if (doc == NULL)
-  {
-    std::cout << "error: could not parse file: " << filename << std::endl;
-      return false;
-  }
-
-  deserialize(xmlDocGetRootElement(doc), t);
-
-  xmlFreeDoc(doc);
-  xmlCleanupParser();
-
-  return true;
-}
-
-
-
-/*
-void serialize(CWriteXml & rWriteXml, const CData & rObject, const char * pszTag, bool fRoot,
-  const char * pszIdTag, const std::string * pstrIdValue)
-{
-  serialize(rWriteXml, static_cast<const SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
-}
-
-
-
-void deserialize(CReadXml & rReadXml, CData & rObject, const char * pszTag, bool fRoot,
+void deserialize(xmlNode * reader, CData & rObject, const char * pszTag, bool fRoot,
   const char * pszIdTag, std::string * pstrIdValue)
 {
-  deserialize(rReadXml, static_cast<SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
+  deserialize(reader, static_cast<SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
 }
-*/
 
 
 
@@ -79,83 +45,84 @@ int main(int argc, char *argv[])
 
 #if 0
   {
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-    std::cout << "| write xml to a string                                          |" << std::endl;
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
+    std::cerr << "+----------------------------------------------------------------+" << std::endl;
+    std::cerr << "| write xml to a string                                          |" << std::endl;
+    std::cerr << "+----------------------------------------------------------------+" << std::endl;
 
     CWriteXmlString writeString(strXmlFirst);
     serialize(writeString, testFirst);
-    std::cout << strXmlFirst << std::endl;
+    std::cerr << strXmlFirst << std::endl;
   }
 
   {
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-    std::cout << "| read xml back from the same string...                          |" << std::endl;
+    std::cerr << "+----------------------------------------------------------------+" << std::endl;
+    std::cerr << "| read xml back from the same string...                          |" << std::endl;
 
     STest sTest;
 
     CReadXmlPChar readPChar(strXmlFirst.c_str());
     deserialize(readPChar, sTest);
 
-    std::cout << "| ...and rewrite again to a new string                           |" << std::endl;
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
+    std::cerr << "| ...and rewrite again to a new string                           |" << std::endl;
+    std::cerr << "+----------------------------------------------------------------+" << std::endl;
 
     std::string strXmlSecond;
 
     CWriteXmlString writeString(strXmlSecond);
     serialize(writeString, sTest);
-    std::cout << strXmlSecond << std::endl;
+    std::cerr << strXmlSecond << std::endl;
 
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-    std::cout << "| compare both strings                                           |" << std::endl;
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
+    std::cerr << "+----------------------------------------------------------------+" << std::endl;
+    std::cerr << "| compare both strings                                           |" << std::endl;
+    std::cerr << "+----------------------------------------------------------------+" << std::endl;
     winloose(strXmlFirst == strXmlSecond);
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
+    std::cerr << "+----------------------------------------------------------------+" << std::endl;
 
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-    std::cout << "| compare both objects                                           |" << std::endl;
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
+    std::cerr << "+----------------------------------------------------------------+" << std::endl;
+    std::cerr << "| compare both objects                                           |" << std::endl;
+    std::cerr << "+----------------------------------------------------------------+" << std::endl;
     winloose(testFirst == sTest);
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
+    std::cerr << "+----------------------------------------------------------------+" << std::endl;
   }
 #endif
 
   for (int nArg=1; nArg<argc; nArg++)
   {
-    std::cout << "+----------------------------------------------------------------+" << std::endl;
-    std::cout << "| read xml from a file                                           |" << std::endl;
+    std::cerr << "+----------------------------------------------------------------+" << std::endl;
+    std::cerr << "| read xml from a file                                           |" << std::endl;
 
     STest sTest;
 
-    if (LoadLibxml2(argv[nArg], sTest))
+    if (LoadLibxml2(argv[nArg], "TEST", sTest))
     {
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
-      std::cout << "| compare both objects                                           |" << std::endl;
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
+      std::cerr << "+----------------------------------------------------------------+" << std::endl;
+      std::cerr << "| compare both objects                                           |" << std::endl;
+      std::cerr << "+----------------------------------------------------------------+" << std::endl;
       winloose(testFirst == sTest);
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
-/*
+      std::cerr << "+----------------------------------------------------------------+" << std::endl;
+
       std::string strXmlSecond;
 
       CWriteXmlString writeString(strXmlSecond);
       serialize(writeString, sTest);
       std::cout << strXmlSecond << std::endl;
 
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
-      std::cout << "| compare with first string                                      |" << std::endl;
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
+/*
+      std::cerr << "+----------------------------------------------------------------+" << std::endl;
+      std::cerr << "| compare with first string                                      |" << std::endl;
+      std::cerr << "+----------------------------------------------------------------+" << std::endl;
       winloose(readFile.GetData() == strXmlFirst);
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
-      std::cout << "| compare with second string                                     |" << std::endl;
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
+      std::cerr << "+----------------------------------------------------------------+" << std::endl;
+      std::cerr << "| compare with second string                                     |" << std::endl;
+      std::cerr << "+----------------------------------------------------------------+" << std::endl;
       winloose(readFile.GetData() == strXmlSecond);
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
+      std::cerr << "+----------------------------------------------------------------+" << std::endl;
 */
     }
     else
     {
-      std::cout << "| ...error reading file ???                                      |" << std::endl;
-      std::cout << "+----------------------------------------------------------------+" << std::endl;
+      std::cerr << "| ...error reading file ???                                      |" << std::endl;
+      std::cerr << "+----------------------------------------------------------------+" << std::endl;
     }
   }
 

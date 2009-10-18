@@ -22,8 +22,17 @@
   #pragma warning( disable : 4786 4996 )
 #endif
 
-# include "test.h"
-# include <iostream>
+#include "test.h"
+
+
+void serialize(CWriteXml & writer, const SData & rObject, const char * pszTag, bool fRoot,
+  const char * pszIdTag, const std::string * pstrIdValue);
+
+void serialize(CWriteXml & writer, const CData & rObject, const char * pszTag, bool fRoot,
+  const char * pszIdTag, const std::string * pstrIdValue)
+{
+  serialize(writer, static_cast<const SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
+}
 
 
 
@@ -74,23 +83,23 @@ bool operator == (const STest & testOne, const STest & testTwo)
 
 
 
-void winloose(bool fWin)
+void winloose(bool fWin, std::ostream & out)
 {
   if (fWin)
   {
-    std::cout << "|     ____ ___ _   _  ____  ___                                  |" << std::endl;
-    std::cout << "|    | __ )_ _| \\ | |/ ___|/ _ \\                                 |" << std::endl;
-    std::cout << "|    |  _ \\| ||  \\| | |  _| | | |                                |" << std::endl;
-    std::cout << "|    | |_) | || |\\  | |_| | |_| |                                |" << std::endl;
-    std::cout << "|    |____/___|_| \\_|\\____|\\___/                                 |" << std::endl;
+    out << "|     ____ ___ _   _  ____  ___                                  |" << std::endl;
+    out << "|    | __ )_ _| \\ | |/ ___|/ _ \\                                 |" << std::endl;
+    out << "|    |  _ \\| ||  \\| | |  _| | | |                                |" << std::endl;
+    out << "|    | |_) | || |\\  | |_| | |_| |                                |" << std::endl;
+    out << "|    |____/___|_| \\_|\\____|\\___/                                 |" << std::endl;
   }
   else
   {
-    std::cout << "|     _     ___   ___  ____  _____                               |" << std::endl;
-    std::cout << "|    | |   / _ \\ / _ \\/ ___|| ____|                              |" << std::endl;
-    std::cout << "|    | |  | | | | | | \\___ \\|  _|                                |" << std::endl;
-    std::cout << "|    | |__| |_| | |_| |___) | |___                               |" << std::endl;
-    std::cout << "|    |_____\\___/ \\___/|____/|_____|                              |" << std::endl;
+    out << "|     _     ___   ___  ____  _____                               |" << std::endl;
+    out << "|    | |   / _ \\ / _ \\/ ___|| ____|                              |" << std::endl;
+    out << "|    | |  | | | | | | \\___ \\|  _|                                |" << std::endl;
+    out << "|    | |__| |_| | |_| |___) | |___                               |" << std::endl;
+    out << "|    |_____\\___/ \\___/|____/|_____|                              |" << std::endl;
   }
 }
 

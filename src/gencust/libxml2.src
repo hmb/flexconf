@@ -699,6 +699,7 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <iostream>
 
 ********** [END]
 
@@ -802,7 +803,7 @@ void deserialize(xmlNode * node, std::string & rObject, const char * pszTag, boo
 
 
 
-xmlNode * skipWhitespace(xmlNode * node)
+inline xmlNode * skipWhitespace(xmlNode * node)
 {
   if (!node ||  node->type != XML_TEXT_NODE)
   {
@@ -825,7 +826,7 @@ xmlNode * skipWhitespace(xmlNode * node)
 
 
 
-bool isElement(xmlNode * &node, const char * name)
+inline bool isElement(xmlNode * &node, const char * name)
 {
   bool retval =
     node &&
@@ -834,6 +835,7 @@ bool isElement(xmlNode * &node, const char * name)
 
   if (retval)
   {
+    std::cerr << "isElement: " << name << (retval? " == " : " != ") << node->name << std::endl;
     node = skipWhitespace(node->children);
   }
 
@@ -846,6 +848,8 @@ bool isElement(xmlNode * &node, const char * name)
 template <class _T>
 void deserialize(xmlNode * node, _T & rObject, const char * pszTag, bool fRoot = true)
 {
+  std::cerr << "deserialize: " << node->name << " (" << pszTag << ")" << std::endl;
+
   if (fRoot)
   {
     if (!isElement(node, pszTag))
@@ -873,7 +877,7 @@ void deserialize(
       return;
   }
 
-  while (node)
+  for (; node; node = skipWhitespace(node->next))
   {
     xmlNode * elem = node;
     if (isElement(elem, pszTagItem))
@@ -883,8 +887,7 @@ void deserialize(
       rObject.insert(_k);
       continue;
     }
-    node = node->next;
-  } // while (node)
+  } // for
 }
 
 
@@ -900,7 +903,7 @@ void deserialize(
       return;
   }
 
-  while (node)
+  for (; node; node = skipWhitespace(node->next))
   {
     xmlNode * elem = node;
     if (isElement(elem, pszTagItem))
@@ -910,8 +913,7 @@ void deserialize(
       rObject.push_back(_t);
       continue;
     }
-    node = node->next;
-  } // while (node)
+  } // for
 }
 
 
@@ -928,7 +930,7 @@ void deserialize(
       return;
   }
 
-  while (node)
+  for (; node; node = skipWhitespace(node->next))
   {
     xmlNode * elem = node;
     if (isElement(elem, pszTagItem))
@@ -948,8 +950,7 @@ void deserialize(
 #endif
       continue;
     }
-    node = node->next;
-  } // while (node)
+  } // for
 }
 
 
@@ -966,7 +967,7 @@ void deserialize(
       return;
   }
 
-  while (node)
+  for (; node; node = skipWhitespace(node->next))
   {
     xmlNode * elem = node;
     if (isElement(elem, pszTagItem))
@@ -988,8 +989,7 @@ void deserialize(
 #endif
       continue;
     }
-    node = node->next;
-  } // while (node)
+  } // for
 }
 
 
@@ -1006,7 +1006,7 @@ void deserialize(
       return;
   }
 
-  while (node)
+  for (; node; node = skipWhitespace(node->next))
   {
     xmlNode * elem = node;
     if (isElement(elem, pszTagItem))
@@ -1017,8 +1017,7 @@ void deserialize(
       rObject.insert(std::pair<std::string, _T>(strKey, _t));
       continue;
     }
-    node = node->next;
-  } // while (node)
+  } // for
 }
 
 
@@ -1035,7 +1034,7 @@ void deserialize(
       return;
   }
 
-  while (node)
+  for (; node; node = skipWhitespace(node->next))
   {
     xmlNode * elem = node;
     if (isElement(elem, pszTagItem))
@@ -1048,8 +1047,29 @@ void deserialize(
       rObject.insert(std::pair<_K, _T>(_k, _t));
       continue;
     }
-    node = node->next;
-  } // while (node)
+  } // for
+}
+
+
+
+template <class T>
+bool LoadLibxml2(const char * filename, const char * roottag, T & t)
+{
+  LIBXML_TEST_VERSION
+
+  xmlDoc  * doc = xmlReadFile(filename, NULL, 0);
+  if (doc == NULL)
+  {
+    std::cerr << "error: could not parse file: " << filename << std::endl;
+      return false;
+  }
+
+  deserialize(xmlDocGetRootElement(doc), t, roottag, true, 0, 0);
+
+  xmlFreeDoc(doc);
+  xmlCleanupParser();
+
+  return true;
 }
 
 
@@ -1083,6 +1103,9 @@ void deserialize(
 void deserialize(xmlNode * node, $(name) & rObject, const char * pszTag, bool fRoot,
   const char * pszIdTag, std::string * pstrIdValue)
 {
+  std::cerr << "strict prolog $(name): " << (pszIdTag? pszIdTag : "<null>") << ", "
+    << pstrIdValue << std::endl;
+
   if (!pszTag)
     pszTag="$(alias)";
   if (fRoot)
@@ -1091,12 +1114,12 @@ void deserialize(xmlNode * node, $(name) & rObject, const char * pszTag, bool fR
       return;
   }
 
-  while (node)
+  for (; node; node = skipWhitespace(node->next))
   {
     xmlNode * elem = node;
     if (pszIdTag && pstrIdValue && isElement(elem, pszIdTag))
     {
-      deserialize(node, *pstrIdValue, pszIdTag, false);
+      deserialize(elem, *pstrIdValue, pszIdTag, false);
       continue;
     }
 ********** [END]
@@ -1105,7 +1128,7 @@ void deserialize(xmlNode * node, $(name) & rObject, const char * pszTag, bool fR
 ********** [DI] GENERIC DECL
     if (isElement(elem, "$(alias)"))
     {
-      deserialize(node, rObject.$(name), "$(alias)", false);
+      deserialize(elem, rObject.$(name), "$(alias)", false);
       continue;
     }
 ********** [END]
@@ -1115,7 +1138,7 @@ void deserialize(xmlNode * node, $(name) & rObject, const char * pszTag, bool fR
 /* TODO
     if (isElement(elem, "$(alias)"))
     {
-      deserialize(node, rObject.%s, "%s", false);\n", mstrName.c_str(), mstrAlias.c_str());
+      deserialize(elem, rObject.%s, "%s", false);\n", mstrName.c_str(), mstrAlias.c_str());
       continue;
     }
 */
@@ -1125,7 +1148,7 @@ void deserialize(xmlNode * node, $(name) & rObject, const char * pszTag, bool fR
 ********** [DI] SET/LIST DECL
     if (isElement(elem, "$(alias)"))
     {
-      deserialize(node, rObject.$(name), "$(alias)", "$(item)", false);
+      deserialize(elem, rObject.$(name), "$(alias)", "$(item)", false);
       continue;
     }
 ********** [END]
@@ -1134,7 +1157,7 @@ void deserialize(xmlNode * node, $(name) & rObject, const char * pszTag, bool fR
 ********** [DI] MAP DECL
     if (isElement(elem, "$(alias)"))
     {
-      deserialize(node, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
+      deserialize(elem, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
       continue;
     }
 ********** [END]
@@ -1142,8 +1165,7 @@ void deserialize(xmlNode * node, $(name) & rObject, const char * pszTag, bool fR
 
 ********** [DI] STRUCT EPILOG
     /* end of struct deserialize function */
-    node = node->next;
-  } // while (node)
+  } // for
 }
 ********** [END]
 
@@ -1164,8 +1186,16 @@ void deserialize(xmlNode * node, std::string & rObject, const char * pszTag, boo
       return;
   }
 
-
-  rObject = reinterpret_cast<char*>(node->content);
+  if (node && node->content)
+  {
+    rObject = reinterpret_cast<char*>(node->content);
+    std::cerr << "content:" << node->content << std::endl;
+  }
+  else
+  {
+    rObject.clear();
+    std::cerr << "no content:" << std::endl;
+  }
 
   // return node->next == 0;
 }

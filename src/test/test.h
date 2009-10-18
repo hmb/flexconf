@@ -32,6 +32,7 @@
 #include <set>
 #include <list>
 #include <map>
+#include <iostream>
 
 
 /* flexconf skip begin */
@@ -39,8 +40,12 @@
 class CWriteXml;
 class CReadXml;
 
+struct _xmlNode;
+typedef struct _xmlNode xmlNode;
+
 
 using namespace std;
+
 
 // this is some hidden section
 /////////////////////////////////////
@@ -75,9 +80,11 @@ struct SData
 //<!--
 class CData : private SData
 {
-friend void serialize(CWriteXml & rWriteXml, const CData & rObject, const char * pszTag = 0, bool fRoot = true,
+friend void serialize(CWriteXml & writer, const CData & rObject, const char * pszTag = 0, bool fRoot = true,
   const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
-friend void deserialize(CReadXml & rReadXml, CData & rObject, const char * pszTag =0, bool fRoot = true,
+friend void deserialize(CReadXml & reader, CData & rObject, const char * pszTag =0, bool fRoot = true,
+  const char * pszIdTag = 0, std::string * pstrIdValue = 0);
+friend void deserialize(xmlNode * reader, CData & rObject, const char * pszTag =0, bool fRoot = true,
   const char * pszIdTag = 0, std::string * pstrIdValue = 0);
 };
 //-->
@@ -102,8 +109,7 @@ struct STestBase
   SData             datData;
   SData             datData2;     // flexconf alias Data
   SData             vecData[4];   // flexconf alias sepp item DataElement
-  //CData             datDataDerived;
-  SData             datDataDerived;
+  CData             datDataDerived;
 
   // illeagal: maps with plain types as value are not allowed
   // std::map<std::string, int>    mapTesting;
@@ -214,7 +220,7 @@ struct STestIgnored
 
 bool operator == (const SData & testOne, const SData & testTwo);
 bool operator == (const STest & testOne, const STest & testTwo);
-void winloose(bool fWin);
+void winloose(bool fWin, std::ostream & out = std::cerr);
 void initTest(STest & test);
 
 /* flexconf skip end */

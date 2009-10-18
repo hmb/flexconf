@@ -30,18 +30,10 @@
 
 
 
-void serialize(CWriteXml & rWriteXml, const CData & rObject, const char * pszTag, bool fRoot,
-  const char * pszIdTag, const std::string * pstrIdValue)
-{
-  serialize(rWriteXml, static_cast<const SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
-}
-
-
-
-void deserialize(CReadXml & rReadXml, CData & rObject, const char * pszTag, bool fRoot,
+void deserialize(CReadXml & reader, CData & rObject, const char * pszTag, bool fRoot,
   const char * pszIdTag, std::string * pstrIdValue)
 {
-  deserialize(rReadXml, static_cast<SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
+  deserialize(reader, static_cast<SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
 }
 
 
