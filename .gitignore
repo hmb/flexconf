@@ -18,6 +18,11 @@ config.h.in
 config.log
 config.status
 configure
+build-stamp
+configure-stamp
+debian/files
+debian/flexconf.substvars
+debian/flexconf/
 src/flexconf
 src/genxml/testread
 src/test/*Com.h
