@@ -69,7 +69,7 @@
 
 IDENT         [_A-Za-z][_A-Za-z0-9]*
 NUM           [0-9]+
-STRUCTXML     "//"[ \t]*"flexconf"[ \t]+
+STRUCTXML     "//"[ \t]*(("flexconf")|("xmlconf"))[ \t]+
 NSSEP         ::
 NCONST        [0-9]+
 DCONST        [0-9]?\.[0-9]+
@@ -213,7 +213,7 @@ class {
 
 
 
-("/* flexconf skip begin */")|("// flexconf skip begin")|("//<!--") {
+("/* flexconf skip begin */")|("// flexconf skip begin")|("/* xmlconf skip begin */")|("// xmlconf skip begin")|("//<!--") {
     /* start skipped section */
     ECHOOUT(beginskip);
     BEGIN(SC_SKIP);
@@ -230,7 +230,7 @@ class {
 }
 
 
-<SC_SKIP>("/"+"* flexconf skip end */")|("// flexconf skip end")|("//-->") {
+<SC_SKIP>("/"+"* flexconf skip end */")|("// flexconf skip end")|("/"+"* xmlconf skip end */")|("// xmlconf skip end")|("//-->") {
     /* end skipped section */
     ECHOOUT(endskip);
     BEGIN(INITIAL);

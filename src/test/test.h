@@ -67,7 +67,7 @@ typedef unsigned long SHexNum;
 // flexconf alias data
 struct SData
 {
-  int             nInt;       // flexconf alias int
+  int             nInt;       // xmlconf alias int
   double          dblDouble;  // flexconf alias double
   std::string     strString;  // flexconf alias string
 //  int           & rnInt;      // flexconf alias ref_int
