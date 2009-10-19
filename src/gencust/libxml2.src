@@ -1049,14 +1049,43 @@ void deserialize(
 
 
 
+struct SLibxml2Error
+{
+  SLibxml2Error();
+
+  std::string   mMessage;
+  int           mLine;
+  int           mColumn;
+  std::string   mExtra1;
+  std::string   mExtra2;
+  std::string   mExtra3;
+  int           mExtra4;
+};
+
+void xmlGenericErrorFunc_NOOP(void * ctx, const char * msg, ...);
+
 template <class T>
-bool LoadLibxml2(const char * filename, const char * roottag, T & t)
+bool Libxml2Load(const char * filename, T & t, const char * roottag = 0, SLibxml2Error * perror = 0)
 {
   LIBXML_TEST_VERSION
+
+  xmlSetGenericErrorFunc(0, &xmlGenericErrorFunc_NOOP);
 
   xmlDoc  * doc = xmlReadFile(filename, NULL, 0);
   if (doc == NULL)
   {
+    if (perror)
+    {
+      xmlErrorPtr xerr  = xmlGetLastError();
+      perror->mMessage  = xerr->message? xerr->message : "";
+      perror->mLine     = xerr->line;
+      perror->mColumn   = xerr->int2;
+      perror->mExtra1   = xerr->str1? xerr->str1 : "";
+      perror->mExtra2   = xerr->str2? xerr->str2 : "";
+      perror->mExtra3   = xerr->str3? xerr->str3 : "";
+      perror->mExtra4   = xerr->int1;
+    }
+
     return false;
   }
 
@@ -1067,8 +1096,6 @@ bool LoadLibxml2(const char * filename, const char * roottag, T & t)
 
   return true;
 }
-
-
 #endif // _$(basename)Des_h_
 ********** [END]
 
@@ -1193,4 +1220,17 @@ void deserialize(xmlNode * node, std::string & rObject, const char * pszTag, boo
 
 
 
+void xmlGenericErrorFunc_NOOP(void * ctx, const char * msg, ...)
+{
+}
+
+
+
+SLibxml2Error::SLibxml2Error()
+  :
+  mLine(0),
+  mColumn(0),
+  mExtra4(0)
+{
+}
 ********** [END]

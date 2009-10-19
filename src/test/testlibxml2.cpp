@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
     STest sTest;
 
-    if (LoadLibxml2(argv[nArg], "TEST", sTest))
+    if (Libxml2Load(argv[nArg], sTest, "TEST"))
     {
       std::cerr << "+----------------------------------------------------------------+" << std::endl;
       std::cerr << "| compare both objects                                           |" << std::endl;
