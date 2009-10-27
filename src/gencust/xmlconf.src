@@ -74,6 +74,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef _$(basename)Com_h_
 #define _$(basename)Com_h_
 
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_DEPRECATE
+#endif
+
 #include <string>
 #include <list>
 #include <set>
@@ -998,22 +1002,22 @@ inline void deserialize(const char * pBuffer, bool & rObject)
 
 inline void deserialize(const char * pBuffer, short & rObject)
 {
-  rObject = strtol(pBuffer, 0, 10);
+  rObject = static_cast<short>(strtol(pBuffer, 0, 10));
 }
 
 inline void deserialize(const char * pBuffer, unsigned short & rObject)
 {
-  rObject = strtoul(pBuffer, 0, 10);
+  rObject = static_cast<unsigned short>(strtoul(pBuffer, 0, 10));
 }
 
 inline void deserialize(const char * pBuffer, int & rObject)
 {
-  rObject = strtol(pBuffer, 0, 10);
+  rObject = static_cast<int>(strtol(pBuffer, 0, 10));
 }
 
 inline void deserialize(const char * pBuffer, unsigned int & rObject)
 {
-  rObject = strtoul(pBuffer, 0, 10);
+  rObject = static_cast<unsigned int>(strtoul(pBuffer, 0, 10));
 }
 
 inline void deserialize(const char * pBuffer, long & rObject)
@@ -1028,7 +1032,7 @@ inline void deserialize(const char * pBuffer, unsigned long & rObject)
 
 inline void deserialize(const char * pBuffer, float & rObject)
 {
-  rObject = atof(pBuffer);
+  rObject = static_cast<float>(atof(pBuffer));
 }
 
 inline void deserialize(const char * pBuffer, double & rObject)
