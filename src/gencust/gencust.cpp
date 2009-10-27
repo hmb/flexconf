@@ -20,6 +20,7 @@
 
 #include "gencust.h"
 #include "../misc.h"
+#include <algorithm>
 
 #define PRINTF  printf
 
@@ -139,7 +140,7 @@ static inline int isnonalpha(int c)
 
 static void mkvarname(std::string & varname)
 {
-  replace_if(varname.begin(), varname.end(), &isnonalpha, '_');
+  std::replace_if(varname.begin(), varname.end(), &isnonalpha, '_');
 }
 
 static void writeStringSource(char const * separator, std::string const & string,
