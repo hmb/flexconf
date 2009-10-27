@@ -18,14 +18,15 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="out\bin\dbg"
+			IntermediateDirectory="out\tmp\dbg"
 			ConfigurationType="1"
 			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="&quot;$(OutDir)\flexconf&quot; test.h"
+				Description=""
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -90,15 +91,15 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="out\bin\rel"
+			IntermediateDirectory="out\tmp\rel"
 			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="&quot;$(OutDir)\flexconf&quot; test.h"
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -168,23 +169,61 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\struct.h"
-			>
-		</File>
-		<File
-			RelativePath=".\structDes.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\structSer.cpp"
-			>
-		</File>
-		<File
 			RelativePath=".\test.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\test.h"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="creating flexconf files..."
+					CommandLine="&quot;$(SolutionDir)out\bin\dbg\flexconf&quot; -c &quot;$(SolutionDir)src\gencust\xmlconf.src&quot; -b xmlconf $(InputFileName)"
+					AdditionalDependencies=""
+					Outputs="$(InputDir)xmlconfCom.h;$(InputDir)xmlconfCom.cpp;$(InputDir)xmlconfSer.h;$(InputDir)xmlconfSer.cpp;$(InputDir)xmlconfDes.h;$(InputDir)xmlconfDes.cpp"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="creating flexconf files..."
+					CommandLine="&quot;$(SolutionDir)out\bin\rel\flexconf&quot; -c &quot;$(SolutionDir)src\gencust\xmlconf.src&quot; -b xmlconf $(InputFileName)"
+					AdditionalDependencies="&quot;$(SolutionDir)src\gencust\xmlconf.src&quot;"
+					Outputs="$(InputDir)xmlconfCom.h;$(InputDir)xmlconfCom.cpp;$(InputDir)xmlconfSer.h;$(InputDir)xmlconfSer.cpp;$(InputDir)xmlconfDes.h;$(InputDir)xmlconfDes.cpp"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\testxmlconf.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\xmlconfCom.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\xmlconfCom.h"
+			>
+		</File>
+		<File
+			RelativePath=".\xmlconfDes.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\xmlconfDes.h"
+			>
+		</File>
+		<File
+			RelativePath=".\xmlconfSer.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\xmlconfSer.h"
 			>
 		</File>
 	</Files>
