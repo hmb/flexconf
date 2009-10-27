@@ -1,11 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C++ Express 2008
+# Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flexconf", "flexconf.vcproj", "{16605B70-2DF9-4E6A-AB9B-E36590F0629B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "src\test\test.vcproj", "{DD1DE3A5-E4D7-48C7-B4FB-A22331253A48}"
 	ProjectSection(ProjectDependencies) = postProject
 		{16605B70-2DF9-4E6A-AB9B-E36590F0629B} = {16605B70-2DF9-4E6A-AB9B-E36590F0629B}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{130E1017-A970-45FA-BA73-CB96DBE66BA7}"
+	ProjectSection(SolutionItems) = preProject
+		script\strcode.pl = script\strcode.pl
 	EndProjectSection
 EndProject
 Global

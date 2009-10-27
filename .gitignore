@@ -1,3 +1,7 @@
+*.user
+*.ncb
+*.suo
+out
 flexconf.kdevelop.pcs
 flexconf.kdevses
 Makefile
