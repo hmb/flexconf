@@ -388,6 +388,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\gencust\winreg.src"
+				>
+			</File>
+			<File
 				RelativePath=".\src\gencust\xmlconf.src"
 				>
 			</File>
