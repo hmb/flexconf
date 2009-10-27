@@ -1,0 +1,473 @@
+***************************************************************************
+flexconf - flexible configuration generator
+Copyright (c) 2008-2009 Holger Böhnke
+
+This file is part of flexconf.
+
+Flexconf is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+***************************************************************************
+
+
+
+********** [GL] PROLOG
+/*-------------------------------------------------------------------
+  This file is part of the structure de/serializer flexconf.
+  It has been automatically created by:
+
+  $(packagename)
+
+  !!! DO NOT MODIFY MANUALLY !!!
+
+  Bugreports to $(bugreport)
+  -------------------------------------------------------------------
+  flexconf - flexible configuration generator
+  Copyright (c) 2008-2009 Holger Böhnke
+
+  This file is part of flexconf.
+
+  Flexconf is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -------------------------------------------------------------------
+  As a special exception, you may create a larger work that contains
+  part or all of the de/serializer functions and distribute that work
+  under terms of your choice, as long as that work itself does not
+  provide a functionality similar to flexconf.
+  Alternatively, if you modify or redistribute this file itself,
+  you may (at your option) remove this special exception, which will
+  cause the file to be licensed under the GNU General Public
+  License without this special exception.
+*/
+
+********** [END]
+
+
+
+
+
+
+********** [CH] PROLOG
+// ------------------------------------------------------------------
+// This is the structure common header file.
+// ------------------------------------------------------------------
+
+#ifndef _$(basename)Com_h_
+#define _$(basename)Com_h_
+
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_DEPRECATE
+#endif
+
+#include <string>
+#include <list>
+#include <set>
+#include <map>
+#include <windows.h>
+#include <amalib/Registry.h>
+
+********** [END]
+
+
+********** [CH] FILE PROLOG
+#include "$(headerfile)"
+********** [END]
+
+
+********** [CH] STRUCT PROLOG
+********** [END]
+
+
+********** [CH] GENERIC DECL
+********** [END]
+
+
+********** [CH] VECTOR DECL
+********** [END]
+
+
+********** [CH] SET/LIST DECL
+********** [END]
+
+
+********** [CH] MAP DECL
+********** [END]
+
+
+********** [CH] STRUCT EPILOG
+********** [END]
+
+
+********** [CH] FILE EPILOG
+********** [END]
+
+
+********** [CH] EPILOG
+#endif // _$(basename)Com_h_
+********** [END]
+
+
+
+
+
+
+********** [CI] PROLOG
+// ------------------------------------------------------------------
+// This is the structure common implementation file.
+// ------------------------------------------------------------------
+
+#include "$(basename)Com.h"
+********** [END]
+
+
+********** [CI] FILE PROLOG
+********** [END]
+
+
+********** [CI] STRUCT PROLOG
+********** [END]
+
+
+********** [CI] GENERIC DECL
+********** [END]
+
+
+********** [CI] VECTOR DECL
+********** [END]
+
+
+********** [CI] SET/LIST DECL
+********** [END]
+
+
+********** [CI] MAP DECL
+********** [END]
+
+
+********** [CI] STRUCT EPILOG
+}
+********** [END]
+
+
+********** [CI] FILE EPILOG
+********** [END]
+
+
+********** [CI] EPILOG
+********** [END]
+
+
+
+
+
+
+********** [SH] PROLOG
+// ------------------------------------------------------------------
+// This is the structure serializer header file.
+// ------------------------------------------------------------------
+
+#ifndef _$(basename)Ser_h_
+#define _$(basename)Ser_h_
+
+********** [END]
+
+
+********** [SH] FILE PROLOG
+********** [END]
+
+
+********** [SH] STRUCT PROLOG
+void serialize(const amalib::CRegKey & rkeyParent, const $(name) & rObject, const char * pszKeyName = 0,
+  const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
+********** [END]
+
+
+********** [SH] GENERIC DECL
+********** [END]
+
+
+********** [SH] VECTOR DECL
+********** [END]
+
+
+********** [SH] SET/LIST DECL
+********** [END]
+
+
+********** [SH] MAP DECL
+********** [END]
+
+
+********** [SH] STRUCT EPILOG
+********** [END]
+
+
+********** [SH] FILE EPILOG
+********** [END]
+
+
+********** [SH] EPILOG
+
+
+template <class _T>
+void serialize(const amalib::CRegKey & rkeyStruct, const _T & rObject, const char * pszKeyName)
+{
+  rkeyStruct.SetValue(pszKeyName, rObject);
+}
+
+
+template <class _T>
+void serialize(const amalib::CRegKey & rkeyStruct, const _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)
+{
+  amalib::CRegKey keyArray;
+  keyArray.Create(rkeyStruct, pszKeyName);
+  for (int n=0; n<nCount; n++)
+  {
+    const int BUFSIZE   = 200;
+    char szBuffer[BUFSIZE];
+    snprintf(szBuffer, BUFSIZE, "%.150s%d", pszItemName, n);
+    serialize(keyArray, arObject[n], szBuffer);
+  } // for
+}
+
+
+#endif // _$(basename)Ser_h_
+********** [END]
+
+
+
+
+
+
+********** [SI] PROLOG
+// ------------------------------------------------------------------
+// This is the structure serializer implementation file.
+// ------------------------------------------------------------------
+
+#include "$(basename)Com.h"
+#include "$(basename)Ser.h"
+********** [END]
+
+
+********** [SI] FILE PROLOG
+********** [END]
+
+
+********** [SI] STRUCT PROLOG
+
+
+
+void serialize(const amalib::CRegKey & rkeyParent, const $(name) & rObject, const char * pszKeyName,
+  const char * pszIdTag, const std::string * pstrIdValue)
+{
+  if (!pszKeyName)
+    pszKeyName="$(alias)";
+  amalib::CRegKey keyStruct;
+  keyStruct.Create(rkeyParent, pszKeyName);
+  if (pszIdTag && pstrIdValue)
+  {
+    return; // :TODO: not yet implemented
+  //  serialize(rWriteXml, *pstrIdValue, pszIdTag);
+  }
+********** [END]
+
+
+********** [SI] GENERIC DECL
+  serialize(keyStruct, rObject.$(name), "$(alias)");
+********** [END]
+
+
+********** [SI] VECTOR DECL
+  serialize(keyStruct, rObject.$(name), $(size), "$(alias)", "$(item)");
+********** [END]
+
+
+********** [SI] SET/LIST DECL
+  // :TODO: serialize(keyStruct, rObject.$(name), "$(alias)", "$(item)");
+********** [END]
+
+
+********** [SI] MAP DECL
+  // :TODO: serialize(keyStruct, rObject.$(name), "$(alias)", "$(item)", "$(id)");
+********** [END]
+
+
+********** [SI] STRUCT EPILOG
+  }
+********** [END]
+
+
+********** [SI] FILE EPILOG
+********** [END]
+
+
+********** [SI] EPILOG
+********** [END]
+
+
+
+
+
+
+********** [DH] PROLOG
+// ------------------------------------------------------------------
+// This is the structure deserializer header file.
+// ------------------------------------------------------------------
+
+#ifndef _$(basename)Des_h_
+#define _$(basename)Des_h_
+
+********** [END]
+
+
+********** [DH] FILE PROLOG
+********** [END]
+
+
+********** [DH] STRUCT PROLOG
+void deserialize(const amalib::CRegKey & rkeyParent, $(name) & rObject, const char * pszKeyName = 0,
+  const char * pszIdTag = 0, std::string * pstrIdValue = 0);
+********** [END]
+
+
+********** [DH] GENERIC DECL
+********** [END]
+
+
+********** [DH] VECTOR DECL
+********** [END]
+
+
+********** [DH] SET/LIST DECL
+********** [END]
+
+
+********** [DH] MAP DECL
+********** [END]
+
+
+********** [DH] STRUCT EPILOG
+********** [END]
+
+
+********** [DH] FILE EPILOG
+********** [END]
+
+
+********** [DH] EPILOG
+
+
+
+template <class _T>
+void deserialize(const amalib::CRegKey & rkeyStruct, _T & rObject, const char * pszKeyName)
+{
+  rkeyStruct.QueryValue(pszKeyName, rObject);
+}
+
+
+template <class _T>
+void deserialize(const amalib::CRegKey & rkeyStruct, _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)
+{
+  amalib::CRegKey keyArray;
+  keyArray.Create(rkeyStruct, pszKeyName);
+  for (int n=0; n<nCount; n++)
+  {
+    const int BUFSIZE   = 200;
+    char szBuffer[BUFSIZE];
+    snprintf(szBuffer, BUFSIZE, \"%.150s%d\", pszItemName, n);
+    deserialize(keyArray, arObject[n], szBuffer);
+  } // for
+}
+
+
+#endif // _$(basename)Des_h_
+********** [END]
+
+
+
+
+
+
+********** [DI] PROLOG
+// ------------------------------------------------------------------
+// This is the structure deserializer implementation file.
+// ------------------------------------------------------------------
+
+#include "$(basename)Com.h"
+#include "$(basename)Des.h"
+********** [END]
+
+
+********** [DI] FILE PROLOG
+********** [END]
+
+
+********** [DI] STRUCT PROLOG
+
+
+
+void deserialize(const amalib::CRegKey & rkeyParent, $(name) & rObject, const char * pszKeyName,
+  const char * pszIdTag, std::string * pstrIdValue)
+{
+  if (!pszKeyName)
+    pszKeyName="$(alias)";
+  amalib::CRegKey keyStruct;
+  keyStruct.Open(rkeyParent, pszKeyName);
+  if (pszIdTag && pstrIdValue)
+  {
+    return; // :TODO: not yet implemented
+    //  deserialize(rReadXml, *pstrIdValue, pszIdTag);
+  }
+********** [END]
+
+
+********** [DI] GENERIC DECL
+  deserialize(keyStruct, rObject.$(name), "$(alias)");
+********** [END]
+
+
+********** [DI] VECTOR DECL
+  deserialize(keyStruct, rObject.$(name), $(size), "$(alias)", "$(item)");
+********** [END]
+
+
+********** [DI] SET/LIST DECL
+  // :TODO: deserialize(keyStruct, rObject.$(name), "$(alias)", "$(item)");
+********** [END]
+
+
+********** [DI] MAP DECL
+  // :TODO: deserialize(keyStruct, rObject.$(name), "$(alias)", "$(item)", "$(id)");
+********** [END]
+
+
+********** [DI] STRUCT EPILOG
+}
+********** [END]
+
+
+********** [DI] FILE EPILOG
+********** [END]
+
+
+********** [DI] EPILOG
+********** [END]
