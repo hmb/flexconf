@@ -76,6 +76,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_DEPRECATE
+#define snprintf _snprintf
+#pragma warning(disable: 4786)
 #endif
 
 #include <string>
@@ -122,6 +124,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 ********** [CH] EPILOG
+
+
 #endif // _$(basename)Com_h_
 ********** [END]
 
@@ -164,7 +168,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 ********** [CI] STRUCT EPILOG
-}
 ********** [END]
 
 
@@ -187,6 +190,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef _$(basename)Ser_h_
 #define _$(basename)Ser_h_
+
+
+
+template <class _T>
+void serialize(const amalib::CRegKey & rkeyStruct, const _T & rObject, const char * pszKeyName)
+{
+  rkeyStruct.SetValue(pszKeyName, rObject);
+}
+
+
+
+template <class _T>
+void serialize(const amalib::CRegKey & rkeyStruct, const _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)
+{
+  amalib::CRegKey keyArray;
+  keyArray.Create(rkeyStruct, pszKeyName);
+  for (int n=0; n<nCount; n++)
+  {
+    const int BUFSIZE   = 200;
+    char szBuffer[BUFSIZE];
+    snprintf(szBuffer, BUFSIZE, "%.150s%d", pszItemName, n);
+    serialize(keyArray, arObject[n], szBuffer);
+  } // for
+}
+
+
 
 ********** [END]
 
@@ -226,28 +255,6 @@ void serialize(const amalib::CRegKey & rkeyParent, const $(name) & rObject, cons
 
 
 ********** [SH] EPILOG
-
-
-template <class _T>
-void serialize(const amalib::CRegKey & rkeyStruct, const _T & rObject, const char * pszKeyName)
-{
-  rkeyStruct.SetValue(pszKeyName, rObject);
-}
-
-
-template <class _T>
-void serialize(const amalib::CRegKey & rkeyStruct, const _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)
-{
-  amalib::CRegKey keyArray;
-  keyArray.Create(rkeyStruct, pszKeyName);
-  for (int n=0; n<nCount; n++)
-  {
-    const int BUFSIZE   = 200;
-    char szBuffer[BUFSIZE];
-    snprintf(szBuffer, BUFSIZE, "%.150s%d", pszItemName, n);
-    serialize(keyArray, arObject[n], szBuffer);
-  } // for
-}
 
 
 #endif // _$(basename)Ser_h_
@@ -312,7 +319,7 @@ void serialize(const amalib::CRegKey & rkeyParent, const $(name) & rObject, cons
 
 
 ********** [SI] STRUCT EPILOG
-  }
+}
 ********** [END]
 
 
@@ -335,6 +342,32 @@ void serialize(const amalib::CRegKey & rkeyParent, const $(name) & rObject, cons
 
 #ifndef _$(basename)Des_h_
 #define _$(basename)Des_h_
+
+
+
+template <class _T>
+void deserialize(const amalib::CRegKey & rkeyStruct, _T & rObject, const char * pszKeyName)
+{
+  rkeyStruct.QueryValue(pszKeyName, rObject);
+}
+
+
+
+template <class _T>
+void deserialize(const amalib::CRegKey & rkeyStruct, _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)
+{
+  amalib::CRegKey keyArray;
+  keyArray.Create(rkeyStruct, pszKeyName);
+  for (int n=0; n<nCount; n++)
+  {
+    const int BUFSIZE   = 200;
+    char szBuffer[BUFSIZE];
+    snprintf(szBuffer, BUFSIZE, "%.150s%d", pszItemName, n);
+    deserialize(keyArray, arObject[n], szBuffer);
+  } // for
+}
+
+
 
 ********** [END]
 
@@ -374,29 +407,6 @@ void deserialize(const amalib::CRegKey & rkeyParent, $(name) & rObject, const ch
 
 
 ********** [DH] EPILOG
-
-
-
-template <class _T>
-void deserialize(const amalib::CRegKey & rkeyStruct, _T & rObject, const char * pszKeyName)
-{
-  rkeyStruct.QueryValue(pszKeyName, rObject);
-}
-
-
-template <class _T>
-void deserialize(const amalib::CRegKey & rkeyStruct, _T arObject[], int nCount, const char * pszKeyName, const char * pszItemName)
-{
-  amalib::CRegKey keyArray;
-  keyArray.Create(rkeyStruct, pszKeyName);
-  for (int n=0; n<nCount; n++)
-  {
-    const int BUFSIZE   = 200;
-    char szBuffer[BUFSIZE];
-    snprintf(szBuffer, BUFSIZE, \"%.150s%d\", pszItemName, n);
-    deserialize(keyArray, arObject[n], szBuffer);
-  } // for
-}
 
 
 #endif // _$(basename)Des_h_
