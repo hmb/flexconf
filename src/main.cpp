@@ -21,7 +21,6 @@
 #include "config.h"
 #include "grammar.h"
 #include "genxml/genxml.h"
-#include "genreg/genreg.h"
 #include "gencust/gencust.h"
 #include <iostream>
 
@@ -132,6 +131,9 @@ static bool getoptions(int argc, const char * argv[], SOptions & options, std::l
 
     case 'r':
       options.mGenType = eGenTypRegistry;
+      std::cout << "ERR: internal registry generation currently disabled. "
+        "Use the custom generator with 'winreg.src'" << std::endl;
+      return false;
       break;
 
     case 'x':
@@ -217,10 +219,12 @@ int main(int argc, const char * argv[])
     }
     break;
 
+/*
   case eGenTypRegistry:
     std::cout << "using registry generator" << std::endl;
     auto_ptr_assign(pGenerator, CGenerator, new CGeneratorReg);
     break;
+*/
 
   case eGenTypXmlconf:
     {
