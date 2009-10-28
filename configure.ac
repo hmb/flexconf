@@ -189,7 +189,6 @@ AC_CONFIG_FILES([
   Makefile \
   src/Makefile \
   src/gencust/Makefile \
-  src/genreg/Makefile \
   src/genxml/Makefile \
   src/test/Makefile \
   ])
