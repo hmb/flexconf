@@ -26,6 +26,7 @@ build-stamp
 configure-stamp
 debian/files
 debian/flexconf.substvars
+debian/flexconf.debhelper.log
 debian/flexconf/
 src/flexconf
 src/genxml/testread
