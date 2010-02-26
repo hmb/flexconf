@@ -44,7 +44,7 @@ static const char szXml[] =
 
 
 
-int main(int argc, const char * argv)
+int main(int argc, const char * argv[])
 {
   CReadXmlPChar xmlReader(szXml);
 

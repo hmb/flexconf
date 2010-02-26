@@ -23,6 +23,7 @@
 #include "genxml/genxml.h"
 #include "gencust/gencust.h"
 #include <iostream>
+#include <memory>
 
 #if defined(_MSC_VER) && _MSC_VER <= 1200
   #define auto_ptr_assign(_ptr, _class, _value) _ptr = std::auto_ptr<_class>(_value)

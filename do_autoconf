@@ -31,6 +31,12 @@ case "$DEBVER" in
     ./configure $@
     ;;
 
+  5.0.*)
+    echo "(lenny)"
+    ./Makefile.dist sarge
+    ./configure $@
+    ;;
+
   4.0)
     echo "(etch)"
     ./Makefile.dist sarge

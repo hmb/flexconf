@@ -699,6 +699,9 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
 #ifndef _$(basename)Des_h_
 #define _$(basename)Des_h_
 
+#include <string.h>
+#include <stdlib.h>
+
 ********** [END]
 
 

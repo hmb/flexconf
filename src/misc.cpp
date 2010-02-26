@@ -20,6 +20,7 @@
 
 #include "misc.h"
 #include "config.h"
+#include <string.h>
 
 
 

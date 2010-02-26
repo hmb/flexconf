@@ -21,6 +21,7 @@
 #include "gencust.h"
 #include "../misc.h"
 #include <algorithm>
+#include <string.h>
 
 #define PRINTF  printf
 

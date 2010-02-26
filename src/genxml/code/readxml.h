@@ -19,6 +19,10 @@
 //
 //
 //#line 2 "../readxml.h"
+#include <string.h>
+
+
+
 class CReadXml
 {
 public:

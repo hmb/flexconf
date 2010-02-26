@@ -700,6 +700,7 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <iostream>
+#include <string.h>
 
 ********** [END]
 
