@@ -17,7 +17,7 @@ chmod u+x Makefile.dist
 
 case "$DEBVER" in
   0)
-    echo Solaris
+    echo "Solaris"
     aclocal
     autoconf
     autoheader
@@ -25,40 +25,16 @@ case "$DEBVER" in
     ./configure $@
     ;;
 
-  -1)
-    echo SuSE
-    ./Makefile.dist all
-    ./configure $@
-    ;;
-
-  5.0.*)
-    echo "(lenny)"
-    ./Makefile.dist sarge
-    ./configure $@
-    ;;
-
-  4.0)
-    echo "(etch)"
-    ./Makefile.dist sarge
-    ./configure $@
-    ;;
-
-  3.1)
-    echo "(sarge)"
-    ./Makefile.dist sarge
-    ./configure $@
-    ;;
-
-  3.0)
-    echo "(woody)"
-    ./Makefile.dist all
-    ./configure --with-stlport $@
-    ;;
-
   *)
-    echo ERROR: could not determine debian distribution
-    exit 1
+    echo "SuSE"
+    ./Makefile.dist all
+    ./configure $@
     ;;
+
+#  *)
+#    echo "ERROR: could not find target for distribution"
+#    exit 1
+#    ;;
 esac
 
 exit 0
