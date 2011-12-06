@@ -204,7 +204,7 @@ typedef struct _xmlNode xmlNode;
 #ifndef _$(basename)Ser_h_
 #define _$(basename)Ser_h_
 
-//#include <stdio.h>
+#include <stdio.h>
 
 #ifdef _MSC_VER
 #define snprintf _snprintf

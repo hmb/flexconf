@@ -206,7 +206,7 @@ class CReadXml;
 #ifndef _$(basename)Ser_h_
 #define _$(basename)Ser_h_
 
-//#include <stdio.h>
+#include <stdio.h>
 
 #ifdef _MSC_VER
 #define snprintf _snprintf
@@ -699,6 +699,7 @@ void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * 
 #ifndef _$(basename)Des_h_
 #define _$(basename)Des_h_
 
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 

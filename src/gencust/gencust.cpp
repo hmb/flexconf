@@ -20,6 +20,7 @@
 
 #include "gencust.h"
 #include "../misc.h"
+#include <stdio.h>
 #include <algorithm>
 #include <string.h>
 
