@@ -101,8 +101,8 @@ struct SLongHex
   operator unsigned long () const { return mulHex; }
 };
 
-class CWriteXml;
-class CReadXml;
+class CWriteJson;
+class CReadJson;
 
 ********** [END]
 
@@ -221,7 +221,7 @@ class CReadXml;
 
 
 ********** [SH] STRUCT PROLOG
-void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszTag = 0, bool fRoot = true,
+void serialize(CWriteJson & rWriteJson, const $(name) & rObject, const char * pszTag = 0, bool fRoot = true,
   const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
 ********** [END]
 
@@ -256,14 +256,14 @@ void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszT
 
 const int IDENT_WIDTH = 2;
 
-class CWriteXml
+class CWriteJson
 {
 public:
-  CWriteXml()
+  CWriteJson()
   {
   }
 
-  virtual ~CWriteXml()
+  virtual ~CWriteJson()
   {
   }
 
@@ -290,10 +290,10 @@ private:
 
 
 
-class CWriteXmlString : public CWriteXml
+class CWriteJsonString : public CWriteJson
 {
 public:
-  CWriteXmlString(std::string & strWrite) :
+  CWriteJsonString(std::string & strWrite) :
     mstrWrite(strWrite),
     mnDepth(0),
     mfStartTag(false),
@@ -468,17 +468,17 @@ inline void serialize(char * pBuffer, int nBufSize, const SLongHex & rObject)
 
 
 // serialize a std::string object
-void serialize(CWriteXml & rWriteXml, const std::string &     rObject, const char * pszTag, bool fRoot = true);
+void serialize(CWriteJson & rWriteJson, const std::string &     rObject, const char * pszTag, bool fRoot = true);
 
 // serialize any of the objects for that an above function is defined
 template <class _T>
-void serialize(CWriteXml & rWriteXml, const _T & rObject, const char * pszTag, bool fRoot = true)
+void serialize(CWriteJson & rWriteJson, const _T & rObject, const char * pszTag, bool fRoot = true)
 {
-  rWriteXml.StartTag(pszTag, fRoot);
+  rWriteJson.StartTag(pszTag, fRoot);
   char szBuffer[80];
   serialize(szBuffer, 80, rObject);
-  rWriteXml.PutData(szBuffer);
-  rWriteXml.EndTag(pszTag);
+  rWriteJson.PutData(szBuffer);
+  rWriteJson.EndTag(pszTag);
 }
 
 
@@ -486,16 +486,16 @@ void serialize(CWriteXml & rWriteXml, const _T & rObject, const char * pszTag, b
 // serialize any set object for witch a key serialize function exists
 template <class _K>
 void serialize(
-  CWriteXml & rWriteXml, const std::set<_K> & rObject,
+  CWriteJson & rWriteJson, const std::set<_K> & rObject,
   const char * pszTag, const char * pszTagItem, bool fRoot = true)
 {
-  rWriteXml.StartTag(pszTag, fRoot);
+  rWriteJson.StartTag(pszTag, fRoot);
   for (typename std::set<_K>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
   {
     // serialize the key object
-    serialize(rWriteXml, *itr, pszTagItem, false);
+    serialize(rWriteJson, *itr, pszTagItem, false);
   }
-  rWriteXml.EndTag(pszTag);
+  rWriteJson.EndTag(pszTag);
 }
 
 
@@ -503,16 +503,16 @@ void serialize(
 // serialize any list object for witch a serialize function exists
 template <class _T>
 void serialize(
-  CWriteXml & rWriteXml, const std::list<_T> & rObject,
+  CWriteJson & rWriteJson, const std::list<_T> & rObject,
   const char * pszTag, const char * pszTagItem, bool fRoot = true)
 {
-  rWriteXml.StartTag(pszTag, fRoot);
+  rWriteJson.StartTag(pszTag, fRoot);
   for (typename std::list<_T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
   {
     // serialize the key object
-    serialize(rWriteXml, *itr, pszTagItem, false);
+    serialize(rWriteJson, *itr, pszTagItem, false);
   }
-  rWriteXml.EndTag(pszTag);
+  rWriteJson.EndTag(pszTag);
 }
 
 
@@ -520,16 +520,16 @@ void serialize(
 // serialize a std::map<std::string, _T> object
 template <class _T>
 void serialize(
-  CWriteXml & rWriteXml, const std::map<std::string, _T> & rObject,
+  CWriteJson & rWriteJson, const std::map<std::string, _T> & rObject,
   const char * pszTag, const char * pszTagItem, const char * pszTagId,
   bool fRoot = true)
 {
-  rWriteXml.StartTag(pszTag, fRoot);
+  rWriteJson.StartTag(pszTag, fRoot);
   for (typename std::map<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
   {
-    serialize(rWriteXml, itr->second, pszTagItem, false, pszTagId, &itr->first);
+    serialize(rWriteJson, itr->second, pszTagItem, false, pszTagId, &itr->first);
   }
-  rWriteXml.EndTag(pszTag);
+  rWriteJson.EndTag(pszTag);
 }
 
 
@@ -537,11 +537,11 @@ void serialize(
 // serialize any other map object for witch a key serialize function exists
 template <class _K, class _T>
 void serialize(
-  CWriteXml & rWriteXml, const std::map<_K, _T> & rObject,
+  CWriteJson & rWriteJson, const std::map<_K, _T> & rObject,
   const char * pszTag, const char * pszTagItem, const char * pszTagId,
   bool fRoot = true)
 {
-  rWriteXml.StartTag(pszTag, fRoot);
+  rWriteJson.StartTag(pszTag, fRoot);
   for (typename std::map<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
   {
     // first serialize the key to a string
@@ -550,9 +550,9 @@ void serialize(
     serialize(szBuffer, BUFSIZE, itr->first);
     std::string strBuffer(szBuffer);
     // serialize the object with a string key
-    serialize(rWriteXml, itr->second, pszTagItem, false, pszTagId, &strBuffer);
+    serialize(rWriteJson, itr->second, pszTagItem, false, pszTagId, &strBuffer);
   }
-  rWriteXml.EndTag(pszTag);
+  rWriteJson.EndTag(pszTag);
 }
 
 
@@ -560,16 +560,16 @@ void serialize(
 // serialize a std::multimap<std::string, _T> object
 template <class _T>
 void serialize(
-  CWriteXml & rWriteXml, const std::multimap<std::string, _T> & rObject,
+  CWriteJson & rWriteJson, const std::multimap<std::string, _T> & rObject,
   const char * pszTag, const char * pszTagItem, const char * pszTagId,
   bool fRoot = true)
 {
-  rWriteXml.StartTag(pszTag, fRoot);
+  rWriteJson.StartTag(pszTag, fRoot);
   for (typename std::multimap<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
   {
-    serialize(rWriteXml, itr->second, pszTagItem, false, pszTagId, &itr->first);
+    serialize(rWriteJson, itr->second, pszTagItem, false, pszTagId, &itr->first);
   }
-  rWriteXml.EndTag(pszTag);
+  rWriteJson.EndTag(pszTag);
 }
 
 
@@ -577,11 +577,11 @@ void serialize(
 // serialize any other multimap object for witch a key serialize function exists
 template <class _K, class _T>
 void serialize(
-  CWriteXml & rWriteXml, const std::multimap<_K, _T> & rObject,
+  CWriteJson & rWriteJson, const std::multimap<_K, _T> & rObject,
   const char * pszTag, const char * pszTagItem, const char * pszTagId,
   bool fRoot = true)
 {
-  rWriteXml.StartTag(pszTag, fRoot);
+  rWriteJson.StartTag(pszTag, fRoot);
   for (typename std::multimap<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
   {
     // first serialize the key to a string
@@ -590,9 +590,9 @@ void serialize(
     serialize(szBuffer, BUFSIZE, itr->first);
     std::string strBuffer(szBuffer);
     // serialize the object with a string key
-    serialize(rWriteXml, itr->second, pszTagItem, false, pszTagId, &strBuffer);
+    serialize(rWriteJson, itr->second, pszTagItem, false, pszTagId, &strBuffer);
   }
-  rWriteXml.EndTag(pszTag);
+  rWriteJson.EndTag(pszTag);
 }
 
 
@@ -622,21 +622,21 @@ void serialize(
 
 
 
-void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszTag, bool fRoot,
+void serialize(CWriteJson & rWriteJson, const $(name) & rObject, const char * pszTag, bool fRoot,
   const char * pszIdTag, const std::string * pstrIdValue)
 {
   if (!pszTag)
     pszTag="$(alias)";
-  rWriteXml.StartTag(pszTag, fRoot);
+  rWriteJson.StartTag(pszTag, fRoot);
   if (pszIdTag && pstrIdValue)
   {
-    serialize(rWriteXml, *pstrIdValue, pszIdTag, false);
+    serialize(rWriteJson, *pstrIdValue, pszIdTag, false);
   }
 ********** [END]
 
 
 ********** [SI] GENERIC DECL
-  serialize(rWriteXml, rObject.$(name), "$(alias)", false);
+  serialize(rWriteJson, rObject.$(name), "$(alias)", false);
 ********** [END]
 
 
@@ -644,25 +644,25 @@ void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszT
 /* TODO
   {for (int n=0; n<$(size); n++)
   {
-    serialize(rWriteXml, rObject.$(name)[n], "$(alias)", false);
+    serialize(rWriteJson, rObject.$(name)[n], "$(alias)", false);
   }}
 */
 ********** [END]
 
 
 ********** [SI] SET/LIST DECL
-  serialize(rWriteXml, rObject.$(name), "$(alias)", "$(item)", false);
+  serialize(rWriteJson, rObject.$(name), "$(alias)", "$(item)", false);
 ********** [END]
 
 
 ********** [SI] MAP DECL
-  serialize(rWriteXml, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
+  serialize(rWriteJson, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
 ********** [END]
 
 
 ********** [SI] STRUCT EPILOG
   /* end of struct serialize function */
-  rWriteXml.EndTag(pszTag);
+  rWriteJson.EndTag(pszTag);
 }
 ********** [END]
 
@@ -675,11 +675,11 @@ void serialize(CWriteXml & rWriteXml, const $(name) & rObject, const char * pszT
 
 
 
-void serialize(CWriteXml & rWriteXml, const std::string & rObject, const char * pszTag, bool fRoot)
+void serialize(CWriteJson & rWriteJson, const std::string & rObject, const char * pszTag, bool fRoot)
 {
-  rWriteXml.StartTag(pszTag, fRoot);
-  rWriteXml.PutData(rObject.data(), rObject.length());
-  rWriteXml.EndTag(pszTag);
+  rWriteJson.StartTag(pszTag, fRoot);
+  rWriteJson.PutData(rObject.data(), rObject.length());
+  rWriteJson.EndTag(pszTag);
 }
 
 
