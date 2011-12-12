@@ -25,16 +25,6 @@
 #include "test.h"
 
 
-void serialize(CWriteXml & writer, const SData & rObject, const char * pszTag, bool fRoot,
-  const char * pszIdTag, const std::string * pstrIdValue);
-
-void serialize(CWriteXml & writer, const CData & rObject, const char * pszTag, bool fRoot,
-  const char * pszIdTag, const std::string * pstrIdValue)
-{
-  serialize(writer, static_cast<const SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
-}
-
-
 
 SData::SData()
   :

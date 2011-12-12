@@ -30,6 +30,12 @@
 
 
 
+void serialize(CWriteXml & writer, const CData & rObject, const char * pszTag, bool fRoot,
+  const char * pszIdTag, const std::string * pstrIdValue)
+{
+  serialize(writer, static_cast<const SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
+}
+
 void deserialize(CReadXml & reader, CData & rObject, const char * pszTag, bool fRoot,
   const char * pszIdTag, std::string * pstrIdValue)
 {
