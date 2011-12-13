@@ -110,6 +110,7 @@ void initTest(STest & test)
 
   test.setData.insert("asdf");
   test.setData.insert("jklö");
+  test.setData.insert("special: \" ' < >");
 
   test.setDataL.insert(545);
   test.setDataL.insert(789);
@@ -133,6 +134,7 @@ void initTest(STest & test)
   test.mlstString.push_back("Hallo");
   test.mlstString.push_back("Hallo");
   test.mlstString.push_back("Welt");
+  test.mlstString.push_back("special: \" ' < >");
 
 //  test.mapData["asdfg"]    = data;
   test.mapDataL[5]         = data;
@@ -181,8 +183,11 @@ void initTest(STest & test)
   test.mapDataStr["kllkrew"]  = data;
   data.strString = "key: eropw";
   test.mapDataStr["eropw"]    = data;
+  test.mapDataStr["special: \" ' < >"] = data;
 
   // multimap string
+  data.strString = "special: \" ' < >";
+  test.mmapDataStr.insert(std::pair<std::string, SData>("special: \" ' < >", data));
   data.strString = "multi key: test1-1";
   test.mmapDataStr.insert(std::pair<std::string, SData>("test1", data));
   data.strString = "multi key: test1-2";

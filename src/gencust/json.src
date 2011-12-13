@@ -417,7 +417,7 @@ void serialize(
   for (typename std::list<_T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
     // serialize the key object
-    serialize(rWriteJson, *itr, 0 /*pszTagItem*/);
+    serialize(rWriteJson, *itr, 0);
   }
   rWriteJson.EndArray(pszTag);
 }
@@ -425,7 +425,8 @@ void serialize(
 
 
 // serialize a std::map<std::string, _T> object
-// this special case can be serialized as object with the key beeing the element id
+// this special case can be serialized as object with the key beeing the json
+// id string
 template <class _T>
 void serialize(
   CWriteJson & rWriteJson, const std::map<std::string, _T> & rObject,
@@ -596,7 +597,7 @@ void CWriteJsonString::startCompound(const char * pszTag, char c)
   if (pszTag)
   {
     mstrWrite += '"';
-    mstrWrite += pszTag;
+    putData(pszTag, 0x7FFF);
     mstrWrite += "\" : ";
   }
 
@@ -642,18 +643,13 @@ void CWriteJsonString::startElement(const char * pszName)
   if (pszName)
   {
     mstrWrite += '"';
-    mstrWrite += pszName;
+    putData(pszName, 0x7FFF);
     mstrWrite += "\" : ";
   }
 }
 
 void CWriteJsonString::endElement(const char * pszName)
 {
-/*
-  indent();
-  mstrWrite += ",\n";
-  mfLf = true;
-*/
 }
 
 void CWriteJsonString::putData(const std::string & data)
@@ -665,7 +661,7 @@ void CWriteJsonString::putData(const std::string & data)
 
 void CWriteJsonString::putData(const char * pszData, int nDataLen)
 {
-  const char *  pszPos  = pszData;
+  const char * pszPos = pszData;
 
   while (*pszPos && pszPos-pszData < nDataLen)
   {
@@ -683,7 +679,7 @@ void CWriteJsonString::putData(const char * pszData, int nDataLen)
       continue;
     }
 
-    const char *  pszEnd  = pszPos;
+    const char * pszEnd = pszPos;
 
     // find end or entity
     while ( pszEnd-pszData < nDataLen   &&
