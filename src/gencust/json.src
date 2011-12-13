@@ -265,11 +265,12 @@ private:
   void putData(const char * pszData, int nDataLen);
 
   void indent();
+  void newline();
 
   std::string & mstrWrite;
   int           mnDepth;
-  bool          mfLf;
   bool          mfNewStruct;
+  bool          mfLf;
 };
 
 
@@ -542,8 +543,8 @@ CWriteJsonString::CWriteJsonString(std::string & strWrite)
   :
   mstrWrite(strWrite),
   mnDepth(0),
-  mfLf(false),
-  mfNewStruct(true)
+  mfNewStruct(true),
+  mfLf(false)
 {
 }
 
@@ -551,8 +552,8 @@ void CWriteJsonString::startCompound(const char * pszTag, char c)
 {
   if (!mfNewStruct)
   {
-    mstrWrite += ",\n";
-    mfLf = true;
+    mstrWrite += ',';
+    newline();
   }
   else
   {
@@ -569,8 +570,7 @@ void CWriteJsonString::startCompound(const char * pszTag, char c)
   }
 
   mstrWrite += c;
-  mstrWrite += '\n';
-  mfLf = true;
+  newline();
   ++mnDepth;
   mfNewStruct = true;
 }
@@ -579,8 +579,7 @@ void CWriteJsonString::endCompound(const char * pszTag, char c)
 {
   if (!mfNewStruct)
   {
-    mstrWrite += "\n";
-    mfLf = true;
+    newline();
   }
   else
   {
@@ -597,8 +596,8 @@ void CWriteJsonString::startElement(const char * pszName)
 {
   if (!mfNewStruct)
   {
-    mstrWrite += ",\n";
-    mfLf = true;
+    mstrWrite += ',';
+    newline();
   }
   else
   {
@@ -670,6 +669,13 @@ void CWriteJsonString::indent()
     mfLf = false;
   }
 }
+
+void CWriteJsonString::newline()
+{
+  mstrWrite += '\n';
+  mfLf = true;
+}
+
 ********** [END]
 
 
