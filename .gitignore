@@ -42,3 +42,4 @@ Makefile.in
 /src/test/*Ser.cpp
 /src/test/testxmlconf
 /src/test/testlibxml2
+/src/test/testjson

@@ -21,7 +21,8 @@
 
 noinst_PROGRAMS = \
   testxmlconf \
-  testlibxml2
+  testlibxml2 \
+  testjson
 
 
 
@@ -49,6 +50,13 @@ testlibxml2_SOURCES = \
   libxml2Des.cpp \
   test.cpp \
   testlibxml2.cpp
+
+testjson_SOURCES = \
+  jsonCom.cpp \
+  jsonSer.cpp \
+  jsonDes.cpp \
+  test.cpp \
+  testjson.cpp
 
 
 
