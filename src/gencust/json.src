@@ -318,55 +318,25 @@ void serialize(CWriteJson & rWriteJson, const $(name) & rObject, const char * ps
 
 
 
-inline void serialize(char * pBuffer, int nBufSize, const bool & rObject)
-{
-  snprintf(pBuffer, nBufSize, rObject? "1" : "0");
-}
+void serialize(char * pBuffer, int nBufSize, const bool & rObject);
 
-inline void serialize(char * pBuffer, int nBufSize, const short & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%hd", rObject);
-}
+void serialize(char * pBuffer, int nBufSize, const short & rObject);
 
-inline void serialize(char * pBuffer, int nBufSize, const unsigned short & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%hu", rObject);
-}
+void serialize(char * pBuffer, int nBufSize, const unsigned short & rObject);
 
-inline void serialize(char * pBuffer, int nBufSize, const int & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%d", rObject);
-}
+void serialize(char * pBuffer, int nBufSize, const int & rObject);
 
-inline void serialize(char * pBuffer, int nBufSize, const unsigned int & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%u", rObject);
-}
+void serialize(char * pBuffer, int nBufSize, const unsigned int & rObject);
 
-inline void serialize(char * pBuffer, int nBufSize, const long & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%ld", rObject);
-}
+void serialize(char * pBuffer, int nBufSize, const long & rObject);
 
-inline void serialize(char * pBuffer, int nBufSize, const unsigned long & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%lu", rObject);
-}
+void serialize(char * pBuffer, int nBufSize, const unsigned long & rObject);
 
-inline void serialize(char * pBuffer, int nBufSize, const float & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%f", static_cast<double>(rObject));
-}
+void serialize(char * pBuffer, int nBufSize, const float & rObject);
 
-inline void serialize(char * pBuffer, int nBufSize, const double & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%f", rObject);
-}
+void serialize(char * pBuffer, int nBufSize, const double & rObject);
 
-inline void serialize(char * pBuffer, int nBufSize, const SLongHex & rObject)
-{
-  snprintf(pBuffer, nBufSize, "%lX", rObject.mulHex);
-}
+void serialize(char * pBuffer, int nBufSize, const SLongHex & rObject);
 
 
 
@@ -762,6 +732,58 @@ void serialize(CWriteJson & rWriteJson, const $(name) & rObject, const char * ps
 
 
 ********** [SI] EPILOG
+
+
+
+void serialize(char * pBuffer, int nBufSize, const bool & rObject)
+{
+  snprintf(pBuffer, nBufSize, rObject? "1" : "0");
+}
+
+void serialize(char * pBuffer, int nBufSize, const short & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%hd", rObject);
+}
+
+void serialize(char * pBuffer, int nBufSize, const unsigned short & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%hu", rObject);
+}
+
+void serialize(char * pBuffer, int nBufSize, const int & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%d", rObject);
+}
+
+void serialize(char * pBuffer, int nBufSize, const unsigned int & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%u", rObject);
+}
+
+void serialize(char * pBuffer, int nBufSize, const long & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%ld", rObject);
+}
+
+void serialize(char * pBuffer, int nBufSize, const unsigned long & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%lu", rObject);
+}
+
+void serialize(char * pBuffer, int nBufSize, const float & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%f", static_cast<double>(rObject));
+}
+
+void serialize(char * pBuffer, int nBufSize, const double & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%f", rObject);
+}
+
+void serialize(char * pBuffer, int nBufSize, const SLongHex & rObject)
+{
+  snprintf(pBuffer, nBufSize, "%lX", rObject.mulHex);
+}
 
 
 
