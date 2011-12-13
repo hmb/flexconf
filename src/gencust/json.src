@@ -373,6 +373,8 @@ inline void serialize(char * pBuffer, int nBufSize, const SLongHex & rObject)
 // serialize a std::string object
 void serialize(CWriteJson & rWriteJson, const std::string & rObject, const char * pszTag);
 
+
+
 // serialize any of the objects for that an above function is defined
 template <class _T>
 void serialize(CWriteJson & rWriteJson, const _T & rObject, const char * pszTag)
@@ -394,13 +396,13 @@ void serialize(
   CWriteJson & rWriteJson, const std::set<_K> & rObject,
   const char * pszTag, const char * pszTagItem)
 {
-  rWriteJson.StartObject(pszTag);
+  rWriteJson.StartArray(pszTag);
   for (typename std::set<_K>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
     // serialize the key object
-    serialize(rWriteJson, *itr, pszTagItem);
+    serialize(rWriteJson, *itr, 0);
   }
-  rWriteJson.EndObject(pszTag);
+  rWriteJson.EndArray(pszTag);
 }
 
 
@@ -423,6 +425,7 @@ void serialize(
 
 
 // serialize a std::map<std::string, _T> object
+// this special case can be serialized as object with the key beeing the element id
 template <class _T>
 void serialize(
   CWriteJson & rWriteJson, const std::map<std::string, _T> & rObject,
@@ -431,7 +434,7 @@ void serialize(
   rWriteJson.StartObject(pszTag);
   for (typename std::map<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
-    serialize(rWriteJson, itr->second, pszTagItem, pszTagId, &itr->first);
+    serialize(rWriteJson, itr->second, itr->first.c_str());
   }
   rWriteJson.EndObject(pszTag);
 }
@@ -439,12 +442,14 @@ void serialize(
 
 
 // serialize any other map object for witch a key serialize function exists
+// this is serialized as array with the key beeing written inside the structure
+// as the key is possibly not valid as json object id
 template <class _K, class _T>
 void serialize(
   CWriteJson & rWriteJson, const std::map<_K, _T> & rObject,
   const char * pszTag, const char * pszTagItem, const char * pszTagId)
 {
-  rWriteJson.StartObject(pszTag);
+  rWriteJson.StartArray(pszTag);
   for (typename std::map<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
     // first serialize the key to a string
@@ -453,9 +458,9 @@ void serialize(
     serialize(szBuffer, BUFSIZE, itr->first);
     std::string strBuffer(szBuffer);
     // serialize the object with a string key
-    serialize(rWriteJson, itr->second, pszTagItem, pszTagId, &strBuffer);
+    serialize(rWriteJson, itr->second, 0, pszTagId, &strBuffer);
   }
-  rWriteJson.EndObject(pszTag);
+  rWriteJson.EndArray(pszTag);
 }
 
 
@@ -466,12 +471,12 @@ void serialize(
   CWriteJson & rWriteJson, const std::multimap<std::string, _T> & rObject,
   const char * pszTag, const char * pszTagItem, const char * pszTagId)
 {
-  rWriteJson.StartObject(pszTag);
+  rWriteJson.StartArray(pszTag);
   for (typename std::multimap<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
-    serialize(rWriteJson, itr->second, pszTagItem, pszTagId, &itr->first);
+    serialize(rWriteJson, itr->second, 0, pszTagId, &itr->first);
   }
-  rWriteJson.EndObject(pszTag);
+  rWriteJson.EndArray(pszTag);
 }
 
 
@@ -482,7 +487,7 @@ void serialize(
   CWriteJson & rWriteJson, const std::multimap<_K, _T> & rObject,
   const char * pszTag, const char * pszTagItem, const char * pszTagId)
 {
-  rWriteJson.StartObject(pszTag);
+  rWriteJson.StartArray(pszTag);
   for (typename std::multimap<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
     // first serialize the key to a string
@@ -491,9 +496,9 @@ void serialize(
     serialize(szBuffer, BUFSIZE, itr->first);
     std::string strBuffer(szBuffer);
     // serialize the object with a string key
-    serialize(rWriteJson, itr->second, pszTagItem, pszTagId, &strBuffer);
+    serialize(rWriteJson, itr->second, 0, pszTagId, &strBuffer);
   }
-  rWriteJson.EndObject(pszTag);
+  rWriteJson.EndArray(pszTag);
 }
 
 
