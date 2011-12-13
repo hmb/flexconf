@@ -252,6 +252,31 @@ private:
 
 
 
+class CWriteJsonString : public CWriteJson
+{
+public:
+  CWriteJsonString(std::string & strWrite);
+
+private:
+  void startCompound(const char * pszTag, char c);
+  void endCompound(const char * pszTag, char c);
+
+  void startElement(const char * pszName);
+  void endElement(const char * pszName);
+
+  void putData(const std::string & data);
+  void putData(const char * pszData, int nDataLen);
+
+  void indent();
+
+  std::string & mstrWrite;
+  int           mnDepth;
+  bool          mfLf;
+  bool          mfNewStruct;
+};
+
+
+
 ********** [END]
 
 
@@ -290,156 +315,6 @@ void serialize(CWriteJson & rWriteJson, const $(name) & rObject, const char * ps
 
 
 ********** [SH] EPILOG
-
-
-
-class CWriteJsonString : public CWriteJson
-{
-public:
-  CWriteJsonString(std::string & strWrite) :
-    mstrWrite(strWrite),
-    mnDepth(0),
-    mfLf(false),
-    mfNewStruct(true)
-  {
-  }
-
-  void startCompound(const char * pszTag, char c)
-  {
-    if (!mfNewStruct)
-    {
-      mstrWrite += ",\n";
-      mfLf = true;
-    }
-    else
-    {
-      mfNewStruct = false;
-    }
-
-    indent();
-
-    if (pszTag)
-    {
-      mstrWrite += '"';
-      mstrWrite += pszTag;
-      mstrWrite += "\" : ";
-    }
-
-    mstrWrite += c;
-    mstrWrite += '\n';
-    mfLf = true;
-    mnDepth++;
-    mfNewStruct = true;
-  }
-
-  void endCompound(const char * pszTag, char c)
-  {
-    if (!mfNewStruct)
-    {
-      mstrWrite += "\n";
-      mfLf = true;
-    }
-    else
-    {
-      mfNewStruct = false;
-    }
-
-    mnDepth--;
-    indent();
-    mstrWrite += c;
-    mfLf = true;
-  }
-
-  void startElement(const char * pszName)
-  {
-    if (!mfNewStruct)
-    {
-      mstrWrite += ",\n";
-      mfLf = true;
-    }
-    else
-    {
-      mfNewStruct = false;
-    }
-
-    indent();
-
-    if (pszName)
-    {
-      mstrWrite += '"';
-      mstrWrite += pszName;
-      mstrWrite += "\" : ";
-    }
-  }
-
-  void endElement(const char * pszName)
-  {
-/*
-    indent();
-    mstrWrite += ",\n";
-    mfLf = true;
-*/
-  }
-
-  void putData(const std::string & data)
-  {
-    mstrWrite += '"';
-    putData(data.data(), data.length());
-    mstrWrite += '"';
-  }
-
-  void putData(const char * pszData, int nDataLen)
-  {
-    const char *  pszPos  = pszData;
-
-    while (*pszPos && pszPos-pszData < nDataLen)
-    {
-      if ('"' == *pszPos)
-      {
-        mstrWrite += "\\\"";
-        pszPos++;
-        continue;
-      }
-
-      if ('\\' == *pszPos)
-      {
-        mstrWrite += "\\\\";
-        pszPos++;
-        continue;
-      }
-
-      const char *  pszEnd  = pszPos;
-
-      // find end or entity
-      while ( pszEnd-pszData < nDataLen   &&
-              0   != *pszEnd      &&
-              '\"' != *pszEnd     &&
-              '\\' != *pszEnd)
-      {
-        pszEnd++;
-      }
-
-      mstrWrite.append(pszPos, pszEnd-pszPos);
-      pszPos = pszEnd;
-    }
-  }
-
-  void indent()
-  {
-    if (mfLf)
-    {
-      mstrWrite.append(mnDepth*IDENT_WIDTH, ' ');
-      mfLf = false;
-    }
-  }
-
-
-private:
-  std::string & mstrWrite;
-  int           mnDepth;
-  bool          mfLf;
-  bool          mfNewStruct;
-};
 
 
 
@@ -686,6 +561,146 @@ void CWriteJson::PutData(const std::string & data)
 void CWriteJson::PutData(const char * pszData, int nDataLen = 0x7FFF)
 {
   putData(pszData, nDataLen);
+}
+
+
+
+CWriteJsonString::CWriteJsonString(std::string & strWrite)
+  :
+  mstrWrite(strWrite),
+  mnDepth(0),
+  mfLf(false),
+  mfNewStruct(true)
+{
+}
+
+void CWriteJsonString::startCompound(const char * pszTag, char c)
+{
+  if (!mfNewStruct)
+  {
+    mstrWrite += ",\n";
+    mfLf = true;
+  }
+  else
+  {
+    mfNewStruct = false;
+  }
+
+  indent();
+
+  if (pszTag)
+  {
+    mstrWrite += '"';
+    mstrWrite += pszTag;
+    mstrWrite += "\" : ";
+  }
+
+  mstrWrite += c;
+  mstrWrite += '\n';
+  mfLf = true;
+  mnDepth++;
+  mfNewStruct = true;
+}
+
+void CWriteJsonString::endCompound(const char * pszTag, char c)
+{
+  if (!mfNewStruct)
+  {
+    mstrWrite += "\n";
+    mfLf = true;
+  }
+  else
+  {
+    mfNewStruct = false;
+  }
+
+  mnDepth--;
+  indent();
+  mstrWrite += c;
+  mfLf = true;
+}
+
+void CWriteJsonString::startElement(const char * pszName)
+{
+  if (!mfNewStruct)
+  {
+    mstrWrite += ",\n";
+    mfLf = true;
+  }
+  else
+  {
+    mfNewStruct = false;
+  }
+
+  indent();
+
+  if (pszName)
+  {
+    mstrWrite += '"';
+    mstrWrite += pszName;
+    mstrWrite += "\" : ";
+  }
+}
+
+void CWriteJsonString::endElement(const char * pszName)
+{
+/*
+  indent();
+  mstrWrite += ",\n";
+  mfLf = true;
+*/
+}
+
+void CWriteJsonString::putData(const std::string & data)
+{
+  mstrWrite += '"';
+  putData(data.data(), data.length());
+  mstrWrite += '"';
+}
+
+void CWriteJsonString::putData(const char * pszData, int nDataLen)
+{
+  const char *  pszPos  = pszData;
+
+  while (*pszPos && pszPos-pszData < nDataLen)
+  {
+    if ('"' == *pszPos)
+    {
+      mstrWrite += "\\\"";
+      pszPos++;
+      continue;
+    }
+
+    if ('\\' == *pszPos)
+    {
+      mstrWrite += "\\\\";
+      pszPos++;
+      continue;
+    }
+
+    const char *  pszEnd  = pszPos;
+
+    // find end or entity
+    while ( pszEnd-pszData < nDataLen   &&
+            0   != *pszEnd      &&
+            '\"' != *pszEnd     &&
+            '\\' != *pszEnd)
+    {
+      pszEnd++;
+    }
+
+    mstrWrite.append(pszPos, pszEnd-pszPos);
+    pszPos = pszEnd;
+  }
+}
+
+void CWriteJsonString::indent()
+{
+  if (mfLf)
+  {
+    mstrWrite.append(mnDepth*IDENT_WIDTH, ' ');
+    mfLf = false;
+  }
 }
 ********** [END]
 
