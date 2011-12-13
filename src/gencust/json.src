@@ -101,9 +101,6 @@ struct SLongHex
   operator unsigned long () const { return mulHex; }
 };
 
-class CWriteJson;
-class CReadJson;
-
 ********** [END]
 
 
