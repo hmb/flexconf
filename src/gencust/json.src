@@ -273,7 +273,6 @@ private:
 };
 
 
-
 ********** [END]
 
 
@@ -282,6 +281,7 @@ private:
 
 
 ********** [SH] STRUCT PROLOG
+
 void serialize(CWriteJson & rWriteJson, const $(name) & rObject, const char * pszTag = 0,
   const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
 ********** [END]
