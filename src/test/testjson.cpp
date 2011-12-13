@@ -31,10 +31,10 @@
 
 
 
-void serialize(CWriteJson & writer, const CData & rObject, const char * pszTag, bool fRoot,
+void serialize(CWriteJson & writer, const CData & rObject, const char * pszTag,
   const char * pszIdTag, const std::string * pstrIdValue)
 {
-  serialize(writer, static_cast<const SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
+  serialize(writer, static_cast<const SData&>(rObject), pszTag, pszIdTag, pstrIdValue);
 }
 
 void deserialize(CReadXml & reader, CData & rObject, const char * pszTag, bool fRoot,
