@@ -58,13 +58,13 @@ int main(int argc, char *argv[])
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
 
     CWriteJsonString writeString(strXmlFirst);
-/*
+//*
     serialize(writeString, testFirst);
 /*/
     SData dat;
     serialize(writeString, dat);
 //*/
-    std::cerr << strXmlFirst << std::endl;
+    std::cout << strXmlFirst << std::endl;
   }
 
 #if 0
