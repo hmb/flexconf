@@ -395,7 +395,7 @@ void serialize(
   const char * pszTag, const char * pszTagItem)
 {
   rWriteJson.StartObject(pszTag);
-  for (typename std::set<_K>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  for (typename std::set<_K>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
     // serialize the key object
     serialize(rWriteJson, *itr, pszTagItem);
@@ -412,7 +412,7 @@ void serialize(
   const char * pszTag, const char * pszTagItem)
 {
   rWriteJson.StartArray(pszTag);
-  for (typename std::list<_T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  for (typename std::list<_T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
     // serialize the key object
     serialize(rWriteJson, *itr, 0 /*pszTagItem*/);
@@ -429,7 +429,7 @@ void serialize(
   const char * pszTag, const char * pszTagItem, const char * pszTagId)
 {
   rWriteJson.StartObject(pszTag);
-  for (typename std::map<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  for (typename std::map<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
     serialize(rWriteJson, itr->second, pszTagItem, pszTagId, &itr->first);
   }
@@ -445,7 +445,7 @@ void serialize(
   const char * pszTag, const char * pszTagItem, const char * pszTagId)
 {
   rWriteJson.StartObject(pszTag);
-  for (typename std::map<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  for (typename std::map<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
     // first serialize the key to a string
     const int BUFSIZE = 1024;
@@ -467,7 +467,7 @@ void serialize(
   const char * pszTag, const char * pszTagItem, const char * pszTagId)
 {
   rWriteJson.StartObject(pszTag);
-  for (typename std::multimap<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  for (typename std::multimap<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
     serialize(rWriteJson, itr->second, pszTagItem, pszTagId, &itr->first);
   }
@@ -483,7 +483,7 @@ void serialize(
   const char * pszTag, const char * pszTagItem, const char * pszTagId)
 {
   rWriteJson.StartObject(pszTag);
-  for (typename std::multimap<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); itr++)
+  for (typename std::multimap<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
     // first serialize the key to a string
     const int BUFSIZE = 1024;
@@ -598,7 +598,7 @@ void CWriteJsonString::startCompound(const char * pszTag, char c)
   mstrWrite += c;
   mstrWrite += '\n';
   mfLf = true;
-  mnDepth++;
+  ++mnDepth;
   mfNewStruct = true;
 }
 
@@ -614,7 +614,7 @@ void CWriteJsonString::endCompound(const char * pszTag, char c)
     mfNewStruct = false;
   }
 
-  mnDepth--;
+  --mnDepth;
   indent();
   mstrWrite += c;
   mfLf = true;
@@ -667,14 +667,14 @@ void CWriteJsonString::putData(const char * pszData, int nDataLen)
     if ('"' == *pszPos)
     {
       mstrWrite += "\\\"";
-      pszPos++;
+      ++pszPos;
       continue;
     }
 
     if ('\\' == *pszPos)
     {
       mstrWrite += "\\\\";
-      pszPos++;
+      ++pszPos;
       continue;
     }
 
@@ -686,7 +686,7 @@ void CWriteJsonString::putData(const char * pszData, int nDataLen)
             '\"' != *pszEnd     &&
             '\\' != *pszEnd)
     {
-      pszEnd++;
+      ++pszEnd;
     }
 
     mstrWrite.append(pszPos, pszEnd-pszPos);
@@ -731,7 +731,7 @@ void serialize(CWriteJson & rWriteJson, const $(name) & rObject, const char * ps
 
 ********** [SI] VECTOR DECL
 /* TODO
-  {for (int n=0; n<$(size); n++)
+  {for (int n=0; n<$(size); ++n)
   {
     serialize(rWriteJson, rObject.$(name)[n], "$(alias)");
   }}
@@ -946,7 +946,7 @@ public:
     if ('&' == *mpszXml)
     {
       // skip ampersand
-      mpszXml++;
+      ++mpszXml;
 
       if (0==strncmp(mpszXml, "gt;", 3))
       {
@@ -991,7 +991,7 @@ public:
             '<' != *pszNext &&
             '&' != *pszNext )
     {
-      pszNext++;
+      ++pszNext;
     }
 
     pszData   = mpszXml;
@@ -1006,12 +1006,12 @@ public:
     // not eof then skip over the '<', if we are on one else skip non '<'
     // skip over the '<'
     if (*mpszXml)
-      mpszXml++;
+      ++mpszXml;
 
     // find next start or end tag
     while (  0 != *mpszXml   &&   '<' != *mpszXml  )
     {
-      mpszXml++;
+      ++mpszXml;
     }
   }
 
@@ -1026,7 +1026,7 @@ public:
             )
           )
     {
-      mpszXml++;
+      ++mpszXml;
     }
   }
 protected:
