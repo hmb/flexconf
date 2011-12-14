@@ -220,6 +220,9 @@ struct SLongHex
 class CWriteJson
 {
 public:
+  static const int NUL_TERM_STRING  = -1;
+
+public:
   CWriteJson();
   virtual ~CWriteJson();
 
@@ -233,7 +236,8 @@ public:
   void StartElement(const char * pszName);
   void EndElement(const char * pszName);
 
-  void PutData(const std::string & data);
+  void Write(const std::string & data);
+
   void PutData(const char * data, int dataLen);
 
 private:
@@ -241,7 +245,10 @@ private:
   virtual void endCompound(const char * pszTag, char c)       = 0;
   virtual void startElement(const char * pszName)             = 0;
   virtual void endElement(const char * pszName)               = 0;
-  virtual void putData(const std::string & data)              = 0;
+
+  virtual void write(const std::string & data)                = 0;
+  virtual void write(const char * data, int dataLen)          = 0;
+
   virtual void putData(const char * data, int dataLen)        = 0;
 };
 
@@ -258,7 +265,9 @@ private:
   void startElement(const char * pszName);
   void endElement(const char * pszName);
 
-  void putData(const std::string & data);
+  void write(const std::string & data);
+  void write(const char * data, int dataLen = NUL_TERM_STRING);
+
   void putData(const char * data, int dataLen);
 
   void indent();
@@ -351,9 +360,12 @@ void serialize(CWriteJson & rWriteJson, const _T & rObject, const char * pszTag)
 {
   rWriteJson.StartElement(pszTag);
 
-  char szBuffer[80];
-  serialize(szBuffer, 80, rObject);
-  rWriteJson.PutData(szBuffer, 80);
+  // enough for int and double types
+  const int BUFSIZE = 80;
+
+  char szBuffer[BUFSIZE];
+  serialize(szBuffer, BUFSIZE, rObject);
+  rWriteJson.PutData(szBuffer, CWriteJson::NUL_TERM_STRING);
 
   rWriteJson.EndElement(pszTag);
 }
@@ -529,9 +541,9 @@ void CWriteJson::EndElement(const char * pszName)
   endElement(pszName);
 }
 
-void CWriteJson::PutData(const std::string & data)
+void CWriteJson::Write(const std::string & data)
 {
-  putData(data);
+  write(data);
 }
 
 void CWriteJson::PutData(const char * data, int dataLen)
@@ -568,9 +580,8 @@ void CWriteJsonString::startCompound(const char * pszTag, char c)
 
   if (pszTag)
   {
-    mstrWrite += '"';
-    putData(pszTag, 0x7FFF);
-    mstrWrite += "\" : ";
+    write(pszTag);
+    mstrWrite += " : ";
   }
 
   mstrWrite += c;
@@ -612,9 +623,8 @@ void CWriteJsonString::startElement(const char * pszName)
 
   if (pszName)
   {
-    mstrWrite += '"';
-    putData(pszName, 0x7FFF);
-    mstrWrite += "\" : ";
+    write(pszName);
+    mstrWrite += " : ";
   }
 }
 
@@ -622,48 +632,65 @@ void CWriteJsonString::endElement(const char * pszName)
 {
 }
 
-void CWriteJsonString::putData(const std::string & data)
+
+void CWriteJsonString::write(const std::string & data)
 {
-  mstrWrite += '"';
-  putData(data.data(), data.length());
-  mstrWrite += '"';
+  write(data.c_str(), NUL_TERM_STRING);
 }
 
-void CWriteJsonString::putData(const char * pszData, int nDataLen)
+void CWriteJsonString::write(const char * data, int dataLen)
 {
-  const char * pszPos = pszData;
+  mstrWrite += '"';
 
-  while (*pszPos && pszPos-pszData < nDataLen)
+  const char * pos = data;
+
+  while (*pos && (dataLen==NUL_TERM_STRING || pos-data < dataLen))
   {
-    if ('"' == *pszPos)
+    if ('"' == *pos)
     {
       mstrWrite += "\\\"";
-      ++pszPos;
+      ++pos;
       continue;
     }
 
-    if ('\\' == *pszPos)
+    if ('\\' == *pos)
     {
       mstrWrite += "\\\\";
-      ++pszPos;
+      ++pos;
       continue;
     }
 
-    const char * pszEnd = pszPos;
+    const char * end = pos;
 
     // find end or entity
-    while ( pszEnd-pszData < nDataLen   &&
-            0   != *pszEnd      &&
-            '\"' != *pszEnd     &&
-            '\\' != *pszEnd)
+    while ( (dataLen==NUL_TERM_STRING || end-data < dataLen)
+            &&  0     != *end
+            &&  '\"'  != *end
+            &&  '\\'  != *end)
     {
-      ++pszEnd;
+      ++end;
     }
 
-    mstrWrite.append(pszPos, pszEnd-pszPos);
-    pszPos = pszEnd;
+    mstrWrite.append(pos, end-pos);
+    pos = end;
+  }
+
+  mstrWrite += '"';
+}
+
+
+void CWriteJsonString::putData(const char * data, int dataLen)
+{
+  if (dataLen == NUL_TERM_STRING)
+  {
+    mstrWrite += data;
+  }
+  else
+  {
+    mstrWrite.append(data, dataLen);
   }
 }
+
 
 void CWriteJsonString::indent()
 {
@@ -800,7 +827,7 @@ void serialize(char * pBuffer, int nBufSize, const SLongHex & rObject)
 void serialize(CWriteJson & rWriteJson, const std::string & rObject, const char * pszTag)
 {
   rWriteJson.StartElement(pszTag);
-  rWriteJson.PutData(rObject);
+  rWriteJson.Write(rObject);
   rWriteJson.EndElement(pszTag);
 }
 ********** [END]
