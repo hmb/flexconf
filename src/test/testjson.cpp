@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
 /*/
     SData dat;
     serialize(writeString, dat);
+//    serialize(writeString, dat, "sepp");
 //*/
     std::cout << strXmlFirst << std::endl;
   }
