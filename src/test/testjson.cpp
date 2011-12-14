@@ -57,13 +57,16 @@ int main(int argc, char *argv[])
     std::cerr << "| write xml to a string                                          |" << std::endl;
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
 
-    CWriteJsonString writeString(strXmlFirst);
+    CWriteJsonString writer(strXmlFirst);
+
+    writer.SetNewline(true);
+    writer.SetIndentation(4);
 //*
-    serialize(writeString, testFirst);
+    serialize(writer, testFirst);
 /*/
     SData dat;
-    serialize(writeString, dat);
-//    serialize(writeString, dat, "sepp");
+    serialize(writer, dat);
+//    serialize(writer, dat, "sepp");
 //*/
     std::cout << strXmlFirst << std::endl;
   }
