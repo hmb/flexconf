@@ -259,6 +259,12 @@ class CWriteJsonString : public CWriteJson
 public:
   CWriteJsonString(std::string & strWrite);
 
+  bool GetNewline() const;
+  void SetNewline(bool newline);
+
+  int GetIndentation() const;
+  void SetIndentation(int indentation);
+
 private:
   void startCompound(const char * pszTag, char c);
   void endCompound(const char * pszTag, char c);
@@ -563,6 +569,28 @@ CWriteJsonString::CWriteJsonString(std::string & strWrite)
   mIndentation(DEFAULT_IDENT)
 {
 }
+
+
+bool CWriteJsonString::GetNewline() const
+{
+  return mNewline;
+}
+
+void CWriteJsonString::SetNewline(bool newline)
+{
+  mNewline = newline;
+}
+
+int CWriteJsonString::GetIndentation() const
+{
+  return mIndentation;
+}
+
+void CWriteJsonString::SetIndentation(int indentation)
+{
+  mIndentation = indentation;
+}
+
 
 void CWriteJsonString::startCompound(const char * pszTag, char c)
 {
