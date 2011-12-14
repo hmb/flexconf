@@ -234,7 +234,7 @@ public:
   void EndElement(const char * pszName);
 
   void PutData(const std::string & data);
-  void PutData(const char * pszData, int nDataLen);
+  void PutData(const char * data, int dataLen);
 
 private:
   virtual void startCompound(const char * pszTag, char c)     = 0;
@@ -242,7 +242,7 @@ private:
   virtual void startElement(const char * pszName)             = 0;
   virtual void endElement(const char * pszName)               = 0;
   virtual void putData(const std::string & data)              = 0;
-  virtual void putData(const char * pszData, int nDataLen)    = 0;
+  virtual void putData(const char * data, int dataLen)        = 0;
 };
 
 
@@ -252,16 +252,14 @@ class CWriteJsonString : public CWriteJson
 public:
   CWriteJsonString(std::string & strWrite);
 
-
 private:
   void startCompound(const char * pszTag, char c);
   void endCompound(const char * pszTag, char c);
-
   void startElement(const char * pszName);
   void endElement(const char * pszName);
 
   void putData(const std::string & data);
-  void putData(const char * pszData, int nDataLen);
+  void putData(const char * data, int dataLen);
 
   void indent();
   void newline();
@@ -355,7 +353,7 @@ void serialize(CWriteJson & rWriteJson, const _T & rObject, const char * pszTag)
 
   char szBuffer[80];
   serialize(szBuffer, 80, rObject);
-  rWriteJson.PutData(szBuffer);
+  rWriteJson.PutData(szBuffer, 80);
 
   rWriteJson.EndElement(pszTag);
 }
@@ -536,9 +534,9 @@ void CWriteJson::PutData(const std::string & data)
   putData(data);
 }
 
-void CWriteJson::PutData(const char * pszData, int nDataLen = 0x7FFF)
+void CWriteJson::PutData(const char * data, int dataLen)
 {
-  putData(pszData, nDataLen);
+  putData(data, dataLen);
 }
 
 
