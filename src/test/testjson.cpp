@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     std::cerr << "| write xml to a string                                          |" << std::endl;
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
 
-    CWriteJsonString writer(strXmlFirst);
+    CWriterJsonString writer(strXmlFirst);
 
     writer.SetNewline(true);
     writer.SetIndentation(4);

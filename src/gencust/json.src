@@ -253,11 +253,11 @@ private:
 };
 
 
-
-class CWriteJsonString : public CWriter
+class CWriterJson : public CWriter
 {
 public:
-  CWriteJsonString(std::string & strWrite);
+  CWriterJson();
+  ~CWriterJson();
 
   bool GetNewline() const;
   void SetNewline(bool newline);
@@ -279,13 +279,17 @@ private:
   void putDataImpl(const char * data, int dataLen);
 
 private:
+  virtual void put(const std::string & data)            = 0;
+  virtual void put(const char * data, int dataLen)      = 0;
+  virtual void put(char data, int count = 1)            = 0;
+
+private:
   void startCompound(const char * pszTag, char c);
   void endCompound(const char * pszTag, char c);
 
   void indent();
   void newline();
 
-  std::string & mOutBuffer;
   int           mDepth;
   bool          mNewStruct;
   bool          mLf;
@@ -294,6 +298,22 @@ private:
   int           mIndentation;
 
   static const int DEFAULT_IDENT = 2;
+};
+
+
+class CWriterJsonString : public CWriterJson
+{
+public:
+  CWriterJsonString(std::string & outBuffer);
+  virtual ~CWriterJsonString();
+
+private:
+  virtual void put(const std::string & data);
+  virtual void put(const char * data, int dataLen);
+  virtual void put(char data, int count);
+
+private:
+  std::string & mOutBuffer;
 };
 
 
@@ -570,9 +590,8 @@ void CWriter::PutData(const char * data, int dataLen)
 
 
 
-CWriteJsonString::CWriteJsonString(std::string & strWrite)
+CWriterJson::CWriterJson()
   :
-  mOutBuffer(strWrite),
   mDepth(0),
   mNewStruct(true),
   mLf(false),
@@ -581,53 +600,57 @@ CWriteJsonString::CWriteJsonString(std::string & strWrite)
 {
 }
 
+CWriterJson::~CWriterJson()
+{
+}
 
-bool CWriteJsonString::GetNewline() const
+
+bool CWriterJson::GetNewline() const
 {
   return mNewline;
 }
 
-void CWriteJsonString::SetNewline(bool newline)
+void CWriterJson::SetNewline(bool newline)
 {
   mNewline = newline;
 }
 
-int CWriteJsonString::GetIndentation() const
+int CWriterJson::GetIndentation() const
 {
   return mIndentation;
 }
 
-void CWriteJsonString::SetIndentation(int indentation)
+void CWriterJson::SetIndentation(int indentation)
 {
   mIndentation = indentation;
 }
 
 
-void CWriteJsonString::startObjectImpl(const char * pszTag)
+void CWriterJson::startObjectImpl(const char * pszTag)
 {
   startCompound(pszTag, '{');
 }
 
-void CWriteJsonString::endObjectImpl(const char * pszTag)
+void CWriterJson::endObjectImpl(const char * pszTag)
 {
   endCompound(pszTag, '}');
 }
 
-void CWriteJsonString::startArrayImpl(const char * pszTag)
+void CWriterJson::startArrayImpl(const char * pszTag)
 {
   startCompound(pszTag, '[');
 }
 
-void CWriteJsonString::endArrayImpl(const char * pszTag)
+void CWriterJson::endArrayImpl(const char * pszTag)
 {
   endCompound(pszTag, ']');
 }
 
-void CWriteJsonString::startElementImpl(const char * pszName)
+void CWriterJson::startElementImpl(const char * pszName)
 {
   if (!mNewStruct)
   {
-    mOutBuffer += ',';
+    put(',');
     newline();
   }
   else
@@ -640,23 +663,23 @@ void CWriteJsonString::startElementImpl(const char * pszName)
   if (pszName)
   {
     writeImpl(pszName);
-    mOutBuffer += " : ";
+    put(" : ");
   }
 }
 
-void CWriteJsonString::endElementImpl(const char * pszName)
+void CWriterJson::endElementImpl(const char * pszName)
 {
 }
 
 
-void CWriteJsonString::writeImpl(const std::string & data)
+void CWriterJson::writeImpl(const std::string & data)
 {
   writeImpl(data.c_str());
 }
 
-void CWriteJsonString::writeImpl(const char * data, int dataLen)
+void CWriterJson::writeImpl(const char * data, int dataLen)
 {
-  mOutBuffer += '"';
+  put('"');
 
   const char * pos = data;
 
@@ -664,14 +687,14 @@ void CWriteJsonString::writeImpl(const char * data, int dataLen)
   {
     if ('"' == *pos)
     {
-      mOutBuffer += "\\\"";
+      put("\\\"");
       ++pos;
       continue;
     }
 
     if ('\\' == *pos)
     {
-      mOutBuffer += "\\\\";
+      put("\\\\");
       ++pos;
       continue;
     }
@@ -687,32 +710,32 @@ void CWriteJsonString::writeImpl(const char * data, int dataLen)
       ++end;
     }
 
-    mOutBuffer.append(pos, end-pos);
+    put(pos, end-pos);
     pos = end;
   }
 
-  mOutBuffer += '"';
+  put('"');
 }
 
 
-void CWriteJsonString::putDataImpl(const char * data, int dataLen)
+void CWriterJson::putDataImpl(const char * data, int dataLen)
 {
   if (dataLen == NUL_TERM_STRING)
   {
-    mOutBuffer += data;
+    put(data);
   }
   else
   {
-    mOutBuffer.append(data, dataLen);
+    put(data, dataLen);
   }
 }
 
 
-void CWriteJsonString::startCompound(const char * pszTag, char c)
+void CWriterJson::startCompound(const char * pszTag, char c)
 {
   if (!mNewStruct)
   {
-    mOutBuffer += ',';
+    put(',');
     newline();
   }
   else
@@ -725,16 +748,16 @@ void CWriteJsonString::startCompound(const char * pszTag, char c)
   if (pszTag)
   {
     writeImpl(pszTag);
-    mOutBuffer += " : ";
+    put(" : ");
   }
 
-  mOutBuffer += c;
+  put(c);
   newline();
   ++mDepth;
   mNewStruct = true;
 }
 
-void CWriteJsonString::endCompound(const char * pszTag, char c)
+void CWriterJson::endCompound(const char * pszTag, char c)
 {
   if (!mNewStruct)
   {
@@ -747,25 +770,59 @@ void CWriteJsonString::endCompound(const char * pszTag, char c)
 
   --mDepth;
   indent();
-  mOutBuffer += c;
+  put(c);
 }
 
-void CWriteJsonString::indent()
+void CWriterJson::indent()
 {
   if (mLf)
   {
-    mOutBuffer.append(mDepth * mIndentation, ' ');
+    put(' ', mDepth * mIndentation);
     mLf = false;
   }
 }
 
-void CWriteJsonString::newline()
+void CWriterJson::newline()
 {
   if (mNewline)
   {
-    mOutBuffer += '\n';
+    put('\n');
   }
   mLf = true;
+}
+
+
+
+CWriterJsonString::CWriterJsonString(std::string & outBuffer)
+  :
+  mOutBuffer(outBuffer)
+{
+}
+
+CWriterJsonString::~CWriterJsonString()
+{
+}
+
+void CWriterJsonString::put(const std::string & data)
+{
+  mOutBuffer += data;
+}
+
+void CWriterJsonString::put(const char * data, int dataLen)
+{
+  if (dataLen == NUL_TERM_STRING)
+  {
+    mOutBuffer += data;
+  }
+  else
+  {
+    mOutBuffer.append(data, dataLen);
+  }
+}
+
+void CWriterJsonString::put(char data, int count)
+{
+  mOutBuffer.append(count, data);
 }
 
 ********** [END]
