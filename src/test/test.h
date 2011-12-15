@@ -37,7 +37,7 @@
 
 /* flexconf skip begin */
 
-class CWriteJson;
+class CWriter;
 class CWriteXml;
 class CReadXml;
 
@@ -81,7 +81,7 @@ struct SData
 //<!--
 class CData : private SData
 {
-friend void serialize(CWriteJson & writer, const CData & rObject, const char * pszTag = 0,
+friend void serialize(CWriter & writer, const CData & rObject, const char * pszTag = 0,
   const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
 
 friend void serialize(CWriteXml & writer, const CData & rObject, const char * pszTag = 0, bool fRoot = true,

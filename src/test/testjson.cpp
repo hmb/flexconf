@@ -31,7 +31,7 @@
 
 
 
-void serialize(CWriteJson & writer, const CData & rObject, const char * pszTag,
+void serialize(CWriter & writer, const CData & rObject, const char * pszTag,
   const char * pszIdTag, const std::string * pstrIdValue)
 {
   serialize(writer, static_cast<const SData&>(rObject), pszTag, pszIdTag, pstrIdValue);
