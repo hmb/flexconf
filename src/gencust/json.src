@@ -259,11 +259,23 @@ public:
   CWriterJson();
   ~CWriterJson();
 
+  void SetCondensed();
+  void SetPretty();
+
   bool GetNewline() const;
   void SetNewline(bool newline);
 
   int GetIndentation() const;
   void SetIndentation(int indentation);
+
+  int GetAlignmentObj() const;
+  void SetAlignmentObj(int alignmentObj);
+
+  int GetAlignmentElem() const;
+  void SetAlignmentElem(int alignmentElem);
+
+  bool IsColonWhitespace() const;
+  void SetColonWhitespace(bool colonWhitespace);
 
 private:
   void startObjectImpl(const char * pszTag);
@@ -284,8 +296,9 @@ private:
   virtual void put(char data, int count = 1)            = 0;
 
 private:
-  void startCompound(const char * pszTag, char c);
-  void endCompound(const char * pszTag, char c);
+  void startCompound(const char * name, char bracket);
+  void endCompound(const char * name, char bracket);
+  void elemName(const char * name, int alignment);
 
   void indent();
   void newline();
@@ -296,8 +309,15 @@ private:
 
   bool          mNewline;
   int           mIndentation;
+  int           mAlignmentObj;
+  int           mAlignmentElem;
+  bool          mColonWhitespace;
 
-  static const int DEFAULT_IDENT = 2;
+  static const bool DEFAULT_NEWLINE           = true;
+  static const int  DEFAULT_IDENT             = 2;
+  static const int  DEFAULT_ALIGNMENTOBJ      = 1;
+  static const int  DEFAULT_ALIGNMENTELEM     = 1;
+  static const bool DEFAULT_COLONWHITESPACE   = true;
 };
 
 
@@ -532,6 +552,7 @@ void serialize(
 
 #include "$(basename)Com.h"
 #include "$(basename)Ser.h"
+#include <string.h>
 
 
 
@@ -595,8 +616,11 @@ CWriterJson::CWriterJson()
   mDepth(0),
   mNewStruct(true),
   mLf(false),
-  mNewline(true),
-  mIndentation(DEFAULT_IDENT)
+  mNewline(DEFAULT_NEWLINE),
+  mIndentation(DEFAULT_IDENT),
+  mAlignmentObj(DEFAULT_ALIGNMENTOBJ),
+  mAlignmentElem(DEFAULT_ALIGNMENTELEM),
+  mColonWhitespace(DEFAULT_COLONWHITESPACE)
 {
 }
 
@@ -604,6 +628,24 @@ CWriterJson::~CWriterJson()
 {
 }
 
+
+void CWriterJson::SetCondensed()
+{
+  SetNewline(false);
+  SetIndentation(0);
+  SetAlignmentObj(0);
+  SetAlignmentElem(0);
+  SetColonWhitespace(false);
+}
+
+void CWriterJson::SetPretty()
+{
+  SetNewline(DEFAULT_NEWLINE);
+  SetIndentation(DEFAULT_IDENT);
+  SetAlignmentObj(DEFAULT_ALIGNMENTOBJ);
+  SetAlignmentElem(DEFAULT_ALIGNMENTELEM);
+  SetColonWhitespace(DEFAULT_COLONWHITESPACE);
+}
 
 bool CWriterJson::GetNewline() const
 {
@@ -623,6 +665,36 @@ int CWriterJson::GetIndentation() const
 void CWriterJson::SetIndentation(int indentation)
 {
   mIndentation = indentation;
+}
+
+int CWriterJson::GetAlignmentObj() const
+{
+  return mAlignmentObj;
+}
+
+void CWriterJson::SetAlignmentObj(int alignmentObj)
+{
+  mAlignmentObj = alignmentObj;
+}
+
+int CWriterJson::GetAlignmentElem() const
+{
+  return mAlignmentElem;
+}
+
+void CWriterJson::SetAlignmentElem(int alignmentElem)
+{
+  mAlignmentElem = alignmentElem;
+}
+
+bool CWriterJson::IsColonWhitespace() const
+{
+  return mColonWhitespace;
+}
+
+void CWriterJson::SetColonWhitespace(bool colonWhitespace)
+{
+  mColonWhitespace = colonWhitespace;
 }
 
 
@@ -659,12 +731,7 @@ void CWriterJson::startElementImpl(const char * pszName)
   }
 
   indent();
-
-  if (pszName)
-  {
-    writeImpl(pszName);
-    put(" : ");
-  }
+  elemName(pszName, mAlignmentElem);
 }
 
 void CWriterJson::endElementImpl(const char * pszName)
@@ -731,7 +798,7 @@ void CWriterJson::putDataImpl(const char * data, int dataLen)
 }
 
 
-void CWriterJson::startCompound(const char * pszTag, char c)
+void CWriterJson::startCompound(const char * name, char bracket)
 {
   if (!mNewStruct)
   {
@@ -744,20 +811,15 @@ void CWriterJson::startCompound(const char * pszTag, char c)
   }
 
   indent();
+  elemName(name, mAlignmentObj);
 
-  if (pszTag)
-  {
-    writeImpl(pszTag);
-    put(" : ");
-  }
-
-  put(c);
+  put(bracket);
   newline();
   ++mDepth;
   mNewStruct = true;
 }
 
-void CWriterJson::endCompound(const char * pszTag, char c)
+void CWriterJson::endCompound(const char * name, char bracket)
 {
   if (!mNewStruct)
   {
@@ -770,7 +832,31 @@ void CWriterJson::endCompound(const char * pszTag, char c)
 
   --mDepth;
   indent();
-  put(c);
+  put(bracket);
+}
+
+void CWriterJson::elemName(const char * name, int alignment)
+{
+  if (name)
+  {
+    writeImpl(name);
+
+    int namelen = strlen(name);
+    int align   = alignment <= 0 ? 0 :
+                  (alignment >= namelen? alignment - namelen : 1);
+
+    if (align > 0)
+    {
+      put(' ', align);
+    }
+
+    put(':');
+
+    if (mColonWhitespace)
+    {
+      put(' ');
+    }
+  }
 }
 
 void CWriterJson::indent()

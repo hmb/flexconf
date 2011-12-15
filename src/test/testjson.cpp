@@ -59,8 +59,15 @@ int main(int argc, char *argv[])
 
     CWriterJsonString writer(strXmlFirst);
 
-    writer.SetNewline(true);
-    writer.SetIndentation(4);
+//    writer.SetCondensed();
+    writer.SetPretty();
+
+//     writer.SetNewline(false);
+//     writer.SetIndentation(0);
+//     writer.SetAlignmentObj(0);
+//     writer.SetAlignmentElem(0);
+//     writer.SetColonWhitespace(false);
+
 //*
     serialize(writer, testFirst);
 /*/
