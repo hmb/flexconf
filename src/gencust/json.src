@@ -226,30 +226,30 @@ public:
   CWriter();
   virtual ~CWriter();
 
-  // Start Json Object, if tag is null
   void StartObject(const char * pszTag);
   void EndObject(const char * pszTag);
-
   void StartArray(const char * pszTag);
   void EndArray(const char * pszTag);
-
   void StartElement(const char * pszName);
   void EndElement(const char * pszName);
 
   void Write(const std::string & data);
+  void Write(const char * data, int dataLen = NUL_TERM_STRING);
 
   void PutData(const char * data, int dataLen);
 
 private:
-  virtual void startCompound(const char * pszTag, char c)     = 0;
-  virtual void endCompound(const char * pszTag, char c)       = 0;
-  virtual void startElement(const char * pszName)             = 0;
-  virtual void endElement(const char * pszName)               = 0;
+  virtual void startObjectImpl(const char * pszTag)             = 0;
+  virtual void endObjectImpl(const char * pszTag)               = 0;
+  virtual void startArrayImpl(const char * pszTag)              = 0;
+  virtual void endArrayImpl(const char * pszTag)                = 0;
+  virtual void startElementImpl(const char * pszName)           = 0;
+  virtual void endElementImpl(const char * pszName)             = 0;
 
-  virtual void write(const std::string & data)                = 0;
-  virtual void write(const char * data, int dataLen)          = 0;
+  virtual void writeImpl(const std::string & data)              = 0;
+  virtual void writeImpl(const char * data, int dataLen)        = 0;
 
-  virtual void putData(const char * data, int dataLen)        = 0;
+  virtual void putDataImpl(const char * data, int dataLen)      = 0;
 };
 
 
@@ -266,15 +266,21 @@ public:
   void SetIndentation(int indentation);
 
 private:
+  void startObjectImpl(const char * pszTag);
+  void endObjectImpl(const char * pszTag);
+  void startArrayImpl(const char * pszTag);
+  void endArrayImpl(const char * pszTag);
+  void startElementImpl(const char * pszName);
+  void endElementImpl(const char * pszName);
+
+  void writeImpl(const std::string & data);
+  void writeImpl(const char * data, int dataLen = NUL_TERM_STRING);
+
+  void putDataImpl(const char * data, int dataLen);
+
+private:
   void startCompound(const char * pszTag, char c);
   void endCompound(const char * pszTag, char c);
-  void startElement(const char * pszName);
-  void endElement(const char * pszName);
-
-  void write(const std::string & data);
-  void write(const char * data, int dataLen = NUL_TERM_STRING);
-
-  void putData(const char * data, int dataLen);
 
   void indent();
   void newline();
@@ -519,42 +525,47 @@ CWriter::~CWriter()
 
 void CWriter::StartObject(const char * pszTag)
 {
-  startCompound(pszTag, '{');
+  startObjectImpl(pszTag);
 }
 
 void CWriter::EndObject(const char * pszTag)
 {
-  endCompound(pszTag, '}');
+  endObjectImpl(pszTag);
 }
 
 void CWriter::StartArray(const char * pszTag)
 {
-  startCompound(pszTag, '[');
+  startArrayImpl(pszTag);
 }
 
 void CWriter::EndArray(const char * pszTag)
 {
-  endCompound(pszTag, ']');
+  endArrayImpl(pszTag);
 }
 
 void CWriter::StartElement(const char * pszName)
 {
-  startElement(pszName);
+  startElementImpl(pszName);
 }
 
 void CWriter::EndElement(const char * pszName)
 {
-  endElement(pszName);
+  endElementImpl(pszName);
 }
 
 void CWriter::Write(const std::string & data)
 {
-  write(data);
+  writeImpl(data);
+}
+
+void CWriter::Write(const char * data, int dataLen)
+{
+  writeImpl(data, dataLen);
 }
 
 void CWriter::PutData(const char * data, int dataLen)
 {
-  putData(data, dataLen);
+  putDataImpl(data, dataLen);
 }
 
 
@@ -592,49 +603,27 @@ void CWriteJsonString::SetIndentation(int indentation)
 }
 
 
-void CWriteJsonString::startCompound(const char * pszTag, char c)
+void CWriteJsonString::startObjectImpl(const char * pszTag)
 {
-  if (!mNewStruct)
-  {
-    mOutBuffer += ',';
-    newline();
-  }
-  else
-  {
-    mNewStruct = false;
-  }
-
-  indent();
-
-  if (pszTag)
-  {
-    write(pszTag);
-    mOutBuffer += " : ";
-  }
-
-  mOutBuffer += c;
-  newline();
-  ++mDepth;
-  mNewStruct = true;
+  startCompound(pszTag, '{');
 }
 
-void CWriteJsonString::endCompound(const char * pszTag, char c)
+void CWriteJsonString::endObjectImpl(const char * pszTag)
 {
-  if (!mNewStruct)
-  {
-    newline();
-  }
-  else
-  {
-    mNewStruct = false;
-  }
-
-  --mDepth;
-  indent();
-  mOutBuffer += c;
+  endCompound(pszTag, '}');
 }
 
-void CWriteJsonString::startElement(const char * pszName)
+void CWriteJsonString::startArrayImpl(const char * pszTag)
+{
+  startCompound(pszTag, '[');
+}
+
+void CWriteJsonString::endArrayImpl(const char * pszTag)
+{
+  endCompound(pszTag, ']');
+}
+
+void CWriteJsonString::startElementImpl(const char * pszName)
 {
   if (!mNewStruct)
   {
@@ -650,22 +639,22 @@ void CWriteJsonString::startElement(const char * pszName)
 
   if (pszName)
   {
-    write(pszName);
+    writeImpl(pszName);
     mOutBuffer += " : ";
   }
 }
 
-void CWriteJsonString::endElement(const char * pszName)
+void CWriteJsonString::endElementImpl(const char * pszName)
 {
 }
 
 
-void CWriteJsonString::write(const std::string & data)
+void CWriteJsonString::writeImpl(const std::string & data)
 {
-  write(data.c_str(), NUL_TERM_STRING);
+  writeImpl(data.c_str());
 }
 
-void CWriteJsonString::write(const char * data, int dataLen)
+void CWriteJsonString::writeImpl(const char * data, int dataLen)
 {
   mOutBuffer += '"';
 
@@ -706,7 +695,7 @@ void CWriteJsonString::write(const char * data, int dataLen)
 }
 
 
-void CWriteJsonString::putData(const char * data, int dataLen)
+void CWriteJsonString::putDataImpl(const char * data, int dataLen)
 {
   if (dataLen == NUL_TERM_STRING)
   {
@@ -718,6 +707,48 @@ void CWriteJsonString::putData(const char * data, int dataLen)
   }
 }
 
+
+void CWriteJsonString::startCompound(const char * pszTag, char c)
+{
+  if (!mNewStruct)
+  {
+    mOutBuffer += ',';
+    newline();
+  }
+  else
+  {
+    mNewStruct = false;
+  }
+
+  indent();
+
+  if (pszTag)
+  {
+    writeImpl(pszTag);
+    mOutBuffer += " : ";
+  }
+
+  mOutBuffer += c;
+  newline();
+  ++mDepth;
+  mNewStruct = true;
+}
+
+void CWriteJsonString::endCompound(const char * pszTag, char c)
+{
+  if (!mNewStruct)
+  {
+    newline();
+  }
+  else
+  {
+    mNewStruct = false;
+  }
+
+  --mDepth;
+  indent();
+  mOutBuffer += c;
+}
 
 void CWriteJsonString::indent()
 {
