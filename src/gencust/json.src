@@ -236,6 +236,17 @@ public:
   void Write(const std::string & data);
   void Write(const char * data, int dataLen = NUL_TERM_STRING);
 
+  void Write(const bool & rObject);
+  void Write(const short & rObject);
+  void Write(const unsigned short & rObject);
+  void Write(const int & rObject);
+  void Write(const unsigned int & rObject);
+  void Write(const long & rObject);
+  void Write(const unsigned long & rObject);
+  void Write(const float & rObject);
+  void Write(const double & rObject);
+  void Write(const SLongHex & rObject);
+
   void PutData(const char * data, int dataLen);
 
 private:
