@@ -111,6 +111,9 @@ void initTest(STest & test)
   test.setData.insert("asdf");
   test.setData.insert("jklö");
   test.setData.insert("special: \" ' < >");
+  test.setData.insert("special: \" \\ \b \f \n \r \t :end");
+  test.setData.insert("\n\n\r\t :special \" \\ \b\f\n end: \r\t");
+  test.setData.insert("\n jkfsdh \n\rxxx\t :special \v \x1F \" \\ \b\f\n end: \rxx\t");
 
   test.setDataL.insert(545);
   test.setDataL.insert(789);

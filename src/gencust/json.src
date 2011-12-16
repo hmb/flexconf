@@ -748,37 +748,101 @@ void CWriterJson::writeImpl(const char * data, int dataLen)
 {
   put('"');
 
-  const char * pos = data;
+  const char  * pos       = data;   // current start position
+  const char  * end       = pos;    // current end position
 
-  while (*pos && (dataLen==NUL_TERM_STRING || pos-data < dataLen))
+  // one position after the last, if dataLen is given, 0 otherwise
+  const char * const fin  = (dataLen == NUL_TERM_STRING) ? 0 : data + dataLen;
+
+  const char  * special   = 0;      // replacement for an escapes special char
+  int           count     = 0;      // number of unescaped chars after pos
+
+  const int SPBUFLEN  = 7;    // buffer for numerical escapes: \u0000 == 7 chars
+  char spbuffer[SPBUFLEN] = { '\\', 'u', '0', '0', '0', '0', 0 };
+
+  // either we found a nullchar or dataLen is reached
+  while (*end && end!=fin)
   {
-    if ('"' == *pos)
+    switch (*end)
     {
-      put("\\\"");
-      ++pos;
-      continue;
+    case '"':
+      special  = "\\\"";
+      break;
+
+    case '\\':
+      special  = "\\\\";
+      break;
+
+// needs not to be escaped
+//    case '/':
+//      special  = "\\/";
+//      break;
+
+    case '\b':
+      special  = "\\b";
+      break;
+
+    case '\f':
+      special  = "\\f";
+      break;
+
+    case '\n':
+      special  = "\\n";
+      break;
+
+    case '\r':
+      special  = "\\r";
+      break;
+
+    case '\t':
+      special  = "\\t";
+      break;
+
+    default:
+      if ( (*end & '\xE0') || (*end == '\x7F') )
+      {
+        // normal character
+        ++end;
+        ++count;
+      }
+      else
+      {
+        // control char
+        char c = (*end & '\xF0' ) >> 4;
+        spbuffer[4] = c + (c>9? 'a'-10 : '0');
+
+        c = (*end & '\x0F' );
+        spbuffer[5] = c + (c>9? 'a'-10 : '0');
+
+        special = spbuffer;
+      }
+      break;
     }
 
-    if ('\\' == *pos)
+    // character at end position is a specialchar
+    if (special)
     {
-      put("\\\\");
-      ++pos;
-      continue;
+      // first write accumulated non-special chars
+      if (count>0)
+      {
+        put(pos, count);
+      }
+
+      // then write the specialchar found
+      put(special);
+
+      // now restart scanning at next position
+      pos     = end + 1;
+      end     = pos;
+      special = 0;
+      count   = 0;
     }
+  }
 
-    const char * end = pos;
-
-    // find end or entity
-    while ( (dataLen==NUL_TERM_STRING || end-data < dataLen)
-            &&  0     != *end
-            &&  '\"'  != *end
-            &&  '\\'  != *end)
-    {
-      ++end;
-    }
-
-    put(pos, end-pos);
-    pos = end;
+  // write remaining string, not written in the loop
+  if (count>0)
+  {
+    put(pos, count);
   }
 
   put('"');
