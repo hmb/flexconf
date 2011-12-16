@@ -1,0 +1,226 @@
+{
+  "nShort" : -234,
+  "nuShort" : 5645,
+  "nInt" : -48142,
+  "nuInt" : 900,
+  "nLong" : -45456644,
+  "nuLong" : 89890,
+  "nuLongX" : 4112,
+  "fltFloat" : 797.987000,
+  "dblDouble" : 47.110000,
+  "strString" : "siebenundvierzigelf -\"'<>&- siebenundvierzigelf",
+  "datData" : {
+    "int" : 0,
+    "double" : 0.000000,
+    "string" : ""
+  },
+  "Data" : {
+    "int" : 0,
+    "double" : 0.000000,
+    "string" : ""
+  },
+  "datDataDerived" : {
+    "int" : 0,
+    "double" : 0.000000,
+    "string" : ""
+  },
+  "setdata" : [
+    "\n\n\r\t :special \" \\ \b\f\n end: \r\t",
+    "\n jkfsdh \n\rxxx\t :special \u000b \u001f \" \\ \b\f\n end: \rxx\t",
+    "asdf",
+    "jklö",
+    "special: \" ' < >",
+    "special: \" \\ \b \f \n \r \t :end"
+  ],
+  "setlong" : [
+    123,
+    545,
+    789,
+    852,
+    9315
+  ],
+  "ListData" : [
+    {
+      "int" : 45,
+      "double" : 54456456.564565,
+      "string" : "ldksfl"
+    },
+    {
+      "int" : 45,
+      "double" : 54456456.564565,
+      "string" : "ldksfl"
+    },
+    {
+      "int" : 45,
+      "double" : 54456456.564565,
+      "string" : "ldksfl"
+    }
+  ],
+  "ListString" : [
+    "Hallo",
+    "Hallo",
+    "Hallo",
+    "Welt",
+    "special: \" ' < >"
+  ],
+  "maplong" : [
+    {
+      "longid" : "5",
+      "int" : 45,
+      "double" : 54456456.564565,
+      "string" : "ldksfl"
+    },
+    {
+      "longid" : "6",
+      "int" : 546,
+      "double" : 45456.540000,
+      "string" : "sdalkds"
+    },
+    {
+      "longid" : "79",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "iurewiou"
+    }
+  ],
+  "mmaplong" : [
+    {
+      "longid" : "1001",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "1001-1"
+    },
+    {
+      "longid" : "1001",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "1001-2"
+    },
+    {
+      "longid" : "1002",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "1002"
+    },
+    {
+      "longid" : "1003",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "1003"
+    },
+    {
+      "longid" : "2002",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "2002-1"
+    },
+    {
+      "longid" : "2002",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "2002-2"
+    },
+    {
+      "longid" : "2004",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "2004-1"
+    },
+    {
+      "longid" : "2004",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "2004-2"
+    },
+    {
+      "longid" : "2004",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "2004-3"
+    },
+    {
+      "longid" : "2004",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "2004-4"
+    }
+  ],
+  "mapstr" : {
+    "asdfg" : {
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "key: asdfg"
+    },
+    "eropw" : {
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "key: eropw"
+    },
+    "kllkrew" : {
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "key: kllkrew"
+    },
+    "special: \" ' < >" : {
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "key: eropw"
+    }
+  },
+  "mmapstr" : [
+    {
+      "strid" : "special: \" ' < >",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "special: \" ' < >"
+    },
+    {
+      "strid" : "test1",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "multi key: test1-1"
+    },
+    {
+      "strid" : "test1",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "multi key: test1-2"
+    },
+    {
+      "strid" : "test2",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "multi key: test2"
+    },
+    {
+      "strid" : "test3",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "multi key: test3"
+    },
+    {
+      "strid" : "test4",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "multi key: test4-1"
+    },
+    {
+      "strid" : "test4",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "multi key: test4-2"
+    },
+    {
+      "strid" : "test4",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "multi key: test4-3"
+    },
+    {
+      "strid" : "test4",
+      "int" : 458,
+      "double" : 123287.650000,
+      "string" : "multi key: test4-4"
+    }
+  ]
+}
