@@ -39,6 +39,7 @@
 
 class CWriter;
 class CWriteXml;
+class CReader;
 class CReadXml;
 
 struct _xmlNode;
@@ -88,8 +89,12 @@ friend void serialize(CWriteXml & writer, const CData & rObject, const char * ps
   const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
 
 
+friend void deserialize(CReader & reader, CData & rObject, const char * pszTag =0, bool fRoot = true,
+  const char * pszIdTag = 0, std::string * pstrIdValue = 0);
+
 friend void deserialize(CReadXml & reader, CData & rObject, const char * pszTag =0, bool fRoot = true,
   const char * pszIdTag = 0, std::string * pstrIdValue = 0);
+  
 friend void deserialize(xmlNode * reader, CData & rObject, const char * pszTag =0, bool fRoot = true,
   const char * pszIdTag = 0, std::string * pstrIdValue = 0);
 };

@@ -37,7 +37,7 @@ void serialize(CWriter & writer, const CData & rObject, const char * pszTag,
   serialize(writer, static_cast<const SData&>(rObject), pszTag, pszIdTag, pstrIdValue);
 }
 
-void deserialize(CReadXml & reader, CData & rObject, const char * pszTag, bool fRoot,
+void deserialize(CReader & reader, CData & rObject, const char * pszTag, bool fRoot,
   const char * pszIdTag, std::string * pstrIdValue)
 {
   deserialize(reader, static_cast<SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);

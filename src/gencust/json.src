@@ -773,7 +773,8 @@ void CWriterJson::writeImpl(const char * data, int dataLen)
       special  = "\\\\";
       break;
 
-// needs not to be escaped
+// TODO needs not to be escaped
+//      possibly make it optional
 //    case '/':
 //      special  = "\\/";
 //      break;
@@ -1122,7 +1123,7 @@ void serialize(CWriter & writer, const std::string & rObject, const char * pszTa
 
 
 ********** [DH] STRUCT PROLOG
-void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag =0, bool fRoot = true,
+void deserialize(CReader & reader, $(name) & rObject, const char * pszTag =0, bool fRoot = true,
   const char * pszIdTag = 0, std::string * pstrIdValue = 0);
 ********** [END]
 
@@ -1155,14 +1156,14 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag =0,
 
 
 
-class CReadXml
+class CReader
 {
 public:
-  CReadXml()
+  CReader()
   {
   }
 
-  virtual ~CReadXml()
+  virtual ~CReader()
   {
   }
 
@@ -1201,7 +1202,7 @@ private:
 
 
 
-class CReadXmlPChar : public CReadXml
+class CReadXmlPChar : public CReader
 {
 public:
   CReadXmlPChar(const char * pszXml) :
@@ -1462,22 +1463,22 @@ inline void deserialize(const char * pBuffer, SLongHex & rObject)
 
 
 
-void deserialize(CReadXml & rReadXml, std::string & rObject, const char * pszTag, bool fRoot = true);
+void deserialize(CReader & reader, std::string & rObject, const char * pszTag, bool fRoot = true);
 
 // deserialize types without a base or ordinal integers in decimal system
 template <class _T>
-void deserialize(CReadXml & rReadXml, _T & rObject, const char * pszTag, bool fRoot = true)
+void deserialize(CReader & reader, _T & rObject, const char * pszTag, bool fRoot = true)
 {
   if (fRoot)
   {
-    if (!rReadXml.IsStartTag(pszTag, fRoot))
+    if (!reader.IsStartTag(pszTag, fRoot))
       return;
   }
   const char *  pszText   = 0;
   int           nLen      = 0;
-  rReadXml.GetData(pszText, nLen);
+  reader.GetData(pszText, nLen);
   deserialize(pszText, rObject);
-  if (!rReadXml.IsEndTag(pszTag))
+  if (!reader.IsEndTag(pszTag))
     return;
 }
 
@@ -1485,72 +1486,72 @@ void deserialize(CReadXml & rReadXml, _T & rObject, const char * pszTag, bool fR
 
 template <class _K>
 void deserialize(
-  CReadXml & rReadXml, std::set<_K> & rObject,
+  CReader & reader, std::set<_K> & rObject,
   const char * pszTag, const char * pszTagItem, bool fRoot = true)
 {
   if (fRoot)
   {
-    if (!rReadXml.IsStartTag(pszTag, fRoot))
+    if (!reader.IsStartTag(pszTag, fRoot))
       return;
   }
-  while (!rReadXml.IsEof() && !rReadXml.IsEndTag(pszTag))
+  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
   {
-    if (rReadXml.IsStartTag(pszTagItem, false))
+    if (reader.IsStartTag(pszTagItem, false))
     {
       _K _k;
-      deserialize(rReadXml, _k, pszTagItem, false);
+      deserialize(reader, _k, pszTagItem, false);
       rObject.insert(_k);
       continue;
     }
-    rReadXml.SkipTag();
-  } // while (!rReadXml.IsEndTag(...))
+    reader.SkipTag();
+  } // while (!reader.IsEndTag(...))
 }
 
 
 
 template <class _T>
 void deserialize(
-  CReadXml & rReadXml, std::list<_T> & rObject,
+  CReader & reader, std::list<_T> & rObject,
   const char * pszTag, const char * pszTagItem, bool fRoot = true)
 {
   if (fRoot)
   {
-    if (!rReadXml.IsStartTag(pszTag, fRoot))
+    if (!reader.IsStartTag(pszTag, fRoot))
       return;
   }
-  while (!rReadXml.IsEof() && !rReadXml.IsEndTag(pszTag))
+  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
   {
-    if (rReadXml.IsStartTag(pszTagItem, false))
+    if (reader.IsStartTag(pszTagItem, false))
     {
       _T _t;
-      deserialize(rReadXml, _t, pszTagItem, false);
+      deserialize(reader, _t, pszTagItem, false);
       rObject.push_back(_t);
       continue;
     }
-    rReadXml.SkipTag();
-  } // while (!rReadXml.IsEndTag(...))
+    reader.SkipTag();
+  } // while (!reader.IsEndTag(...))
 }
 
 
 
 template <class _T>
 void deserialize(
-  CReadXml & rReadXml, std::map<std::string, _T> & rObject,
+  CReader & reader, std::map<std::string, _T> & rObject,
   const char * pszTag, const char * pszTagItem, const char * pszTagId,
   bool fRoot = true)
 {
   if (fRoot)
   {
-    if (!rReadXml.IsStartTag(pszTag, fRoot))
+    if (!reader.IsStartTag(pszTag, fRoot))
       return;
   }
-  while (!rReadXml.IsEof() && !rReadXml.IsEndTag(pszTag))
+  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
   {
-    if (rReadXml.IsStartTag(pszTagItem, false))
+    if (reader.IsStartTag(pszTagItem, false))
     {
       std::string strKey;
       _T _t;
-      deserialize(rReadXml, _t, pszTagItem, false, pszTagId, &strKey);
+      deserialize(reader, _t, pszTagItem, false, pszTagId, &strKey);
 #if 0 // this should suffice, but to be on the safe side we use the old method
       rObject[strKey] = _t;
 #else
@@ -1563,30 +1564,30 @@ void deserialize(
 #endif
       continue;
     }
-    rReadXml.SkipTag();
-  } // while (!rReadXml.IsEndTag(...))
+    reader.SkipTag();
+  } // while (!reader.IsEndTag(...))
 }
 
 
 
 template <class _K, class _T>
 void deserialize(
-  CReadXml & rReadXml, std::map<_K, _T> & rObject,
+  CReader & reader, std::map<_K, _T> & rObject,
   const char * pszTag, const char * pszTagItem, const char * pszTagId,
   bool fRoot = true)
 {
   if (fRoot)
   {
-    if (!rReadXml.IsStartTag(pszTag, fRoot))
+    if (!reader.IsStartTag(pszTag, fRoot))
       return;
   }
-  while (!rReadXml.IsEof() && !rReadXml.IsEndTag(pszTag))
+  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
   {
-    if (rReadXml.IsStartTag(pszTagItem, false))
+    if (reader.IsStartTag(pszTagItem, false))
     {
       std::string strKey;
       _T _t;
-      deserialize(rReadXml, _t, pszTagItem, false, pszTagId, &strKey);
+      deserialize(reader, _t, pszTagItem, false, pszTagId, &strKey);
       _K _k;
       deserialize(strKey.c_str(), _k);
 #if 0 // this should suffice, but to be on the safe side we use the old method
@@ -1601,64 +1602,64 @@ void deserialize(
 #endif
       continue;
     }
-    rReadXml.SkipTag();
-  } // while (!rReadXml.IsEndTag(...))
+    reader.SkipTag();
+  } // while (!reader.IsEndTag(...))
 }
 
 
 
 template <class _T>
 void deserialize(
-  CReadXml & rReadXml, std::multimap<std::string, _T> & rObject,
+  CReader & reader, std::multimap<std::string, _T> & rObject,
   const char * pszTag, const char * pszTagItem, const char * pszTagId,
   bool fRoot = true)
 {
   if (fRoot)
   {
-    if (!rReadXml.IsStartTag(pszTag, fRoot))
+    if (!reader.IsStartTag(pszTag, fRoot))
       return;
   }
-  while (!rReadXml.IsEof() && !rReadXml.IsEndTag(pszTag))
+  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
   {
-    if (rReadXml.IsStartTag(pszTagItem, false))
+    if (reader.IsStartTag(pszTagItem, false))
     {
       std::string strKey;
       _T _t;
-      deserialize(rReadXml, _t, pszTagItem, false, pszTagId, &strKey);
+      deserialize(reader, _t, pszTagItem, false, pszTagId, &strKey);
       rObject.insert(std::pair<std::string, _T>(strKey, _t));
       continue;
     }
-    rReadXml.SkipTag();
-  } // while (!rReadXml.IsEndTag(...))
+    reader.SkipTag();
+  } // while (!reader.IsEndTag(...))
 }
 
 
 
 template <class _K, class _T>
 void deserialize(
-  CReadXml & rReadXml, std::multimap<_K, _T> & rObject,
+  CReader & reader, std::multimap<_K, _T> & rObject,
   const char * pszTag, const char * pszTagItem, const char * pszTagId,
   bool fRoot = true)
 {
   if (fRoot)
   {
-    if (!rReadXml.IsStartTag(pszTag, fRoot))
+    if (!reader.IsStartTag(pszTag, fRoot))
       return;
   }
-  while (!rReadXml.IsEof() && !rReadXml.IsEndTag(pszTag))
+  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
   {
-    if (rReadXml.IsStartTag(pszTagItem, false))
+    if (reader.IsStartTag(pszTagItem, false))
     {
       std::string strKey;
       _T _t;
-      deserialize(rReadXml, _t, pszTagItem, false, pszTagId, &strKey);
+      deserialize(reader, _t, pszTagItem, false, pszTagId, &strKey);
       _K _k;
       deserialize(strKey.c_str(), _k);
       rObject.insert(std::pair<_K, _T>(_k, _t));
       continue;
     }
-    rReadXml.SkipTag();
-  } // while (!rReadXml.IsEndTag(...))
+    reader.SkipTag();
+  } // while (!reader.IsEndTag(...))
 }
 
 
@@ -1689,30 +1690,30 @@ void deserialize(
 
 
 
-void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bool fRoot,
+void deserialize(CReader & reader, $(name) & rObject, const char * pszTag, bool fRoot,
   const char * pszIdTag, std::string * pstrIdValue)
 {
   if (!pszTag)
     pszTag="$(alias)";
   if (fRoot)
   {
-    if (!rReadXml.IsStartTag(pszTag, fRoot))
+    if (!reader.IsStartTag(pszTag, fRoot))
       return;
   }
-  while (!rReadXml.IsEof() && !rReadXml.IsEndTag(pszTag))
+  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
   {
-    if (pszIdTag && pstrIdValue && rReadXml.IsStartTag(pszIdTag, false))
+    if (pszIdTag && pstrIdValue && reader.IsStartTag(pszIdTag, false))
     {
-      deserialize(rReadXml, *pstrIdValue, pszIdTag, false);
+      deserialize(reader, *pstrIdValue, pszIdTag, false);
       continue;
     }
 ********** [END]
 
 
 ********** [DI] GENERIC DECL
-    if (rReadXml.IsStartTag("$(alias)", false))
+    if (reader.IsStartTag("$(alias)", false))
     {
-      deserialize(rReadXml, rObject.$(name), "$(alias)", false);
+      deserialize(reader, rObject.$(name), "$(alias)", false);
       continue;
     }
 ********** [END]
@@ -1720,9 +1721,9 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
 
 ********** [DI] VECTOR DECL
 /* TODO
-    if (rReadXml.IsStartTag("%s", false))\n", mstrAlias.c_str());
+    if (reader.IsStartTag("%s", false))\n", mstrAlias.c_str());
     {
-      deserialize(rReadXml, rObject.%s, "%s", false);\n", mstrName.c_str(), mstrAlias.c_str());
+      deserialize(reader, rObject.%s, "%s", false);\n", mstrName.c_str(), mstrAlias.c_str());
       continue;
     }
 */
@@ -1730,18 +1731,18 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
 
 
 ********** [DI] SET/LIST DECL
-    if (rReadXml.IsStartTag("$(alias)", false))
+    if (reader.IsStartTag("$(alias)", false))
     {
-      deserialize(rReadXml, rObject.$(name), "$(alias)", "$(item)", false);
+      deserialize(reader, rObject.$(name), "$(alias)", "$(item)", false);
       continue;
     }
 ********** [END]
 
 
 ********** [DI] MAP DECL
-    if (rReadXml.IsStartTag("$(alias)", false))
+    if (reader.IsStartTag("$(alias)", false))
     {
-      deserialize(rReadXml, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
+      deserialize(reader, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
       continue;
     }
 ********** [END]
@@ -1749,8 +1750,8 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
 
 ********** [DI] STRUCT EPILOG
     /* end of struct deserialize function */
-    rReadXml.SkipTag();
-  } // while (!rReadXml.IsEndTag(...))
+    reader.SkipTag();
+  } // while (!reader.IsEndTag(...))
 }
 ********** [END]
 
@@ -1763,11 +1764,11 @@ void deserialize(CReadXml & rReadXml, $(name) & rObject, const char * pszTag, bo
 
 
 
-void deserialize(CReadXml & rReadXml, std::string & rObject, const char * pszTag, bool fRoot)
+void deserialize(CReader & reader, std::string & rObject, const char * pszTag, bool fRoot)
 {
   if (fRoot)
   {
-    if (!rReadXml.IsStartTag(pszTag, fRoot))
+    if (!reader.IsStartTag(pszTag, fRoot))
       return;
   }
 
@@ -1778,11 +1779,11 @@ void deserialize(CReadXml & rReadXml, std::string & rObject, const char * pszTag
   rObject.erase();
   do
   {
-    fMore = !rReadXml.GetData(pszText, nLen);
+    fMore = !reader.GetData(pszText, nLen);
     rObject.append(pszText, nLen);
   } while (fMore);
 
-  if (!rReadXml.IsEndTag(pszTag))
+  if (!reader.IsEndTag(pszTag))
     return;
 }
 ********** [END]
