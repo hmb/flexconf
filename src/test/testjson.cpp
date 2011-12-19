@@ -43,10 +43,60 @@ void deserialize(CReader & reader, CData & rObject, const char * pszTag, bool fR
   deserialize(reader, static_cast<SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
 }
 
+const char * tkn2str(int token)
+{
+  const char * string = "<unknown>";
+
+  switch (token)
+  {
+    case CReader::CURLY_BRACKET_LEFT:        string = "{"; break;
+    case CReader::CURLY_BRACKET_RIGHT:       string = "}"; break;
+    case CReader::SQUARE_BRACKET_LEFT:       string = "["; break;
+    case CReader::SQUARE_BRACKET_RIGHT:      string = "]"; break;
+    case CReader::COLON:                     string = ":"; break;
+    case CReader::COMMA:                     string = ","; break;
+    case CReader::STRING:                    string = "STRING"; break;
+    case CReader::NUMBER:                    string = "NUMBER"; break;
+    case CReader::END:                       string = "END"; break;
+    case CReader::ERROR:                     string = "ERROR"; break;
+  }
+
+  return string;
+}
 
 
 int main(int argc, char *argv[])
 {
+  const char * json =
+    "{\n"
+    "  \"int\" : 0,\n"
+    "  \"double\" : 00.000000,\n"
+    "  \"string\" : \"\"\n"
+    "}\n";
+
+  std::cout << json;
+
+  CReadXmlPChar reader(json);
+
+  std::string text;
+  int token;
+
+  while ((token=reader.getToken(text)) != CReader::END)
+  {
+    std::cout << tkn2str(token);
+    if (true || token != CReader::ERROR)
+    {
+      std::cout << " -> '" << text << '\'' << std::endl;
+    }
+    else
+    {
+      std::cout << std::endl;
+      break;
+    }
+  }
+
+  return 0;
+
   std::string strXmlFirst;
   STest       testFirst;
 
@@ -68,7 +118,7 @@ int main(int argc, char *argv[])
 //     writer.SetAlignmentElem(0);
 //     writer.SetColonWhitespace(false);
 
-//*
+/*
     serialize(writer, testFirst);
 /*/
     SData dat;

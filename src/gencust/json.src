@@ -1167,37 +1167,309 @@ public:
   {
   }
 
-  bool IsEof()
+
+
+  enum Token {
+    CURLY_BRACKET_LEFT        = '{',
+    CURLY_BRACKET_RIGHT       = '}',
+    SQUARE_BRACKET_LEFT       = '[',
+    SQUARE_BRACKET_RIGHT      = ']',
+    COLON                     = ':',
+    COMMA                     = ',',
+    STRING                    = 0x100,
+    NUMBER                    = 0x101,
+    END                       = 0xFFFE,
+    ERROR                     = 0xFFFF
+  };
+
+  int getNibble()
   {
-    return isEof();
+    int c = getChar();
+
+    if (c >= '0' && c <= '9' )
+    {
+      return c - '0';
+    }
+    else if (c >= 'A' && c <= 'F' )
+    {
+      return c + 10 - 'A';
+    }
+    else if (c >= 'a' && c <= 'f' )
+    {
+      return c + 10 - 'a';
+    }
+    else
+    {
+      return -1;
+    }
   }
 
-  bool IsStartTag(const char * pszTag, bool fRoot)
+  int getSpecialChar()
   {
-    return isStartTag(pszTag, fRoot);
+    // read a special char after the initial backslash
+    int c = getChar();
+
+    switch (c)
+    {
+    case '"':
+      c  = '"';
+      break;
+
+    case '\\':
+      c = '\\';
+      break;
+
+    case '/':
+      c = '/';
+      break;
+
+    case 'b':
+      c  = '\b';
+      break;
+
+    case 'f':
+      c  = '\f';
+      break;
+
+    case 'n':
+      c  = '\n';
+      break;
+
+    case 'r':
+      c  = '\r';
+      break;
+
+    case 't':
+      c  = '\t';
+      break;
+
+    case 'u':
+      c =
+          getNibble()    << 12
+        | getNibble()    << 8
+        | getNibble()    << 4
+        | getNibble();
+      break;
+    }
+
+    return c;
   }
 
-  bool IsEndTag(const char * pszTag)
+  int getString(std::string & text)
   {
-    return isEndTag(pszTag);
+    int token = STRING;
+
+    int c = getChar();
+    for (; c!='"' && c!=END; c = getChar())
+    {
+      switch (c)
+      {
+      case '\\':
+        // read special char
+        c = getSpecialChar();
+        // no break on purpose
+      default:
+        text += c;
+        break;
+      }
+    }
+
+    if (c==END)
+    {
+      // TODO missing '"'
+      token = END;
+    }
+    return token;
   }
 
-  bool GetData(const char * & pszData, int & nDataLen)
+  int getNumber(int c, std::string & text)
   {
-    return getData(pszData, nDataLen);
+    enum State { minus, zero, integral, dot, fraction, e, plusminus, exponent, final };
+
+    State state = minus;
+    int token   = ERROR;
+
+    while (state != final)
+    {
+      switch (state)
+      {
+        case minus:
+          if (c == '-')
+          {
+            text += c;
+            c = getChar();
+          }
+          state = zero;
+          break;
+
+        case zero:
+          if (c == '0')
+          {
+            text += c;
+            c = getChar();
+            token = NUMBER;
+            state = dot;
+          }
+          else
+          {
+            state = integral;
+          }
+          break;
+
+        case integral:
+          if (c >= '1' && c <= '9')
+          {
+            text += c;
+            c = getChar();
+
+            while (c >= '0' && c <= '9')
+            {
+              text += c;
+              c = getChar();
+            }
+            token = NUMBER;
+            state = dot;
+          }
+          else
+          {
+            // token = ERROR; is still error
+            state = final;
+          }
+          break;
+
+        case dot:
+          if (c == '.')
+          {
+            text += c;
+            c = getChar();
+            state = fraction;
+          }
+          else if (c >= '0' && c <= '9')
+          {
+            token = ERROR;
+            state = final;
+          }
+          else
+          {
+            state = e;
+          }
+          break;
+
+        case fraction:
+          if (c >= '0' && c <= '9')
+          {
+            text += c;
+            c = getChar();
+
+            while (c >= '0' && c <= '9')
+            {
+              text += c;
+              c = getChar();
+            }
+            state = e;
+          }
+          else
+          {
+            token = ERROR;
+            state = final;
+          }
+          break;
+
+        case e:
+          if (c == 'e'  ||  c == 'E')
+          {
+            text += c;
+            c = getChar();
+            state = plusminus;
+          }
+          else
+          {
+            state = final;
+          }
+          break;
+
+        case plusminus:
+          if (c == '+'  ||  c == '-')
+          {
+            text += c;
+            c = getChar();
+          }
+          state = exponent;
+          break;
+
+        case exponent:
+          if (c >= '0' && c <= '9')
+          {
+            text += c;
+            c = getChar();
+
+            while (c >= '0' && c <= '9')
+            {
+              text += c;
+              c = getChar();
+            }
+            state = final;
+          }
+          else
+          {
+            token = ERROR;
+            state = final;
+          }
+          break;
+
+        // shutup compiler about missing enum in switch
+        // this code is unreachable anyway
+        case final:
+          break;
+      }
+    }
+
+    // putback the last read char that led to final
+    putBack(c);
+
+    return token;
   }
 
-  void SkipTag()
+  int getToken(std::string & text)
   {
-    skipTag();
+    int token = END;
+
+    text.clear();
+
+    int c = getChar();
+
+    switch (c)
+    {
+      case CURLY_BRACKET_LEFT:
+      case CURLY_BRACKET_RIGHT:
+      case SQUARE_BRACKET_LEFT:
+      case SQUARE_BRACKET_RIGHT:
+      case COLON:
+      case COMMA:
+        text  = c;
+        token = c;
+        break;
+
+      case '"':
+        token = getString(text);
+        break;
+
+      case END:
+        // token is already initialized with END
+        break;
+
+      default:
+        token = getNumber(c, text);
+        break;
+    }
+
+    return token;
   }
+
 
 private:
-  virtual bool isEof()                                            = 0;
-  virtual bool isStartTag(const char * pszTag, bool fRoot)        = 0;
-  virtual bool isEndTag(const char * pszTag)                      = 0;
-  virtual bool getData(const char * & pszData, int & nDataLen)    = 0;
-  virtual void skipTag()                                          = 0;
+  virtual int getChar()       = 0;
+  virtual void putBack(int c) = 0;
 };
 
 
@@ -1210,138 +1482,14 @@ public:
   {
   }
 
-  bool isEof()
+protected:
+  void setXml(const char * pszXml)
   {
-    return !*mpszXml;
+    mpszXml = pszXml;
   }
 
-  bool isStartTag(const char * pszTag, bool fRoot)
-  {
-    if (fRoot)
-    {
-      // <?xml version="1.0" encoding="UTF-8" ?>
-      if (0!=strncmp(mpszXml, "<?xml ", 6))
-        return false;
-      mpszXml += 6;
-      while ( *mpszXml && '?' != *mpszXml++);
-      if ( '>' != *mpszXml++)
-        return false;
-
-      // <!DOCTYPE ...
-      eatws();
-      if (0==strncmp(mpszXml, "<!DOCTYPE ", 10))
-      {
-        mpszXml += 10;
-        while ( *mpszXml && '>' != *mpszXml++);
-      }
-    }
-
-    eatws();
-
-    int nTagLen = strlen(pszTag);
-
-    if ('<' != mpszXml[0]                           ||
-        0   != strncmp(mpszXml+1, pszTag, nTagLen)  ||
-        '>' != mpszXml[nTagLen+1] )
-    {
-      return false;
-    }
-    mpszXml += nTagLen+2;
-    return true;
-  }
-
-  bool isEndTag(const char * pszTag)
-  {
-    eatws();
-
-    int nTagLen = strlen(pszTag);
-
-    if ('<' != mpszXml[0]                           ||
-        '/' != mpszXml[1]                           ||
-        0   != strncmp(mpszXml+2, pszTag, nTagLen)  ||
-        '>' != mpszXml[nTagLen+2] )
-    {
-      return false;
-    }
-    mpszXml += nTagLen+3;
-    return true;
-  }
-
-  bool getData(const char * & pszData, int & nDataLen)
-  {
-    if ('&' == *mpszXml)
-    {
-      // skip ampersand
-      ++mpszXml;
-
-      if (0==strncmp(mpszXml, "gt;", 3))
-      {
-        pszData =   ">";
-        mpszXml +=  3;
-      }
-      else if (0==strncmp(mpszXml, "lt;", 3))
-      {
-        pszData =   "<";
-        mpszXml +=  3;
-      }
-      else if (0==strncmp(mpszXml, "amp;", 4))
-      {
-        pszData =   "&";
-        mpszXml +=  4;
-      }
-      else if (0==strncmp(mpszXml, "quot;", 5))
-      {
-        pszData =   "\"";
-        mpszXml +=  5;
-      }
-      else if (0==strncmp(mpszXml, "apos;", 5))
-      {
-        pszData =   "'";
-        mpszXml +=  5;
-      }
-      else
-      {
-        // no known xml entity, use as plain text
-        pszData =   "&";
-      }
-      nDataLen = 1;
-
-      // finished, when new tag starts or string is at the end
-      return  0   == *mpszXml     ||
-              '<' == *mpszXml;
-    }
-
-    const char * pszNext = mpszXml;
-    // find next delimiter
-    while ( 0   != *pszNext &&
-            '<' != *pszNext &&
-            '&' != *pszNext )
-    {
-      ++pszNext;
-    }
-
-    pszData   = mpszXml;
-    nDataLen  = pszNext - mpszXml;
-    mpszXml   = pszNext;
-
-    return '&' != *pszNext;
-  }
-
-  void skipTag()
-  {
-    // not eof then skip over the '<', if we are on one else skip non '<'
-    // skip over the '<'
-    if (*mpszXml)
-      ++mpszXml;
-
-    // find next start or end tag
-    while (  0 != *mpszXml   &&   '<' != *mpszXml  )
-    {
-      ++mpszXml;
-    }
-  }
-
-  void eatws()
+private:
+  void eatWs()
   {
     while ( 0 != *mpszXml &&
             (
@@ -1355,13 +1503,21 @@ public:
       ++mpszXml;
     }
   }
-protected:
-  void setXml(const char * pszXml)
+
+  int getChar()
   {
-    mpszXml = pszXml;
+    eatWs();
+    int c = *mpszXml==0? END : *mpszXml;
+    ++mpszXml;
+
+    return c;
   }
 
-private:
+  void putBack(int c)
+  {
+    --mpszXml;
+  }
+
   const char * mpszXml;
 };
 
@@ -1469,6 +1625,7 @@ void deserialize(CReader & reader, std::string & rObject, const char * pszTag, b
 template <class _T>
 void deserialize(CReader & reader, _T & rObject, const char * pszTag, bool fRoot = true)
 {
+/*
   if (fRoot)
   {
     if (!reader.IsStartTag(pszTag, fRoot))
@@ -1480,6 +1637,7 @@ void deserialize(CReader & reader, _T & rObject, const char * pszTag, bool fRoot
   deserialize(pszText, rObject);
   if (!reader.IsEndTag(pszTag))
     return;
+*/
 }
 
 
@@ -1489,6 +1647,7 @@ void deserialize(
   CReader & reader, std::set<_K> & rObject,
   const char * pszTag, const char * pszTagItem, bool fRoot = true)
 {
+/*
   if (fRoot)
   {
     if (!reader.IsStartTag(pszTag, fRoot))
@@ -1505,6 +1664,7 @@ void deserialize(
     }
     reader.SkipTag();
   } // while (!reader.IsEndTag(...))
+*/
 }
 
 
@@ -1514,6 +1674,7 @@ void deserialize(
   CReader & reader, std::list<_T> & rObject,
   const char * pszTag, const char * pszTagItem, bool fRoot = true)
 {
+/*
   if (fRoot)
   {
     if (!reader.IsStartTag(pszTag, fRoot))
@@ -1530,6 +1691,7 @@ void deserialize(
     }
     reader.SkipTag();
   } // while (!reader.IsEndTag(...))
+*/
 }
 
 
@@ -1540,6 +1702,7 @@ void deserialize(
   const char * pszTag, const char * pszTagItem, const char * pszTagId,
   bool fRoot = true)
 {
+/*
   if (fRoot)
   {
     if (!reader.IsStartTag(pszTag, fRoot))
@@ -1566,6 +1729,7 @@ void deserialize(
     }
     reader.SkipTag();
   } // while (!reader.IsEndTag(...))
+*/
 }
 
 
@@ -1576,6 +1740,7 @@ void deserialize(
   const char * pszTag, const char * pszTagItem, const char * pszTagId,
   bool fRoot = true)
 {
+/*
   if (fRoot)
   {
     if (!reader.IsStartTag(pszTag, fRoot))
@@ -1604,6 +1769,7 @@ void deserialize(
     }
     reader.SkipTag();
   } // while (!reader.IsEndTag(...))
+*/
 }
 
 
@@ -1614,6 +1780,7 @@ void deserialize(
   const char * pszTag, const char * pszTagItem, const char * pszTagId,
   bool fRoot = true)
 {
+/*
   if (fRoot)
   {
     if (!reader.IsStartTag(pszTag, fRoot))
@@ -1631,6 +1798,7 @@ void deserialize(
     }
     reader.SkipTag();
   } // while (!reader.IsEndTag(...))
+*/
 }
 
 
@@ -1641,6 +1809,7 @@ void deserialize(
   const char * pszTag, const char * pszTagItem, const char * pszTagId,
   bool fRoot = true)
 {
+/*
   if (fRoot)
   {
     if (!reader.IsStartTag(pszTag, fRoot))
@@ -1660,6 +1829,7 @@ void deserialize(
     }
     reader.SkipTag();
   } // while (!reader.IsEndTag(...))
+*/
 }
 
 
@@ -1693,6 +1863,7 @@ void deserialize(
 void deserialize(CReader & reader, $(name) & rObject, const char * pszTag, bool fRoot,
   const char * pszIdTag, std::string * pstrIdValue)
 {
+/*
   if (!pszTag)
     pszTag="$(alias)";
   if (fRoot)
@@ -1720,13 +1891,13 @@ void deserialize(CReader & reader, $(name) & rObject, const char * pszTag, bool 
 
 
 ********** [DI] VECTOR DECL
-/* TODO
+/ * TODO
     if (reader.IsStartTag("%s", false))\n", mstrAlias.c_str());
     {
       deserialize(reader, rObject.%s, "%s", false);\n", mstrName.c_str(), mstrAlias.c_str());
       continue;
     }
-*/
+* /
 ********** [END]
 
 
@@ -1749,9 +1920,10 @@ void deserialize(CReader & reader, $(name) & rObject, const char * pszTag, bool 
 
 
 ********** [DI] STRUCT EPILOG
-    /* end of struct deserialize function */
+    // end of struct deserialize function
     reader.SkipTag();
   } // while (!reader.IsEndTag(...))
+*/
 }
 ********** [END]
 
@@ -1766,6 +1938,7 @@ void deserialize(CReader & reader, $(name) & rObject, const char * pszTag, bool 
 
 void deserialize(CReader & reader, std::string & rObject, const char * pszTag, bool fRoot)
 {
+/*
   if (fRoot)
   {
     if (!reader.IsStartTag(pszTag, fRoot))
@@ -1785,5 +1958,6 @@ void deserialize(CReader & reader, std::string & rObject, const char * pszTag, b
 
   if (!reader.IsEndTag(pszTag))
     return;
+*/
 }
 ********** [END]
