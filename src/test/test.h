@@ -122,13 +122,13 @@ struct STestBase
   SData             vecData[4];   // flexconf alias sepp item DataElement
   CData             datDataDerived;
 
-//<!--
   // illeagal: maps with plain types as value are not allowed
   // std::map<std::string, int>    mapTesting;
 
   // testcase for a string set
   std::set<std::string>  setData; //flexconf alias setdata item text
 
+//<!--
   // testcase for a long set
   std::set<long>  setDataL; //flexconf alias setlong item long
 

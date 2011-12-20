@@ -1156,6 +1156,7 @@ void deserialize(CReader & reader, $(name) & rObject, const char * pszTag =0,
 
 
 
+const char * tkn2str(int token);
 void printTkn(int token, const std::string & text);
 
 class CReader
@@ -1662,22 +1663,36 @@ void deserialize(CReader & reader, _T & object, const char * name)
 
 template <class _K>
 void deserialize(
-  CReader & reader, std::set<_K> & rObject,
-  const char * pszTag, const char * pszTagItem)
+  CReader & reader, std::set<_K> & object,
+  const char * name, const char * nameItem)
 {
-/*
-  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
+  std::cerr << "parser info: set deserializer" << std::endl;
+
+  std::string text;
+  int token = reader.getToken(text);
+
+  // token  must be an open square bracket
+  if (token != CReader::SQUARE_BRACKET_LEFT)
   {
-    if (reader.IsStartTag(pszTagItem, false))
-    {
-      _K _k;
-      deserialize(reader, _k, pszTagItem);
-      rObject.insert(_k);
-      continue;
-    }
-    reader.SkipTag();
-  } // while (!reader.IsEndTag(...))
-*/
+    // TODO ERROR
+    std::cerr << "parser error: left square bracket expected" << std::endl;
+  }
+
+  do
+  {
+    _K _k;
+    deserialize(reader, _k, 0);
+    object.insert(_k);
+
+    token = reader.getToken(text);
+  }
+  while (token == CReader::COMMA);
+
+  if (token != CReader::SQUARE_BRACKET_RIGHT)
+  {
+    // TODO ERROR
+    std::cerr << "parser error: right square bracket expected: " << tkn2str(token) << std::endl;
+  }
 }
 
 
@@ -1917,13 +1932,31 @@ void deserialize(CReader & reader, $(name) & rObject, const char * name,
 
 
 ********** [DI] SET/LIST DECL
-/*
-    if (reader.IsStartTag("$(alias)", false))
+
+    if (token == CReader::STRING && text == "$(alias)")
     {
+      // read colon
+      token = reader.getToken(text);
+      if (token != CReader::COLON)
+      {
+        // TODO ERROR
+        std::cerr << "parser error: colon expected" << std::endl;
+      }
+
       deserialize(reader, rObject.$(name), "$(alias)", "$(item)");
-      continue;
+
+      token = reader.getToken(text);
+      if (token == CReader::COMMA)
+      {
+        // prepare for next element
+        token = reader.getToken(text);
+      }
+      else
+      {
+        // finished inside this struct
+        break;
+      }
     }
-*/
 ********** [END]
 
 
