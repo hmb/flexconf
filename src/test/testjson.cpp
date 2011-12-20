@@ -124,6 +124,7 @@ void writeStructure(const T & dat, bool pretty)
 
 int main(int argc, char *argv[])
 {
+/*
   const bool pretty = (argc==2 && 0==strcmp("pretty", argv[1]));
 
   const char * json =
@@ -132,6 +133,7 @@ int main(int argc, char *argv[])
     "  \"double\" : 2.000234000,\n"
     "  \"string\" : \"foobar\"\n"
     "}\n";
+*/
 
 //   std::cout << json;
 
