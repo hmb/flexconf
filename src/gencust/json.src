@@ -1277,7 +1277,7 @@ public:
     if (c==END)
     {
       // TODO ERROR
-      std::cout << "lexical error: missing terminating double quote" << std::endl;
+      std::cerr << "lexical error: missing terminating double quote" << std::endl;
       token = END;
     }
     return token;
@@ -1463,6 +1463,8 @@ public:
         token = getNumber(c, text);
         break;
     }
+
+    printTkn(token, text);
 
     return token;
   }
@@ -1652,7 +1654,7 @@ void deserialize(CReader & reader, _T & object, const char * name)
   else
   {
     // TODO ERROR
-    std::cout << "parser error: value expected" << std::endl;
+    std::cerr << "parser error: value expected" << std::endl;
   }
 }
 
@@ -1852,7 +1854,7 @@ void deserialize(CReader & reader, $(name) & rObject, const char * name,
   if (token != CReader::CURLY_BRACKET_LEFT)
   {
     // TODO ERROR
-    std::cout << "parser error: left curly bracket expected" << std::endl;
+    std::cerr << "parser error: left curly bracket expected" << std::endl;
   }
 
   // read first element
@@ -1883,10 +1885,11 @@ void deserialize(CReader & reader, $(name) & rObject, const char * name,
       if (token != CReader::COLON)
       {
         // TODO ERROR
-        std::cout << "parser error: colon expected" << std::endl;
+        std::cerr << "parser error: colon expected" << std::endl;
       }
 
       deserialize(reader, rObject.$(name), "$(alias)");
+
       token = reader.getToken(text);
       if (token == CReader::COMMA)
       {
@@ -1941,7 +1944,7 @@ void deserialize(CReader & reader, $(name) & rObject, const char * name,
   if (token != CReader::CURLY_BRACKET_RIGHT)
   {
     // TODO ERROR
-    std::cout << "parser error: right curly bracket expected" << std::endl;
+    std::cerr << "parser error: right curly bracket expected" << std::endl;
   }
 }
 ********** [END]
@@ -1962,7 +1965,7 @@ void deserialize(CReader & reader, std::string & object, const char * name)
   if (token != CReader::STRING)
   {
     // TODO ERROR
-    std::cout << "parser error: string value expected" << std::endl;
+    std::cerr << "parser error: string value expected" << std::endl;
   }
 }
 ********** [END]
