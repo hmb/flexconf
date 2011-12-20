@@ -1855,48 +1855,76 @@ void deserialize(
 
 template <class _T>
 void deserialize(
-  CReader & reader, std::multimap<std::string, _T> & rObject,
-  const char * pszTag, const char * pszTagItem, const char * pszTagId)
+  CReader & reader, std::multimap<std::string, _T> & object,
+  const char * name, const char * nameItem, const char * nameId)
 {
-/*
-  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
+  std::cerr << "parser info: multi map deserializer string" << std::endl;
+
+  std::string text;
+  int token = reader.getToken(text);
+
+  // token  must be an open square bracket
+  if (token != CReader::SQUARE_BRACKET_LEFT)
   {
-    if (reader.IsStartTag(pszTagItem, false))
-    {
-      std::string strKey;
-      _T _t;
-      deserialize(reader, _t, pszTagItem, pszTagId, &strKey);
-      rObject.insert(std::pair<std::string, _T>(strKey, _t));
-      continue;
-    }
-    reader.SkipTag();
-  } // while (!reader.IsEndTag(...))
-*/
+    // TODO ERROR
+    std::cerr << "parser error: left square bracket expected" << std::endl;
+  }
+
+  do
+  {
+    std::string strKey;
+    _T _t;
+    deserialize(reader, _t, nameItem, nameId, &strKey);
+    object.insert(std::pair<std::string, _T>(strKey, _t));
+
+    token = reader.getToken(text);
+  }
+  while (token == CReader::COMMA);
+
+  if (token != CReader::SQUARE_BRACKET_RIGHT)
+  {
+    // TODO ERROR
+    std::cerr << "parser error: right square bracket expected: " << tkn2str(token) << std::endl;
+  }
 }
 
 
 
 template <class _K, class _T>
 void deserialize(
-  CReader & reader, std::multimap<_K, _T> & rObject,
-  const char * pszTag, const char * pszTagItem, const char * pszTagId)
+  CReader & reader, std::multimap<_K, _T> & object,
+  const char * name, const char * nameItem, const char * nameId)
 {
-/*
-  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
+  std::cerr << "parser info: multi map deserializer _K" << std::endl;
+
+  std::string text;
+  int token = reader.getToken(text);
+
+  // token  must be an open square bracket
+  if (token != CReader::SQUARE_BRACKET_LEFT)
   {
-    if (reader.IsStartTag(pszTagItem, false))
-    {
-      std::string strKey;
-      _T _t;
-      deserialize(reader, _t, pszTagItem, pszTagId, &strKey);
-      _K _k;
-      deserialize(strKey.c_str(), _k);
-      rObject.insert(std::pair<_K, _T>(_k, _t));
-      continue;
-    }
-    reader.SkipTag();
-  } // while (!reader.IsEndTag(...))
-*/
+    // TODO ERROR
+    std::cerr << "parser error: left square bracket expected" << std::endl;
+  }
+
+  do
+  {
+    std::string strKey;
+    _T _t;
+    deserialize(reader, _t, nameItem, nameId, &strKey);
+    _K _k;
+    deserialize(strKey.c_str(), _k);
+    object.insert(std::pair<_K, _T>(_k, _t));
+
+    token = reader.getToken(text);
+  }
+  while (token == CReader::COMMA);
+
+  if (token != CReader::SQUARE_BRACKET_RIGHT)
+  {
+    // TODO ERROR
+    std::cerr << "parser error: right square bracket expected: " << tkn2str(token) << std::endl;
+  }
 }
 
 
