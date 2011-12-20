@@ -43,6 +43,8 @@ void deserialize(CReader & reader, CData & rObject, const char * pszTag, bool fR
   deserialize(reader, static_cast<SData&>(rObject), pszTag, fRoot, pszIdTag, pstrIdValue);
 }
 
+
+
 const char * tkn2str(int token)
 {
   const char * string = "<unknown>";
@@ -63,6 +65,8 @@ const char * tkn2str(int token)
 
   return string;
 }
+
+
 
 void tokenize(CReader & reader)
 {
@@ -89,6 +93,15 @@ void tokenize(CReader & reader)
 template <class T>
 void writeStructure(bool pretty)
 {
+  T dat;
+  writeStructure(dat, pretty);
+}
+
+
+
+template <class T>
+void writeStructure(const T & dat, bool pretty)
+{
   std::string serialized;
   CWriterJsonString writer(serialized);
 
@@ -103,7 +116,6 @@ void writeStructure(bool pretty)
 //   writer.SetAlignmentElem(0);
 //   writer.SetColonWhitespace(false);
 
-  T dat;
   serialize(writer, dat);
   std::cout << serialized << std::endl;
 }
@@ -112,6 +124,8 @@ void writeStructure(bool pretty)
 
 int main(int argc, char *argv[])
 {
+  const bool pretty = (argc==2 && 0==strcmp("pretty", argv[1]));
+
   const char * json =
     "{\n"
     "  \"int\" : 451,\n"
