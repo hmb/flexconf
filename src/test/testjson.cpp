@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
 
     serialize(writer, sTest);
 
-    std::cerr << doublecheck << std::endl;
+    std::cout << doublecheck << std::endl;
 
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
     std::cerr << "| compare both strings                                           |" << std::endl;
