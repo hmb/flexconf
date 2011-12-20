@@ -1699,22 +1699,36 @@ void deserialize(
 
 template <class _T>
 void deserialize(
-  CReader & reader, std::list<_T> & rObject,
-  const char * pszTag, const char * pszTagItem)
+  CReader & reader, std::list<_T> & object,
+  const char * name, const char * nameItem)
 {
-/*
-  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
+  std::cerr << "parser info: list deserializer" << std::endl;
+
+  std::string text;
+  int token = reader.getToken(text);
+
+  // token  must be an open square bracket
+  if (token != CReader::SQUARE_BRACKET_LEFT)
   {
-    if (reader.IsStartTag(pszTagItem, false))
-    {
-      _T _t;
-      deserialize(reader, _t, pszTagItem);
-      rObject.push_back(_t);
-      continue;
-    }
-    reader.SkipTag();
-  } // while (!reader.IsEndTag(...))
-*/
+    // TODO ERROR
+    std::cerr << "parser error: left square bracket expected" << std::endl;
+  }
+
+  do
+  {
+    _T _t;
+    deserialize(reader, _t, 0);
+    object.push_back(_t);
+
+    token = reader.getToken(text);
+  }
+  while (token == CReader::COMMA);
+
+  if (token != CReader::SQUARE_BRACKET_RIGHT)
+  {
+    // TODO ERROR
+    std::cerr << "parser error: right square bracket expected: " << tkn2str(token) << std::endl;
+  }
 }
 
 

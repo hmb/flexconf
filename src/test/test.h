@@ -128,7 +128,6 @@ struct STestBase
   // testcase for a string set
   std::set<std::string>  setData; //flexconf alias setdata item text
 
-//<!--
   // testcase for a long set
   std::set<long>  setDataL; //flexconf alias setlong item long
 
@@ -138,6 +137,7 @@ struct STestBase
   // testcase for a data list
   std::list<std::string> mlstString;  //flexconf alias ListString item StringItem
 
+//<!--
   std::map<long, SData>  mapDataL; //flexconf alias maplong item app id longid
 
   std::multimap<long, SData>  mmapDataL; //flexconf alias mmaplong item app id longid
