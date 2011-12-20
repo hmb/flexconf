@@ -122,6 +122,7 @@ struct STestBase
   SData             vecData[4];   // flexconf alias sepp item DataElement
   CData             datDataDerived;
 
+//<!--
   // illeagal: maps with plain types as value are not allowed
   // std::map<std::string, int>    mapTesting;
 
@@ -144,6 +145,7 @@ struct STestBase
   std::map<std::string, SData>  mapDataStr; //flexconf alias mapstr item app id strid
 
   std::multimap<std::string, SData>  mmapDataStr; //flexconf alias mmapstr item app id strid
+//-->
 
 #ifndef _MSC_VER
 //<!--
