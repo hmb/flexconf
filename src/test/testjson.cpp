@@ -68,6 +68,22 @@ const char * tkn2str(int token)
 
 
 
+void printTkn(int token, const std::string & text)
+{
+  std::cerr << tkn2str(token);
+
+  if (token != CReader::ERROR && token != CReader::END)
+  {
+    std::cerr << " -> '" << text << '\'' << std::endl;
+  }
+  else
+  {
+    std::cerr << std::endl;
+  }
+}
+
+
+
 void tokenize(CReader & reader)
 {
   std::string text;
@@ -75,14 +91,10 @@ void tokenize(CReader & reader)
 
   while ((token=reader.getToken(text)) != CReader::END)
   {
-    std::cout << tkn2str(token);
-    if (token != CReader::ERROR)
+    printTkn(token, text);
+
+    if (token == CReader::ERROR)
     {
-      std::cout << " -> '" << text << '\'' << std::endl;
-    }
-    else
-    {
-      std::cout << std::endl;
       break;
     }
   }

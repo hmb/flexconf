@@ -1156,6 +1156,8 @@ void deserialize(CReader & reader, $(name) & rObject, const char * pszTag =0,
 
 
 
+void printTkn(int token, const std::string & text);
+
 class CReader
 {
 public:
