@@ -175,29 +175,32 @@ int main(int argc, char *argv[])
     std::cout << serialized << std::endl;
   }
 
-#if 0
   {
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
     std::cerr << "| read xml back from the same string...                          |" << std::endl;
 
     STest sTest;
 
-    CReadXmlPChar readPChar(strXmlFirst.c_str());
-    deserialize(readPChar, sTest);
+    CReaderCharPointer reader(serialized.c_str());
+    deserialize(reader, sTest);
 
     std::cerr << "| ...and rewrite again to a new string                           |" << std::endl;
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
 
-    std::string strXmlSecond;
+    std::string doublecheck;
 
-    CWriteXmlString writeString(strXmlSecond);
-    serialize(writeString, sTest);
-    std::cerr << strXmlSecond << std::endl;
+    CWriterJsonString writer(doublecheck);
+
+    writer.SetPretty();
+
+    serialize(writer, sTest);
+
+    std::cerr << doublecheck << std::endl;
 
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
     std::cerr << "| compare both strings                                           |" << std::endl;
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
-    winloose(strXmlFirst == strXmlSecond);
+    winloose(serialized == doublecheck);
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
 
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
@@ -207,6 +210,7 @@ int main(int argc, char *argv[])
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
   }
 
+#if 0
   for (int nArg=1; nArg<argc; nArg++)
   {
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
