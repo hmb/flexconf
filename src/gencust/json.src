@@ -1738,28 +1738,77 @@ void deserialize(
   CReader & reader, std::map<std::string, _T> & rObject,
   const char * pszTag, const char * pszTagItem, const char * pszTagId)
 {
-/*
-  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
+  std::cerr << "parser info: map deserializer string" << std::endl;
+
+  std::string text;
+  int token = reader.getToken(text);
+
+  if (token != CReader::CURLY_BRACKET_LEFT)
   {
-    if (reader.IsStartTag(pszTagItem, false))
+    // TODO ERROR
+    std::cerr << "parser error: left curly bracket expected" << std::endl;
+  }
+
+  do
+  {
+    std::string strKey;
+    token = reader.getToken(strKey);
+
+    if (token != CReader::STRING)
     {
-      std::string strKey;
-      _T _t;
-      deserialize(reader, _t, pszTagItem, pszTagId, &strKey);
-#if 0 // this should suffice, but to be on the safe side we use the old method
-      rObject[strKey] = _t;
-#else
-      typename std::map<std::string, _T>::iterator fnd = rObject.find(strKey);
-      if (fnd != rObject.end())
-      {
-        rObject.erase(fnd);
-      }
-      rObject.insert(std::pair<std::string, _T>(strKey, _t));
-#endif
-      continue;
+      // TODO ERROR
+      std::cerr << "parser error: string (map index) expected" << std::endl;
     }
-    reader.SkipTag();
-  } // while (!reader.IsEndTag(...))
+
+    // read colon
+    token = reader.getToken(text);
+    if (token != CReader::COLON)
+    {
+      // TODO ERROR
+      std::cerr << "parser error: colon expected" << std::endl;
+    }
+
+    _T _t;
+    deserialize(reader, _t, pszTagItem);
+    rObject[strKey] = _t;
+
+    token = reader.getToken(text);
+  }
+  while (token == CReader::COMMA);
+
+  if (token != CReader::CURLY_BRACKET_RIGHT)
+  {
+    // TODO ERROR
+    std::cerr << "parser error: right curly bracket expected: " << tkn2str(token) << std::endl;
+  }
+
+/* inbuild version
+  std::string text;
+  int token = reader.getToken(text);
+
+  // token  must be an open square bracket
+  if (token != CReader::SQUARE_BRACKET_LEFT)
+  {
+    // TODO ERROR
+    std::cerr << "parser error: left square bracket expected" << std::endl;
+  }
+
+  do
+  {
+    std::string strKey;
+    _T _t;
+    deserialize(reader, _t, pszTagItem, pszTagId, &strKey);
+    rObject[strKey] = _t;
+
+    token = reader.getToken(text);
+  }
+  while (token == CReader::COMMA);
+
+  if (token != CReader::SQUARE_BRACKET_RIGHT)
+  {
+    // TODO ERROR
+    std::cerr << "parser error: right square bracket expected: " << tkn2str(token) << std::endl;
+  }
 */
 }
 
@@ -1767,34 +1816,39 @@ void deserialize(
 
 template <class _K, class _T>
 void deserialize(
-  CReader & reader, std::map<_K, _T> & rObject,
-  const char * pszTag, const char * pszTagItem, const char * pszTagId)
+  CReader & reader, std::map<_K, _T> & object,
+  const char * name, const char * nameItem, const char * nameId)
 {
-/*
-  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
+  std::cerr << "parser info: map deserializer _K" << std::endl;
+
+  std::string text;
+  int token = reader.getToken(text);
+
+  // token  must be an open square bracket
+  if (token != CReader::SQUARE_BRACKET_LEFT)
   {
-    if (reader.IsStartTag(pszTagItem, false))
-    {
-      std::string strKey;
-      _T _t;
-      deserialize(reader, _t, pszTagItem, pszTagId, &strKey);
-      _K _k;
-      deserialize(strKey.c_str(), _k);
-#if 0 // this should suffice, but to be on the safe side we use the old method
-      rObject[_k] = _t;
-#else
-      typename std::map<_K, _T>::iterator fnd = rObject.find(_k);
-      if (fnd != rObject.end())
-      {
-        rObject.erase(fnd);
-      }
-      rObject.insert(std::pair<_K, _T>(_k, _t));
-#endif
-      continue;
-    }
-    reader.SkipTag();
-  } // while (!reader.IsEndTag(...))
-*/
+    // TODO ERROR
+    std::cerr << "parser error: left square bracket expected" << std::endl;
+  }
+
+  do
+  {
+    std::string strKey;
+    _T _t;
+    deserialize(reader, _t, nameItem, nameId, &strKey);
+    _K _k;
+    deserialize(strKey.c_str(), _k);
+    object[_k] = _t;
+
+    token = reader.getToken(text);
+  }
+  while (token == CReader::COMMA);
+
+  if (token != CReader::SQUARE_BRACKET_RIGHT)
+  {
+    // TODO ERROR
+    std::cerr << "parser error: right square bracket expected: " << tkn2str(token) << std::endl;
+  }
 }
 
 
@@ -1889,19 +1943,34 @@ void deserialize(CReader & reader, $(name) & rObject, const char * name,
   // read first element
   token = reader.getToken(text);
 
-  // if this is a container, the first element shall be the key
-  if (idTag && idValue && token == CReader::STRING && text == idTag)
-  {
-    // read colon
-    token = reader.getToken(text);
-    // deserialize value
-    deserialize(reader, *idValue, idTag);
-    // read next token
-    token = reader.getToken(text);
-  }
-
   do
   {
+    // if this is a container, the first element shall be the key
+    if (idTag && idValue && token == CReader::STRING && text == idTag)
+    {
+      // read colon
+      token = reader.getToken(text);
+      if (token != CReader::COLON)
+      {
+        // TODO ERROR
+        std::cerr << "parser error: colon expected" << std::endl;
+      }
+
+      deserialize(reader, *idValue, idTag);
+
+      token = reader.getToken(text);
+      if (token == CReader::COMMA)
+      {
+        // prepare for next element
+        token = reader.getToken(text);
+      }
+      else
+      {
+        // finished inside this struct
+        break;
+      }
+    }
+
 ********** [END]
 
 
@@ -1975,13 +2044,31 @@ void deserialize(CReader & reader, $(name) & rObject, const char * name,
 
 
 ********** [DI] MAP DECL
-/*
-    if (reader.IsStartTag("$(alias)", false))
+
+    if (token == CReader::STRING && text == "$(alias)")
     {
+      // read colon
+      token = reader.getToken(text);
+      if (token != CReader::COLON)
+      {
+        // TODO ERROR
+        std::cerr << "parser error: colon expected" << std::endl;
+      }
+
       deserialize(reader, rObject.$(name), "$(alias)", "$(item)", "$(id)");
-      continue;
+
+      token = reader.getToken(text);
+      if (token == CReader::COMMA)
+      {
+        // prepare for next element
+        token = reader.getToken(text);
+      }
+      else
+      {
+        // finished inside this struct
+        break;
+      }
     }
-*/
 ********** [END]
 
 
