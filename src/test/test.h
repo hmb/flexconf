@@ -89,7 +89,7 @@ friend void serialize(CWriteXml & writer, const CData & rObject, const char * ps
   const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
 
 
-friend void deserialize(CReader & reader, CData & rObject, const char * pszTag =0, bool fRoot = true,
+friend void deserialize(CReader & reader, CData & rObject, const char * pszTag =0,
   const char * pszIdTag = 0, std::string * pstrIdValue = 0);
 
 friend void deserialize(CReadXml & reader, CData & rObject, const char * pszTag =0, bool fRoot = true,
