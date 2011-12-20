@@ -1205,7 +1205,7 @@ public:
   int getSpecialChar()
   {
     // read a special char after the initial backslash
-    int c = getChar();
+    int c = getRawChar();
 
     switch (c)
     {
@@ -1257,8 +1257,8 @@ public:
   {
     int token = STRING;
 
-    int c = getChar();
-    for (; c!='"' && c!=END; c = getChar())
+    int c = getRawChar();
+    for (; c!='"' && c!=END; c = getRawChar())
     {
       switch (c)
       {
@@ -1468,6 +1468,7 @@ public:
 
 private:
   virtual int getChar()       = 0;
+  virtual int getRawChar()    = 0;
   virtual void putBack(int c) = 0;
 };
 
@@ -1503,10 +1504,8 @@ private:
     }
   }
 
-  int getChar()
+  int getRawChar()
   {
-    eatWhitespace();
-
     int c = *mSource;
 
     if (c != 0)
@@ -1519,6 +1518,12 @@ private:
     }
 
     return c;
+  }
+
+  int getChar()
+  {
+    eatWhitespace();
+    return getRawChar();
   }
 
   void putBack(int c)
