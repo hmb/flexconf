@@ -133,21 +133,21 @@ int main(int argc, char *argv[])
     "  \"string\" : \"foobar\"\n"
     "}\n";
 
-  std::cout << json;
+//   std::cout << json;
 
   STest       testFirst;
   initTest(testFirst);
-  SData dat;
+//   SData dat;
 
-  {
-    CReaderCharPointer reader(json);
-    tokenize(reader);
-  }
+//   {
+//     CReaderCharPointer reader(json);
+//     tokenize(reader);
+//   }
 
-  {
-    CReaderCharPointer reader(json);
-    deserialize(reader, dat);
-  }
+//   {
+//     CReaderCharPointer reader(json);
+//     deserialize(reader, dat);
+//   }
 
   std::string serialized;
   {
@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
 //     writer.SetAlignmentElem(0);
 //     writer.SetColonWhitespace(false);
 
-/*
+//*
     serialize(writer, testFirst);
 /*/
     serialize(writer, dat);
