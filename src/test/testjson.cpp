@@ -64,27 +64,15 @@ const char * tkn2str(int token)
   return string;
 }
 
-
-int main(int argc, char *argv[])
+void tokenize(CReader & reader)
 {
-  const char * json =
-    "{\n"
-    "  \"int\" : 0,\n"
-    "  \"double\" : 00.000000,\n"
-    "  \"string\" : \"\"\n"
-    "}\n";
-
-  std::cout << json;
-
-  CReadXmlPChar reader(json);
-
   std::string text;
   int token;
 
   while ((token=reader.getToken(text)) != CReader::END)
   {
     std::cout << tkn2str(token);
-    if (true || token != CReader::ERROR)
+    if (token != CReader::ERROR)
     {
       std::cout << " -> '" << text << '\'' << std::endl;
     }
@@ -94,20 +82,66 @@ int main(int argc, char *argv[])
       break;
     }
   }
+}
 
-  return 0;
 
-  std::string strXmlFirst;
+
+template <class T>
+void writeStructure(bool pretty)
+{
+  std::string serialized;
+  CWriterJsonString writer(serialized);
+
+  if (pretty)
+    writer.SetPretty();
+  else
+    writer.SetCondensed();
+
+//   writer.SetNewline(false);
+//   writer.SetIndentation(0);
+//   writer.SetAlignmentObj(0);
+//   writer.SetAlignmentElem(0);
+//   writer.SetColonWhitespace(false);
+
+  T dat;
+  serialize(writer, dat);
+  std::cout << serialized << std::endl;
+}
+
+
+
+int main(int argc, char *argv[])
+{
+  const char * json =
+    "{\n"
+    "  \"int\" : 451,\n"
+    "  \"double\" : 2.000234000,\n"
+    "  \"string\" : \"foobar\"\n"
+    "}\n";
+
+  std::cout << json;
+
   STest       testFirst;
-
   initTest(testFirst);
+  SData dat;
 
+  {
+    CReaderCharPointer reader(json);
+    tokenize(reader);
+  }
+
+  {
+    CReaderCharPointer reader(json);
+    deserialize(reader, dat);
+  }
+
+  std::string serialized;
   {
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
     std::cerr << "| write xml to a string                                          |" << std::endl;
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
 
-    CWriterJsonString writer(strXmlFirst);
+    CWriterJsonString writer(serialized);
 
 //    writer.SetCondensed();
     writer.SetPretty();
@@ -121,11 +155,10 @@ int main(int argc, char *argv[])
 /*
     serialize(writer, testFirst);
 /*/
-    SData dat;
     serialize(writer, dat);
 //    serialize(writer, dat, "sepp");
 //*/
-    std::cout << strXmlFirst << std::endl;
+    std::cout << serialized << std::endl;
   }
 
 #if 0

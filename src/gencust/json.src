@@ -1167,8 +1167,6 @@ public:
   {
   }
 
-
-
   enum Token {
     CURLY_BRACKET_LEFT        = '{',
     CURLY_BRACKET_RIGHT       = '}',
@@ -1276,7 +1274,8 @@ public:
 
     if (c==END)
     {
-      // TODO missing '"'
+      // TODO ERROR
+      std::cout << "lexical error: missing terminating double quote" << std::endl;
       token = END;
     }
     return token;
@@ -1474,69 +1473,79 @@ private:
 
 
 
-class CReadXmlPChar : public CReader
+class CReaderCharPointer : public CReader
 {
 public:
-  CReadXmlPChar(const char * pszXml) :
-    mpszXml(pszXml)
+  CReaderCharPointer(const char * source) :
+    mSource(source)
   {
   }
 
 protected:
-  void setXml(const char * pszXml)
+  void setSource(const char * source)
   {
-    mpszXml = pszXml;
+    mSource = source;
   }
 
 private:
-  void eatWs()
+  void eatWhitespace()
   {
-    while ( 0 != *mpszXml &&
+    while ( 0 != *mSource &&
             (
-              ' '   == *mpszXml ||
-              '\t'  == *mpszXml ||
-              '\n'  == *mpszXml ||
-              '\r'  == *mpszXml
+              ' '   == *mSource ||
+              '\t'  == *mSource ||
+              '\n'  == *mSource ||
+              '\r'  == *mSource
             )
           )
     {
-      ++mpszXml;
+      ++mSource;
     }
   }
 
   int getChar()
   {
-    eatWs();
-    int c = *mpszXml==0? END : *mpszXml;
-    ++mpszXml;
+    eatWhitespace();
+
+    int c = *mSource;
+
+    if (c != 0)
+    {
+      ++mSource;
+    }
+    else
+    {
+      c = END;
+    }
 
     return c;
   }
 
   void putBack(int c)
   {
-    --mpszXml;
+    --mSource;
   }
 
-  const char * mpszXml;
+private:
+  const char * mSource;
 };
 
 
 
-class CReadXmlFile : public CReadXmlPChar
+class CReadXmlFile : public CReaderCharPointer
 {
 public:
   CReadXmlFile() :
-    CReadXmlPChar(0)
+    CReaderCharPointer(0)
   {
   }
 
-  bool UseFile(const char * pszFilename)
+  bool UseFile(const char * filename)
   {
-    setXml(0);
+    setSource(0);
     mstrData.erase();
 
-    FILE * f = fopen(pszFilename, "r");
+    FILE * f = fopen(filename, "r");
     if (!f)
     {
       return false;
@@ -1551,7 +1560,7 @@ public:
     }
 
     fclose(f);
-    setXml(mstrData.c_str());
+    setSource(mstrData.c_str());
     return true;
   }
 
@@ -1623,21 +1632,29 @@ void deserialize(CReader & reader, std::string & rObject, const char * pszTag, b
 
 // deserialize types without a base or ordinal integers in decimal system
 template <class _T>
-void deserialize(CReader & reader, _T & rObject, const char * pszTag, bool fRoot = true)
+void deserialize(CReader & reader, _T & object, const char * name, bool fRoot = true)
 {
 /*
   if (fRoot)
   {
-    if (!reader.IsStartTag(pszTag, fRoot))
+    if (!reader.IsStartTag(name, fRoot))
       return;
   }
-  const char *  pszText   = 0;
-  int           nLen      = 0;
-  reader.GetData(pszText, nLen);
-  deserialize(pszText, rObject);
-  if (!reader.IsEndTag(pszTag))
-    return;
 */
+
+  std::string text;
+  int token = reader.getToken(text);
+
+  // a simple element is either sth. serialized as string or a number
+  if (token == CReader::STRING  ||  token == CReader::NUMBER)
+  {
+    deserialize(text.c_str(), object);
+  }
+  else
+  {
+    // TODO ERROR
+    std::cout << "parser error: value expected" << std::endl;
+  }
 }
 
 
@@ -1860,70 +1877,107 @@ void deserialize(
 
 
 
-void deserialize(CReader & reader, $(name) & rObject, const char * pszTag, bool fRoot,
-  const char * pszIdTag, std::string * pstrIdValue)
+void deserialize(CReader & reader, $(name) & rObject, const char * name, bool fRoot,
+  const char * idTag, std::string * idValue)
 {
-/*
-  if (!pszTag)
-    pszTag="$(alias)";
-  if (fRoot)
+  std::string text;
+  int token = reader.getToken(text);
+
+  // token  must be open curly bracket
+  if (token != CReader::CURLY_BRACKET_LEFT)
   {
-    if (!reader.IsStartTag(pszTag, fRoot))
-      return;
+    // TODO ERROR
+    std::cout << "parser error: left curly bracket expected" << std::endl;
   }
-  while (!reader.IsEof() && !reader.IsEndTag(pszTag))
+
+  // read first element
+  token = reader.getToken(text);
+
+  // if this is a container, the first element shall be the key
+  if (idTag && idValue && token == CReader::STRING && text == idTag)
   {
-    if (pszIdTag && pstrIdValue && reader.IsStartTag(pszIdTag, false))
-    {
-      deserialize(reader, *pstrIdValue, pszIdTag, false);
-      continue;
-    }
+    // read colon
+    token = reader.getToken(text);
+    // deserialize value
+    deserialize(reader, *idValue, idTag, false);
+    // read next token
+    token = reader.getToken(text);
+  }
+
+  do
+  {
 ********** [END]
 
 
 ********** [DI] GENERIC DECL
-    if (reader.IsStartTag("$(alias)", false))
+
+    if (token == CReader::STRING && text == "$(alias)")
     {
+      // read colon
+      token = reader.getToken(text);
+      if (token != CReader::COLON)
+      {
+        // TODO ERROR
+        std::cout << "parser error: colon expected" << std::endl;
+      }
+
       deserialize(reader, rObject.$(name), "$(alias)", false);
-      continue;
+      token = reader.getToken(text);
+      if (token == CReader::COMMA)
+      {
+        // prepare for next element
+        token = reader.getToken(text);
+      }
+      else
+      {
+        // finished inside this struct
+        break;
+      }
     }
 ********** [END]
 
 
 ********** [DI] VECTOR DECL
-/ * TODO
+/* TODO
     if (reader.IsStartTag("%s", false))\n", mstrAlias.c_str());
     {
       deserialize(reader, rObject.%s, "%s", false);\n", mstrName.c_str(), mstrAlias.c_str());
       continue;
     }
-* /
+*/
 ********** [END]
 
 
 ********** [DI] SET/LIST DECL
+/*
     if (reader.IsStartTag("$(alias)", false))
     {
       deserialize(reader, rObject.$(name), "$(alias)", "$(item)", false);
       continue;
     }
+*/
 ********** [END]
 
 
 ********** [DI] MAP DECL
+/*
     if (reader.IsStartTag("$(alias)", false))
     {
       deserialize(reader, rObject.$(name), "$(alias)", "$(item)", "$(id)", false);
       continue;
     }
+*/
 ********** [END]
 
 
 ********** [DI] STRUCT EPILOG
-    // end of struct deserialize function
-    reader.SkipTag();
-  } // while (!reader.IsEndTag(...))
-*/
+  } while (false); // don't loop, just pass once
+
+  if (token != CReader::CURLY_BRACKET_RIGHT)
+  {
+    // TODO ERROR
+    std::cout << "parser error: right curly bracket expected" << std::endl;
+  }
 }
 ********** [END]
 
@@ -1936,28 +1990,14 @@ void deserialize(CReader & reader, $(name) & rObject, const char * pszTag, bool 
 
 
 
-void deserialize(CReader & reader, std::string & rObject, const char * pszTag, bool fRoot)
+void deserialize(CReader & reader, std::string & object, const char * name, bool fRoot)
 {
-/*
-  if (fRoot)
+  int token = reader.getToken(object);
+
+  if (token != CReader::STRING)
   {
-    if (!reader.IsStartTag(pszTag, fRoot))
-      return;
+    // TODO ERROR
+    std::cout << "parser error: string value expected" << std::endl;
   }
-
-  const char *  pszText   = 0;
-  int           nLen      = 0;
-  bool          fMore     = false;
-
-  rObject.erase();
-  do
-  {
-    fMore = !reader.GetData(pszText, nLen);
-    rObject.append(pszText, nLen);
-  } while (fMore);
-
-  if (!reader.IsEndTag(pszTag))
-    return;
-*/
 }
 ********** [END]
