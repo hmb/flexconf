@@ -453,6 +453,9 @@ void serialize(
   CWriter & writer, const std::set<_K> & rObject,
   const char * pszTag, const char * /*pszTagItem*/)
 {
+  if (rObject.empty())
+    return;
+
   writer.StartArray(pszTag);
   for (typename std::set<_K>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
@@ -470,6 +473,9 @@ void serialize(
   CWriter & writer, const std::list<_T> & rObject,
   const char * pszTag, const char * /*pszTagItem*/)
 {
+  if (rObject.empty())
+    return;
+
   writer.StartArray(pszTag);
   for (typename std::list<_T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
@@ -489,6 +495,9 @@ void serialize(
   CWriter & writer, const std::map<std::string, _T> & rObject,
   const char * pszTag, const char * /*pszTagItem*/, const char * /*pszTagId*/)
 {
+  if (rObject.empty())
+    return;
+
   writer.StartObject(pszTag);
   for (typename std::map<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
@@ -507,6 +516,9 @@ void serialize(
   CWriter & writer, const std::map<_K, _T> & rObject,
   const char * pszTag, const char * /*pszTagItem*/, const char * pszTagId)
 {
+  if (rObject.empty())
+    return;
+
   writer.StartArray(pszTag);
   for (typename std::map<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
@@ -529,6 +541,9 @@ void serialize(
   CWriter & writer, const std::multimap<std::string, _T> & rObject,
   const char * pszTag, const char * /*pszTagItem*/, const char * pszTagId)
 {
+  if (rObject.empty())
+    return;
+
   writer.StartArray(pszTag);
   for (typename std::multimap<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
@@ -545,6 +560,9 @@ void serialize(
   CWriter & writer, const std::multimap<_K, _T> & rObject,
   const char * pszTag, const char * /*pszTagItem*/, const char * pszTagId)
 {
+  if (rObject.empty())
+    return;
+
   writer.StartArray(pszTag);
   for (typename std::multimap<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
   {
@@ -1124,6 +1142,9 @@ void serialize(char * pBuffer, int nBufSize, const SLongHex & rObject)
 
 void serialize(CWriter & writer, const std::string & rObject, const char * pszTag)
 {
+  if (rObject.empty())
+    return;
+
   writer.StartElement(pszTag);
   writer.Write(rObject);
   writer.EndElement(pszTag);

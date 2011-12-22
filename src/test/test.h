@@ -116,6 +116,7 @@ struct STestBase
   float             fltFloat;
   double            dblDouble;
   std::string       strString;
+  std::string       strStringEmpty;
 
   SData             datData;
   SData             datData2;     // flexconf alias Data
@@ -127,23 +128,31 @@ struct STestBase
 
   // testcase for a string set
   std::set<std::string>  setData; //flexconf alias setdata item text
+  std::set<std::string>  setDataEmpty; //flexconf alias setdata_empty item text
 
   // testcase for a long set
   std::set<long>  setDataL; //flexconf alias setlong item long
+  std::set<long>  setDataLEmpty; //flexconf alias setlong_empty item long
 
   // testcase for a data list
   std::list<SData> mlstData;  //flexconf alias ListData item DataItem
+  std::list<SData> mlstDataEmpty;  //flexconf alias ListData_empty item DataItem
 
   // testcase for a data list
   std::list<std::string> mlstString;  //flexconf alias ListString item StringItem
+  std::list<std::string> mlstStringEmpty;  //flexconf alias ListString_empty item StringItem
 
   std::map<long, SData>  mapDataL; //flexconf alias maplong item app id longid
+  std::map<long, SData>  mapDataLEmpty; //flexconf alias maplong_empty item app id longid
 
   std::multimap<long, SData>  mmapDataL; //flexconf alias mmaplong item app id longid
+  std::multimap<long, SData>  mmapDataLEmpty; //flexconf alias mmaplong_empty item app id longid
 
   std::map<std::string, SData>  mapDataStr; //flexconf alias mapstr item app id strid
+  std::map<std::string, SData>  mapDataStrEmpty; //flexconf alias mapstr_empty item app id strid
 
   std::multimap<std::string, SData>  mmapDataStr; //flexconf alias mmapstr item app id strid
+  std::multimap<std::string, SData>  mmapDataStrEmpty; //flexconf alias mmapstr_empty item app id strid
 
 #ifndef _MSC_VER
 //<!--
