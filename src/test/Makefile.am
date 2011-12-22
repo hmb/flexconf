@@ -72,7 +72,7 @@ testxmlconf_CXXFLAGS = -g -W -Wno-unused-parameter -Wall
 
 testlibxml2_CXXFLAGS = -g -I/usr/include/libxml2 -W -Wno-unused-parameter -Wall
 
-testjson_CXXFLAGS = -g -W -Wno-unused-parameter -Wall
+testjson_CXXFLAGS = -g -DFLEXCONF_ENABLE_TRACE -W -Wno-unused-parameter -Wall
 
 
 
