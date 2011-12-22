@@ -2,7 +2,7 @@ Source: flexconf
 Section: amarin
 Priority: optional
 Maintainer: Holger Böhnke <holger.boehnke@amarin.de>
-Build-Depends: debhelper (>> 3.0.0), automake1.7, make, g++, flex, bison, libxml2-dev
+Build-Depends: debhelper (>> 3.0.0), automake, make, g++, flex, bison, libxml2-dev
 Standards-Version: 3.5.2
 
 Package: flexconf
