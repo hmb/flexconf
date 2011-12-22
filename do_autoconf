@@ -28,7 +28,7 @@ case "$DEBVER" in
   *)
     echo "SuSE"
     ./Makefile.dist all
-    ./configure $@
+    ./configure --prefix=/usr $@
     ;;
 
 #  *)
