@@ -68,9 +68,11 @@ testjson_SOURCES = \
 #---------------------------------------------------------------------------------
 # compiler flags needed for the the targets defined above
 
-testxmlconf_CXXFLAGS = -g
+testxmlconf_CXXFLAGS = -g -W -Wno-unused-parameter -Wall
 
-testlibxml2_CXXFLAGS = -g -I/usr/include/libxml2
+testlibxml2_CXXFLAGS = -g -I/usr/include/libxml2 -W -Wno-unused-parameter -Wall
+
+testjson_CXXFLAGS = -g -W -Wno-unused-parameter -Wall
 
 
 

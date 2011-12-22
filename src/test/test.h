@@ -161,7 +161,7 @@ struct STestBase
   unsigned int some_function(int some_int) const ;
   unsigned int some_inline_function(int some_int)
   {
-    return 879;
+    return 879 * some_int;
   }
 
   virtual ~STestBase() {}
@@ -175,8 +175,8 @@ struct STestBase
 
 struct STest : public STestBase
 {
-  virtual unsigned int abstract_function(int some_int)        { return 0; }
-  virtual unsigned int abstract_function(int some_int) const  { return 0; }
+  virtual unsigned int abstract_function(int some_int)        { return 5 + some_int; }
+  virtual unsigned int abstract_function(int some_int) const  { return 63 / some_int; }
 };
 
 
@@ -221,7 +221,7 @@ struct STestIgnored
   unsigned int some_function(int some_int) const;
   unsigned int some_inline_function(int some_int)
   {
-    return 879;
+    return some_int - 879;
   }
 
   virtual ~STestIgnored() {}

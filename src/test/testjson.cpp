@@ -136,9 +136,9 @@ void writeStructure(const T & dat, bool pretty)
 
 int main(int argc, char *argv[])
 {
-/*
   const bool pretty = (argc==2 && 0==strcmp("pretty", argv[1]));
 
+/*
   const char * json =
     "{\n"
     "  \"int\" : 451,\n"

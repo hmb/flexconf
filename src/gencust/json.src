@@ -451,7 +451,7 @@ void serialize(CWriter & writer, const _T & rObject, const char * pszTag)
 template <class _K>
 void serialize(
   CWriter & writer, const std::set<_K> & rObject,
-  const char * pszTag, const char * pszTagItem)
+  const char * pszTag, const char * /*pszTagItem*/)
 {
   writer.StartArray(pszTag);
   for (typename std::set<_K>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
@@ -468,7 +468,7 @@ void serialize(
 template <class _T>
 void serialize(
   CWriter & writer, const std::list<_T> & rObject,
-  const char * pszTag, const char * pszTagItem)
+  const char * pszTag, const char * /*pszTagItem*/)
 {
   writer.StartArray(pszTag);
   for (typename std::list<_T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
@@ -487,7 +487,7 @@ void serialize(
 template <class _T>
 void serialize(
   CWriter & writer, const std::map<std::string, _T> & rObject,
-  const char * pszTag, const char * pszTagItem, const char * pszTagId)
+  const char * pszTag, const char * /*pszTagItem*/, const char * /*pszTagId*/)
 {
   writer.StartObject(pszTag);
   for (typename std::map<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
@@ -505,7 +505,7 @@ void serialize(
 template <class _K, class _T>
 void serialize(
   CWriter & writer, const std::map<_K, _T> & rObject,
-  const char * pszTag, const char * pszTagItem, const char * pszTagId)
+  const char * pszTag, const char * /*pszTagItem*/, const char * pszTagId)
 {
   writer.StartArray(pszTag);
   for (typename std::map<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
@@ -527,7 +527,7 @@ void serialize(
 template <class _T>
 void serialize(
   CWriter & writer, const std::multimap<std::string, _T> & rObject,
-  const char * pszTag, const char * pszTagItem, const char * pszTagId)
+  const char * pszTag, const char * /*pszTagItem*/, const char * pszTagId)
 {
   writer.StartArray(pszTag);
   for (typename std::multimap<std::string, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
@@ -543,7 +543,7 @@ void serialize(
 template <class _K, class _T>
 void serialize(
   CWriter & writer, const std::multimap<_K, _T> & rObject,
-  const char * pszTag, const char * pszTagItem, const char * pszTagId)
+  const char * pszTag, const char * /*pszTagItem*/, const char * pszTagId)
 {
   writer.StartArray(pszTag);
   for (typename std::multimap<_K, _T>::const_iterator itr=rObject.begin(); itr!=rObject.end(); ++itr)
@@ -757,7 +757,7 @@ void CWriterJson::startElementImpl(const char * pszName)
   elemName(pszName, mAlignmentElem);
 }
 
-void CWriterJson::endElementImpl(const char * pszName)
+void CWriterJson::endElementImpl(const char * /*pszName*/)
 {
 }
 
@@ -907,7 +907,7 @@ void CWriterJson::startCompound(const char * name, char bracket)
   mNewStruct = true;
 }
 
-void CWriterJson::endCompound(const char * name, char bracket)
+void CWriterJson::endCompound(const char * /*name*/, char bracket)
 {
   if (!mNewStruct)
   {
@@ -1554,7 +1554,7 @@ private:
     return getRawChar();
   }
 
-  void putBack(int c)
+  void putBack(int /*c*/)
   {
     --mSource;
   }
@@ -1665,7 +1665,7 @@ void deserialize(CReader & reader, std::string & rObject, const char * pszTag);
 
 // deserialize types without a base or ordinal integers in decimal system
 template <class _T>
-void deserialize(CReader & reader, _T & object, const char * name)
+void deserialize(CReader & reader, _T & object, const char * /*name*/)
 {
   std::string text;
   int token = reader.getToken(text);
@@ -1687,7 +1687,7 @@ void deserialize(CReader & reader, _T & object, const char * name)
 template <class _K>
 void deserialize(
   CReader & reader, std::set<_K> & object,
-  const char * name, const char * nameItem)
+  const char * /*name*/, const char * /*nameItem*/)
 {
   std::cerr << "parser info: set deserializer" << std::endl;
 
@@ -1723,7 +1723,7 @@ void deserialize(
 template <class _T>
 void deserialize(
   CReader & reader, std::list<_T> & object,
-  const char * name, const char * nameItem)
+  const char * /*name*/, const char * /*nameItem*/)
 {
   std::cerr << "parser info: list deserializer" << std::endl;
 
@@ -1759,7 +1759,7 @@ void deserialize(
 template <class _T>
 void deserialize(
   CReader & reader, std::map<std::string, _T> & rObject,
-  const char * pszTag, const char * pszTagItem, const char * pszTagId)
+  const char * /*pszTag*/, const char * pszTagItem, const char * /*pszTagId*/)
 {
   std::cerr << "parser info: map deserializer string" << std::endl;
 
@@ -1840,7 +1840,7 @@ void deserialize(
 template <class _K, class _T>
 void deserialize(
   CReader & reader, std::map<_K, _T> & object,
-  const char * name, const char * nameItem, const char * nameId)
+  const char * /*name*/, const char * nameItem, const char * nameId)
 {
   std::cerr << "parser info: map deserializer _K" << std::endl;
 
@@ -1879,7 +1879,7 @@ void deserialize(
 template <class _T>
 void deserialize(
   CReader & reader, std::multimap<std::string, _T> & object,
-  const char * name, const char * nameItem, const char * nameId)
+  const char * /*name*/, const char * nameItem, const char * nameId)
 {
   std::cerr << "parser info: multi map deserializer string" << std::endl;
 
@@ -1916,7 +1916,7 @@ void deserialize(
 template <class _K, class _T>
 void deserialize(
   CReader & reader, std::multimap<_K, _T> & object,
-  const char * name, const char * nameItem, const char * nameId)
+  const char * /*name*/, const char * nameItem, const char * nameId)
 {
   std::cerr << "parser info: multi map deserializer _K" << std::endl;
 
@@ -1978,7 +1978,7 @@ void deserialize(
 
 
 
-void deserialize(CReader & reader, $(name) & rObject, const char * name,
+void deserialize(CReader & reader, $(name) & rObject, const char * /*name*/,
   const char * idTag, std::string * idValue)
 {
   std::string text;
@@ -2143,7 +2143,7 @@ void deserialize(CReader & reader, $(name) & rObject, const char * name,
 
 
 
-void deserialize(CReader & reader, std::string & object, const char * name)
+void deserialize(CReader & reader, std::string & object, const char * /*name*/)
 {
   int token = reader.getToken(object);
 
