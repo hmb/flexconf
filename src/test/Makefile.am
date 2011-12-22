@@ -29,32 +29,37 @@ noinst_PROGRAMS = \
 #---------------------------------------------------------------------------------
 # sources needed for the the targets defined above
 
-testxmlconf_SOURCES = \
-  xmlconfCom.cpp \
-  xmlconfSer.cpp \
-  xmlconfDes.cpp \
-  test.cpp \
-  testxmlconf.cpp
-
-#nodist_testxmlconf_SOURCES = \
+XMLCONF_TARGETS = \
   xmlconfCom.cpp \
   xmlconfSer.cpp \
   xmlconfDes.cpp
 
-#EXTRA_DIST = \
-  test.h
+testxmlconf_SOURCES = \
+  $(XMLCONF_TARGETS) \
+  test.cpp \
+  testxmlconf.cpp
 
-testlibxml2_SOURCES = \
+
+
+LIBXML2_TARGETS = \
   libxml2Com.cpp \
   libxml2Ser.cpp \
-  libxml2Des.cpp \
+  libxml2Des.cpp
+
+testlibxml2_SOURCES = \
+  $(LIBXML2_TARGETS) \
   test.cpp \
   testlibxml2.cpp
 
-testjson_SOURCES = \
+
+
+JSON_TARGETS = \
   jsonCom.cpp \
   jsonSer.cpp \
-  jsonDes.cpp \
+  jsonDes.cpp
+
+testjson_SOURCES = \
+  $(JSON_TARGETS) \
   test.cpp \
   testjson.cpp
 
@@ -89,8 +94,14 @@ testlibxml2_LDADD = -lxml2
 
 FCSOURCES   = test.h
 
-%Com.cpp: ../flexconf ../gencust/%.src $(FCSOURCES)
-	../flexconf -c ../gencust/$*.src -b $* $(FCSOURCES)
+$(XMLCONF_TARGETS): ../flexconf ../gencust/xmlconf.src $(FCSOURCES)
+	../flexconf -c ../gencust/xmlconf.src -b xmlconf $(FCSOURCES)
+
+$(LIBXML2_TARGETS): ../flexconf ../gencust/libxml2.src $(FCSOURCES)
+	../flexconf -c ../gencust/libxml2.src -b libxml2 $(FCSOURCES)
+
+$(JSON_TARGETS): ../flexconf ../gencust/json.src $(FCSOURCES)
+	../flexconf -c ../gencust/json.src -b json $(FCSOURCES)
 
 
 
