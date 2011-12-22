@@ -234,6 +234,9 @@ struct SLongHex
 #endif
 
 
+namespace flexconfJson
+{
+
 // ------------------------------------------------------------------
 // Generic baseclass for writing a json snippet.
 // This class must be implemented to write to a specific type of
@@ -577,6 +580,7 @@ void serialize(
   writer.EndArray(pszTag);
 }
 
+} // namespace flexconfJson
 
 #endif // _$(basename)Ser_h_
 ********** [END]
@@ -596,6 +600,8 @@ void serialize(
 #include <string.h>
 
 
+namespace flexconfJson
+{
 
 CWriter::CWriter()
 {
@@ -1149,6 +1155,8 @@ void serialize(CWriter & writer, const std::string & rObject, const char * pszTa
   writer.Write(rObject);
   writer.EndElement(pszTag);
 }
+
+} // namespace flexconfJson
 ********** [END]
 
 
@@ -1167,6 +1175,9 @@ void serialize(CWriter & writer, const std::string & rObject, const char * pszTa
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+namespace flexconfJson
+{
 
 ********** [END]
 
@@ -1207,6 +1218,7 @@ void deserialize(CReader & reader, $(name) & rObject, const char * pszTag =0,
 
 ********** [DH] EPILOG
 
+} // namespace flexconfJson
 
 
 
@@ -1225,6 +1237,8 @@ void          printTkn(int token, const std::string & text);
 
 
 
+namespace flexconfJson
+{
 
 class CReader
 {
@@ -1994,6 +2008,7 @@ void deserialize(
   }
 }
 
+} //namespace flexconfJson
 
 #endif // _$(basename)Des_h_
 ********** [END]
@@ -2011,6 +2026,10 @@ void deserialize(
 #include "$(basename)Com.h"
 #include "$(basename)Des.h"
 //#include <stdlib.h>
+
+namespace flexconfJson
+{
+
 ********** [END]
 
 
@@ -2197,4 +2216,6 @@ void deserialize(CReader & reader, std::string & object, const char * /*name*/)
     TRACE(std::cerr << "parser error: string value expected" << std::endl;)
   }
 }
+
+} // namespace flexconfJson
 ********** [END]

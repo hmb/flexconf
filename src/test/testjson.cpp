@@ -31,6 +31,8 @@
 
 
 
+namespace flexconfJson
+{
 void serialize(CWriter & writer, const CData & rObject, const char * pszTag,
   const char * pszIdTag, const std::string * pstrIdValue)
 {
@@ -42,7 +44,9 @@ void deserialize(CReader & reader, CData & rObject, const char * pszTag,
 {
   deserialize(reader, static_cast<SData&>(rObject), pszTag, pszIdTag, pstrIdValue);
 }
+} // namespace flexconfJson
 
+using namespace flexconfJson;
 
 
 const char * tkn2str(int token)

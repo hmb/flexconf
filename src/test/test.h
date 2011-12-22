@@ -37,13 +37,17 @@
 
 /* flexconf skip begin */
 
-class CWriter;
 class CWriteXml;
-class CReader;
 class CReadXml;
 
 struct _xmlNode;
 typedef struct _xmlNode xmlNode;
+
+namespace flexconfJson
+{
+class CWriter;
+class CReader;
+}
 
 
 using namespace std;
@@ -80,17 +84,28 @@ struct SData
 
 
 //<!--
+class CData;
+
+namespace flexconfJson
+{
+void serialize(flexconfJson::CWriter & writer, const CData & rObject, const char * pszTag = 0,
+  const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
+
+void deserialize(flexconfJson::CReader & reader, CData & rObject, const char * pszTag =0,
+  const char * pszIdTag = 0, std::string * pstrIdValue = 0);
+}
+
 class CData : private SData
 {
-friend void serialize(CWriter & writer, const CData & rObject, const char * pszTag = 0,
-  const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
+friend void flexconfJson::serialize(flexconfJson::CWriter & writer, const CData & rObject, const char * pszTag,
+  const char * pszIdTag, const std::string * pstrIdValue);
 
 friend void serialize(CWriteXml & writer, const CData & rObject, const char * pszTag = 0, bool fRoot = true,
   const char * pszIdTag = 0, const std::string * pstrIdValue = 0);
 
 
-friend void deserialize(CReader & reader, CData & rObject, const char * pszTag =0,
-  const char * pszIdTag = 0, std::string * pstrIdValue = 0);
+friend void flexconfJson::deserialize(flexconfJson::CReader & reader, CData & rObject, const char * pszTag,
+  const char * pszIdTag, std::string * pstrIdValue);
 
 friend void deserialize(CReadXml & reader, CData & rObject, const char * pszTag =0, bool fRoot = true,
   const char * pszIdTag = 0, std::string * pstrIdValue = 0);
