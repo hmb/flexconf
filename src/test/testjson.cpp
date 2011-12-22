@@ -169,10 +169,10 @@ int main(int argc, char *argv[])
     std::cerr << "| write xml to a string                                          |" << std::endl;
     std::cerr << "+----------------------------------------------------------------+" << std::endl;
 
-    CWriterJsonString writer(serialized);
+    CWriterJsonString writer(serialized, pretty);
 
 //    writer.SetCondensed();
-    writer.SetPretty();
+//    writer.SetPretty();
 
 //     writer.SetNewline(false);
 //     writer.SetIndentation(0);
@@ -203,9 +203,9 @@ int main(int argc, char *argv[])
 
     std::string doublecheck;
 
-    CWriterJsonString writer(doublecheck);
+    CWriterJsonString writer(doublecheck, pretty);
 
-    writer.SetPretty();
+//    writer.SetPretty();
 
     serialize(writer, sTest);
 

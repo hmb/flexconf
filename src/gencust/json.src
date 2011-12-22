@@ -279,7 +279,7 @@ private:
 class CWriterJson : public CWriter
 {
 public:
-  CWriterJson();
+  CWriterJson(bool pretty = false);
   ~CWriterJson();
 
   void SetCondensed();
@@ -347,7 +347,7 @@ private:
 class CWriterJsonString : public CWriterJson
 {
 public:
-  CWriterJsonString(std::string & outBuffer);
+  CWriterJsonString(std::string & outBuffer, bool pretty = false);
   virtual ~CWriterJsonString();
 
 private:
@@ -634,7 +634,7 @@ void CWriter::PutData(const char * data, int dataLen)
 
 
 
-CWriterJson::CWriterJson()
+CWriterJson::CWriterJson(bool pretty)
   :
   mDepth(0),
   mNewStruct(true),
@@ -645,6 +645,14 @@ CWriterJson::CWriterJson()
   mAlignmentElem(DEFAULT_ALIGNMENTELEM),
   mColonWhitespace(DEFAULT_COLONWHITESPACE)
 {
+  if (pretty)
+  {
+    SetPretty();
+  }
+  else
+  {
+    SetCondensed();
+  }
 }
 
 CWriterJson::~CWriterJson()
@@ -967,8 +975,9 @@ void CWriterJson::newline()
 
 
 
-CWriterJsonString::CWriterJsonString(std::string & outBuffer)
+CWriterJsonString::CWriterJsonString(std::string & outBuffer, bool pretty)
   :
+  CWriterJson(pretty),
   mOutBuffer(outBuffer)
 {
 }
