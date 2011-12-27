@@ -83,6 +83,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <set>
 #include <map>
 
+// ----------------------------------------------------------------------------
+// TODO DEPRECATED IN FUTURE
+// The following will be deprecated in future versions, as it will be possible
+// to include a format string for numbers, rendering this construct obsolete.
+// If possible avoid using SLongHex.
+//
+// This is a hack to include both the old xmlconf generated files and the new
+// flexconf generated files. As both declare the same struct SLongHex the
+// two declarations collide although being exactly the same. With this macro
+// you can tell that the stuct has been declared somwhere else.
+
+#ifdef LONG_HEX_DECLARED_ELSEWHERE
+
+// just do a forward declaration for now
+struct SLongHex;
+
+#else
+
+// declare the complete structure
 struct SLongHex
 {
   SLongHex() { }
@@ -100,6 +119,10 @@ struct SLongHex
   unsigned long operator = (unsigned long ulHex) { return mulHex=ulHex; }
   operator unsigned long () const { return mulHex; }
 };
+
+#endif
+// END DEPRECATED IN FUTURE
+// ----------------------------------------------------------------------------
 
 class CWriteXml;
 class CReadXml;
