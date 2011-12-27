@@ -1,6 +1,6 @@
 Name:           flexconf
 #Conflicts:
-Version:        0.9.1.0
+Version:        0.9.1.1
 Release:        1
 Summary:        flexconf is a flexible configuration generator for C++
 Group:          Development/Tools

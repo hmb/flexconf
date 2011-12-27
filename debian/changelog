@@ -1,3 +1,9 @@
+flexconf (0.9.1.1-1) unstable; urgency=low
+
+  * Minor fix for "while loop with empty body" warning.
+
+ -- Holger Böhnke <holger.boehnke@amarin.de>  Tue, 27 Dec 2011 17:06:31 +0100
+
 flexconf (0.9.1.0-1) unstable; urgency=low
 
   * Implement a new json serializer / deserializer
