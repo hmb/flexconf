@@ -810,17 +810,22 @@ public:
       // <?xml version="1.0" encoding="UTF-8" ?>
       if (0!=strncmp(mpszXml, "<?xml ", 6))
         return false;
+
       mpszXml += 6;
-      while ( *mpszXml && '?' != *mpszXml++);
+
+      while ( *mpszXml && '?' != *mpszXml++) {}
+
       if ( '>' != *mpszXml++)
         return false;
 
       // <!DOCTYPE ...
       eatws();
+
       if (0==strncmp(mpszXml, "<!DOCTYPE ", 10))
       {
         mpszXml += 10;
-        while ( *mpszXml && '>' != *mpszXml++);
+
+        while ( *mpszXml && '>' != *mpszXml++) {}
       }
     }
 
