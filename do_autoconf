@@ -26,15 +26,10 @@ case "$DEBVER" in
     ;;
 
   *)
-    echo "SuSE"
+    echo "debian or SuSE"
     ./Makefile.dist all
     ./configure --prefix=/usr $@
     ;;
-
-#  *)
-#    echo "ERROR: could not find target for distribution"
-#    exit 1
-#    ;;
 esac
 
 exit 0
