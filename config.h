@@ -44,7 +44,7 @@
 #define PACKAGE_NAME "flexible config generator"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "flexible config generator 0.9.0.1-1"
+#define PACKAGE_STRING "flexible config generator 0.9.1.1-1"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "flexconf"
@@ -53,13 +53,13 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.9.0.1-1"
+#define PACKAGE_VERSION "0.9.1.1-1"
 
 /* Define to 1 if you have the ANSI C header files. */
 /* #undef STDC_HEADERS */
 
 /* Version number of package */
-#define VERSION "0.9.0.1-1"
+#define VERSION "0.9.1.1-1"
 
 /* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
    `char[]'. */
