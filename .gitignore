@@ -31,7 +31,6 @@ Makefile.in
 /debian/flexconf.substvars
 /debian/flexconf.debhelper.log
 /debian/flexconf/
-/src/lexical.cxx
 /src/flexconf
 /src/genxml/testread
 /src/test/*Com.h
