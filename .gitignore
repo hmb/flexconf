@@ -42,3 +42,11 @@ Makefile.in
 /src/test/testxmlconf
 /src/test/testlibxml2
 /src/test/testjson
+
+# eclipse project files
+.ptp-sync-folder
+/.ptp-sync/
+# TODO check, if it's better to include them in VCS
+/.cproject
+/.project
+/.settings/
